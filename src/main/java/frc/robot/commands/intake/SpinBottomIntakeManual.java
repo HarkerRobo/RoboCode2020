@@ -30,7 +30,7 @@ public class SpinBottomIntakeManual implements Command {
 
     @Override
     public void execute() {
-        boolean isPressed = OI.getInstance().getDriver().getButtonAState();
+        boolean isPressed = OI.getInstance().getDriverGamepad().getButtonAState();
         if(isPressed)
         {
             bottomIntakeMagnitude = 1;

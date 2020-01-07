@@ -22,12 +22,12 @@ public class OI
     {
     }
 
-    public XboxGamepad getDriver()
+    public XboxGamepad getDriverGamepad()
     {
         return driverGamepad;
     }
 
-    public XboxGamepad getOperator()
+    public XboxGamepad getOperatorGamepad()
     {
         return operatorGamepad;
     }

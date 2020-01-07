@@ -28,10 +28,14 @@ public class BottomIntake implements Subsystem {
         setupMotors();
     }
     
-    public void setupMotors() {
-        Falcon.setInverted(MOTOR_INVERT);
+    private void setupMotors() {
+        invert();
         enableVoltageComp();
         enableNeutralMode();
+    }
+
+    private void invert() {
+        Falcon.setInverted(MOTOR_INVERT);
     }
 
     public void enableVoltageComp() {

@@ -17,7 +17,7 @@ public class Shooter implements Subsystem {
     public DoubleSolenoid angleSolenoid;
 
     public static final TalonFXInvertType MASTER_INVERT = TalonFXInvertType.Clockwise;
-    public static final TalonFXInvertType FOLLOWER_INVERT = TalonFXInvertType.Clockwise;
+    public static final TalonFXInvertType FOLLOWER_INVERT = TalonFXInvertType.FollowMaster;
     
     public static final int VOLTAGE_COMP = 10;
 
@@ -31,10 +31,13 @@ public class Shooter implements Subsystem {
     }
 
     public void setupTalons() {
+        follower.follow(master);
         invert();
         setNeutralMode();
         setupVoltageComp();
     }
+
+    
 
     private void setupVoltageComp() {
         master.configVoltageCompSaturation(VOLTAGE_COMP);
@@ -48,6 +51,14 @@ public class Shooter implements Subsystem {
     private void invert() {
         master.setInverted(MASTER_INVERT);
         follower.setInverted(FOLLOWER_INVERT);
+    }
+    
+    public TalonFX getMaster() {
+        return master;
+    }
+
+    public TalonFX getFollower() {
+        return follower;
     }
 
     public static Shooter getInstance()
