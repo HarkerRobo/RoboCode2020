@@ -14,19 +14,17 @@ import frc.robot.OI;
 
 public class SpinShooterMotorManual implements Command {
     
-    private Set<Subsystem> subsystems;
-
     public static final int SPEED_MULTIPLIER = 1;
+
+    private Set<Subsystem> subsystems;
 
     public SpinShooterMotorManual() 
     {
         subsystems = new HashSet<Subsystem>();
         subsystems.add(Shooter.getInstance());
-        
     }
 
     public void execute() {
-
         double rightTriggerValue = OI.getInstance().getOperatorGamepad().getRightTrigger();
 
         Shooter.getInstance().getMaster().set(TalonFXControlMode.PercentOutput, rightTriggerValue * SPEED_MULTIPLIER);
@@ -41,5 +39,4 @@ public class SpinShooterMotorManual implements Command {
     public Set<Subsystem> getRequirements() {
         return subsystems;
     }
-    
 }

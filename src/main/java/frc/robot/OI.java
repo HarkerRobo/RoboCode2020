@@ -1,8 +1,12 @@
 package frc.robot;
 
-import frc.robot.*;
 import harkerrobolib.wrappers.XboxGamepad;
 
+/**
+ * OI class to hold controllers and bindings
+ * 
+ * @since 1/6/20
+ */
 public class OI
 {
     private static OI instance;
@@ -10,30 +14,26 @@ public class OI
     private XboxGamepad driverGamepad;
     private XboxGamepad operatorGamepad;
 
-    private OI()
-    {
+    private OI() {
         driverGamepad = new XboxGamepad(RobotMap.DRIVER_PORT);
         operatorGamepad = new XboxGamepad(RobotMap.OPERATOR_PORT);
 
         initBindings();
     }
 
-    private void initBindings()
-    {
+    private void initBindings() {
+        // operatorGamepad.getButtonB().whilePressed(new ToggleShooterAngle());
     }
 
-    public XboxGamepad getDriverGamepad()
-    {
+    public XboxGamepad getDriverGamepad() {
         return driverGamepad;
     }
 
-    public XboxGamepad getOperatorGamepad()
-    {
+    public XboxGamepad getOperatorGamepad() {
         return operatorGamepad;
     }
 
-    public static OI getInstance()
-    {
+    public static OI getInstance() {
         if(instance == null)
             instance = new OI();
         return instance;

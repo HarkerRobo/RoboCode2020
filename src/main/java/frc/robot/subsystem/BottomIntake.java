@@ -14,10 +14,10 @@ import frc.robot.RobotMap;
  */
 public class BottomIntake implements Subsystem {
     private static BottomIntake instance;
-    
-    private static final TalonFXInvertType MOTOR_INVERT = TalonFXInvertType.Clockwise; //Change accordingly
 
     private TalonFX Falcon;
+    
+    private static final TalonFXInvertType MOTOR_INVERT = TalonFXInvertType.Clockwise; //Change accordingly
 
     private static final double VOLTAGE_COMPENSATION = 10;
     
@@ -25,10 +25,11 @@ public class BottomIntake implements Subsystem {
     
     private BottomIntake() {
         Falcon = new TalonFX(RobotMap.CAN_IDS.BOTTOM_INTAKE_MOTOR_ID);
-        setupMotors();
+
+        setupTalons();
     }
     
-    private void setupMotors() {
+    private void setupTalons() {
         invert();
         enableVoltageComp();
         enableNeutralMode();
@@ -53,9 +54,7 @@ public class BottomIntake implements Subsystem {
 
     public static BottomIntake getInstance() {
         if(instance == null)
-        {
             instance = new BottomIntake();
-        }
         return instance;
     }
 }

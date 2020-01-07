@@ -1,20 +1,23 @@
 package frc.robot.subsystem;
 
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotMap;
 
 public class Shooter implements Subsystem {
 
-    public TalonFX master;
-    public TalonFX follower;
+    private TalonFX master;
+    private TalonFX follower;
 
-    public DoubleSolenoid angleSolenoid;
+    private DoubleSolenoid angleSolenoid;
+
+    public static final DoubleSolenoid.Value HIGH_ANGLE = Value.kForward;
+    public static final DoubleSolenoid.Value LOW_ANGLE = Value.kReverse;
 
     public static final TalonFXInvertType MASTER_INVERT = TalonFXInvertType.Clockwise;
     public static final TalonFXInvertType FOLLOWER_INVERT = TalonFXInvertType.FollowMaster;
@@ -27,6 +30,7 @@ public class Shooter implements Subsystem {
         master = new TalonFX(RobotMap.CAN_IDS.SHOOTER_MASTER_ID);
         follower = new TalonFX(RobotMap.CAN_IDS.SHOOTER_FOLLOWER_ID);
         angleSolenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_SOLENOID_REVERSE);
+
         setupTalons();
     }
 
@@ -36,9 +40,7 @@ public class Shooter implements Subsystem {
         setNeutralMode();
         setupVoltageComp();
     }
-
     
-
     private void setupVoltageComp() {
         master.configVoltageCompSaturation(VOLTAGE_COMP);
         master.enableVoltageCompensation(true);
@@ -59,6 +61,10 @@ public class Shooter implements Subsystem {
 
     public TalonFX getFollower() {
         return follower;
+    }
+
+    public DoubleSolenoid getAngleSolenoid() {
+        return angleSolenoid;
     }
 
     public static Shooter getInstance()

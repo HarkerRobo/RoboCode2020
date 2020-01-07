@@ -8,6 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.bottomintake.SpinBottomIntakeManual;
+import frc.robot.commands.shooter.SpinShooterMotorManual;
+import frc.robot.subsystem.BottomIntake;
+import frc.robot.subsystem.Indexer;
+import frc.robot.subsystem.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,7 +38,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-
+        BottomIntake.getInstance().setDefaultCommand(new SpinBottomIntakeManual());
+        Shooter.getInstance().setDefaultCommand(new SpinShooterMotorManual());
+        Indexer.getInstance();
+        
+        OI.getInstance();
     }
 
     /**
@@ -46,7 +56,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        Scheduler.getInstance().run();
+        CommandScheduler.getInstance().run();
     }
 
     /**
@@ -71,7 +81,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        Scheduler.getInstance().run();
+        CommandScheduler.getInstance().run();
     }
 
     /**
@@ -79,8 +89,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
-        Scheduler.getInstance().run();
-
+        CommandScheduler.getInstance().run();
     }
 
     /**
