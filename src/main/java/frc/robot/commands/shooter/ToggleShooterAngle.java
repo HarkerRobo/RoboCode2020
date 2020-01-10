@@ -5,7 +5,7 @@ import java.util.Set;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystem.Shooter;
+import frc.robot.subsystems.Shooter;
 
 /**
  * Toggles the Shooter Solenoids

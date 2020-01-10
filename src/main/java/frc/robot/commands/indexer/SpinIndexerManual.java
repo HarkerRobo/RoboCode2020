@@ -6,7 +6,7 @@ import java.util.Set;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.OI;
-import frc.robot.subsystem.Indexer;
+import frc.robot.subsystems.Indexer;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 public class SpinIndexerManual implements Command {

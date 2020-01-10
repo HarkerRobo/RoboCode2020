@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.bottomintake.SpinBottomIntakeManual;
 import frc.robot.commands.shooter.SpinShooterMotorManual;
-import frc.robot.subsystem.BottomIntake;
-import frc.robot.subsystem.Indexer;
-import frc.robot.subsystem.Shooter;
+import frc.robot.subsystems.BottomIntake;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the

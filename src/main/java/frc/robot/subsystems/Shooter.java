@@ -1,4 +1,4 @@
-package frc.robot.subsystem;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;

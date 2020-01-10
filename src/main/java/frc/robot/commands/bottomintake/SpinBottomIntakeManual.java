@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.OI;
-import frc.robot.subsystem.BottomIntake;
+import frc.robot.subsystems.BottomIntake;
 
 /**
  * Spins the Bottom Intake 
