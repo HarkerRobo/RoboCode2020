@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.commands.shooter.ToggleShooterAngle;
 import harkerrobolib.wrappers.XboxGamepad;
 
 /**
@@ -22,7 +23,7 @@ public class OI
     }
 
     private void initBindings() {
-        // operatorGamepad.getButtonB().whilePressed(new ToggleShooterAngle());
+        operatorGamepad.getButtonB().whilePressed(new ToggleShooterAngle());
     }
 
     public XboxGamepad getDriverGamepad() {
