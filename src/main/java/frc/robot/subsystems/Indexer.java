@@ -7,25 +7,27 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotMap;
 
+/**
+ * The indexer stores and transfers power cells from the intake to the shooter. It consists
+ * of a single motor that spins a belt. 
+ * 
+ * @author Chirag Kaushik
+ * @since January 6, 2020
+ */
 public class Indexer implements Subsystem {
-
     private static Indexer instance;
     
+    private static final TalonFXInvertType FALCON_INVERT = TalonFXInvertType.Clockwise;
+    
     private TalonFX falcon;
-
-    private static final TalonFXInvertType INVERT = TalonFXInvertType.Clockwise;
-
     public static final int VOLTAGE_COMP = 10;
 
-    private Indexer()
-    {
+    private Indexer() {
         falcon = new TalonFX(RobotMap.CAN_IDS.HOPPER_TALON_ID);
     }
     
     public void setupTalons() {
-        
-        falcon.setInverted(INVERT);
-
+        falcon.setInverted(FALCON_INVERT);
         falcon.setNeutralMode(NeutralMode.Coast);
 
         falcon.configVoltageCompSaturation(VOLTAGE_COMP);
@@ -36,8 +38,7 @@ public class Indexer implements Subsystem {
         return falcon;
     }
 
-    public static Indexer getInstance()
-    {
+    public static Indexer getInstance() {
         if(instance == null)
             instance = new Indexer();
         return instance;

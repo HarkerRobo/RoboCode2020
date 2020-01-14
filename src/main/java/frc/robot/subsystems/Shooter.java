@@ -67,8 +67,7 @@ public class Shooter implements Subsystem {
         return angleSolenoid;
     }
 
-    public static Shooter getInstance()
-    {
+    public static Shooter getInstance() {
         if(instance == null)
             instance = new Shooter();
         return instance;

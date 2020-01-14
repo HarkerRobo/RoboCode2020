@@ -1,27 +1,21 @@
 package frc.robot.commands.shooter;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Shooter;
 import frc.robot.OI;
 
-public class SpinShooterMotorManual implements Command {
-    
+/**
+ * Set
+ */
+public class SpinShooterManual extends CommandBase {
     public static final int SPEED_MULTIPLIER = 1;
 
-    private Set<Subsystem> subsystems;
-
-    public SpinShooterMotorManual() 
-    {
-        subsystems = new HashSet<Subsystem>();
-        subsystems.add(Shooter.getInstance());
+    public SpinShooterManual() {
+        addRequirements(Shooter.getInstance());
     }
 
     public void execute() {
@@ -36,7 +30,7 @@ public class SpinShooterMotorManual implements Command {
     }
     
     @Override
-    public Set<Subsystem> getRequirements() {
-        return subsystems;
+    public boolean isFinished() {
+        return false;
     }
 }

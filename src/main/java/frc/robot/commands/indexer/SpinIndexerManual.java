@@ -1,36 +1,19 @@
 package frc.robot.commands.indexer;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.OI;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
-public class SpinIndexerManual implements Command {
-
-    private Set<Subsystem> subsystems;
-
-    public static double indexerMagnitude = 0;
+public class SpinIndexerManual extends CommandBase {
+    public static double magnitude = 0;
     
-    public SpinIndexerManual() {
-        subsystems = new HashSet<Subsystem>();
-        subsystems.add(Indexer.getInstance());
+    public SpinIndexerManual(double outputMagnitude) {
+        addRequirements(Indexer.getInstance());
+        magnitude = outputMagnitude;
     }
     
     public void execute() { 
-        boolean isPressed = OI.getInstance().getDriverGamepad().getButtonXState();
-        if(isPressed)
-        {
-            indexerMagnitude = 1;
-        }
-        else
-        {
-            indexerMagnitude = 0;
-        }
-        Indexer.getInstance().getFalcon().set(TalonFXControlMode.PercentOutput, indexerMagnitude);
+        Indexer.getInstance().getFalcon().set(TalonFXControlMode.PercentOutput, magnitude);
     }
 
     @Override
@@ -38,10 +21,8 @@ public class SpinIndexerManual implements Command {
         Indexer.getInstance().getFalcon().set(TalonFXControlMode.Disabled, 0);
     }
 
-
-    
     @Override
-    public Set<Subsystem> getRequirements() {
-        return subsystems;
+    public boolean isFinished() {
+        return false;
     }
 }

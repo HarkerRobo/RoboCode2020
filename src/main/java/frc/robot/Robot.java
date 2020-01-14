@@ -9,18 +9,40 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.bottomintake.SpinBottomIntakeManual;
-import frc.robot.commands.shooter.SpinShooterMotorManual;
+import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.subsystems.BottomIntake;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
-
+    
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
+ * Has anyone heard of the team that ran out of code? (This is a real story)
+ * 
+ * SO had a rookie team while I was FTAAing who would come out to the field, run till about 15 seconds to the end of the match, then have their robot stop. 
+ * They stepped back calmly from their controllers and just wait out the end of the game
+ * I was confused, thought maybe they just were done with what they were doing in the match, and shrugged
+ * 
+ * they did it 3 more times before I was like “Ok somethings wierd” because they finally didnt look like they had hit end game like they wanted but the bot wasnt moving
+ * 
+ * I went over and was like what
+ * 
+ * “We ran out of code”
+ * 
+ * You What
+ * 
+ * “Oh we just ran out of code. It happens.”
+ * 
+ * Let me see your code
+ * 
+ * I go in and its like 15 lines of code
+ * 
+ * copied and pasted as many times as they could fit on the rio
+ * 
+ * “Have you heard of this magical thing called a loop”
+ * 
+ * “A loop? Whats that?”
  * 
  * Subsystems:
  *  8 drive
@@ -38,9 +60,10 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        BottomIntake.getInstance().setDefaultCommand(new SpinBottomIntakeManual());
-        Shooter.getInstance().setDefaultCommand(new SpinShooterMotorManual());
+        BottomIntake.getInstance();
+        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
         Indexer.getInstance();
+        Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
         
         OI.getInstance();
     }
@@ -97,6 +120,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void testPeriodic() {
-
+        CommandScheduler.getInstance().run();
     }
 }

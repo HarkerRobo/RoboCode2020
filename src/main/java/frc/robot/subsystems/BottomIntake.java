@@ -10,6 +10,7 @@ import frc.robot.RobotMap;
 /**
  * Represents the Bottom Intake Subsystem, controlled by 1 Falcon.
  * 
+ * @author Chirag Kaushik
  * @since 1/6/20
  */
 public class BottomIntake implements Subsystem {
