@@ -98,11 +98,11 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Feet between both of the wheels on the front or back
      */
-    public static final double DT_WIDTH = 0.6477; //25.5 x 32
+    public static final double DT_WIDTH = 0.66; //25.5 x 32
     /**
      * Feet between both of the wheels on the left or right
      */
-    public static final double DT_LENGTH = 0.523; //20.6 feet;
+    public static final double DT_LENGTH = 0.535; //20.6 feet;
 
     public static final int TL_OFFSET = 2212;
     public static final int TR_OFFSET = 6730;
@@ -178,7 +178,7 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Returns the currently-estimated pose of the robot.
      *
-     * @return The pose.
+     * @return The pose
      */
     public Pose2d getPose() {
         Pose2d rawPose = odometry.getPoseMeters();

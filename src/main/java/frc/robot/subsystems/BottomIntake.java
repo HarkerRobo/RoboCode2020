@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
 /**
@@ -13,7 +13,7 @@ import frc.robot.RobotMap;
  * @author Chirag Kaushik
  * @since 1/6/20
  */
-public class BottomIntake implements Subsystem {
+public class BottomIntake extends SubsystemBase {
     private static BottomIntake instance;
 
     private TalonFX Falcon;

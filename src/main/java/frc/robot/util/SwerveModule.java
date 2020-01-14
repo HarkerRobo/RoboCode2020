@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.util.Conversions;
 import harkerrobolib.util.Conversions.SpeedUnit;
@@ -88,10 +87,6 @@ public class SwerveModule {
         falcon.setSelectedSensorPosition(0);
         
         falcon.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DRIVE_CURRENT_CONTINUOUS, DRIVE_CURRENT_PEAK, CURRENT_PEAK_DUR));
-        // falcon.configContinuousCurrentLimit(DRIVE_CURRENT_CONTINUOUS);
-        // falcon.configPeakCurrentLimit(DRIVE_CURRENT_PEAK);
-        // falcon.configPeakCurrentDuration(CURRENT_PEAK_DUR);
-        // falcon.enableCurrentLimit(true);
 
         falcon.configVoltageCompSaturation(VOLTAGE_COMP);
         falcon.enableVoltageCompensation(true);
