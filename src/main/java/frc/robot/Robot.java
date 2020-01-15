@@ -8,9 +8,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.commands.bottomintake.SpinBottomIntakeManual;
 import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
@@ -24,15 +24,15 @@ import frc.robot.subsystems.Shooter;
  * They stepped back calmly from their controllers and just wait out the end of the game
  * I was confused, thought maybe they just were done with what they were doing in the match, and shrugged
  * 
- * they did it 3 more times before I was like “Ok somethings wierd” because they finally didnt look like they had hit end game like they wanted but the bot wasnt moving
+ * they did it 3 more times before I was like "Ok somethings wierd" because they finally didnt look like they had hit end game like they wanted but the bot wasnt moving
  * 
  * I went over and was like what
  * 
- * “We ran out of code”
+ * "We ran out of code"
  * 
  * You What
  * 
- * “Oh we just ran out of code. It happens.”
+ * "Oh we just ran out of code. It happens."
  * 
  * Let me see your code
  * 
@@ -40,9 +40,9 @@ import frc.robot.subsystems.Shooter;
  * 
  * copied and pasted as many times as they could fit on the rio
  * 
- * “Have you heard of this magical thing called a loop”
+ * "Have you heard of this magical thing called a loop"
  * 
- * “A loop? Whats that?”
+ * "A loop? Whats that?"
  * 
  * Subsystems:
  *  8 drive
@@ -60,9 +60,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        BottomIntake.getInstance();
-        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
-        Indexer.getInstance();
+        // BottomIntake.getInstance();
+        // Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
+        // Indexer.getInstance();
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
         
         OI.getInstance();
@@ -80,6 +80,22 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
+        SmartDashboard.putNumber("TL Angle Pos", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("TR Angle Pos", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("BL Angle Pos", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("BR Angle Pos", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition(0));
+
+        SmartDashboard.putNumber("TL Absolute Angle Pos", Drivetrain.getInstance().getTopLeft().getCANCoder().getAbsolutePosition());
+        SmartDashboard.putNumber("TR Absolute Angle Pos", Drivetrain.getInstance().getTopRight().getCANCoder().getAbsolutePosition());
+        SmartDashboard.putNumber("BL Absolute Angle Pos", Drivetrain.getInstance().getBackLeft().getCANCoder().getAbsolutePosition());
+        SmartDashboard.putNumber("BR Absolute Angle Pos", Drivetrain.getInstance().getBackRight().getCANCoder().getAbsolutePosition());
+
+        SmartDashboard.putNumber("Pigeon heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
+        // SmartDashboard.putNumber("TL Angle Pos", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition());
+        // SmartDashboard.putNumber("TR Angle Pos", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition());
+        // SmartDashboard.putNumber("BL Angle Pos", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition());
+        // SmartDashboard.putNumber("BR Angle Pos", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition());
     }
 
     /**

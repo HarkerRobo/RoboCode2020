@@ -27,9 +27,9 @@ public class OI
     }
 
     private void initBindings() {
-        operatorGamepad.getButtonB().whilePressed(new ToggleShooterAngle());
-        operatorGamepad.getButtonA().whilePressed(new SpinBottomIntakeManual(1));
-        operatorGamepad.getButtonX().whilePressed(new SpinIndexerManual(1));
+        // operatorGamepad.getButtonB().whilePressed(new ToggleShooterAngle());
+        // operatorGamepad.getButtonA().whilePressed(new SpinBottomIntakeManual(1));
+        // operatorGamepad.getButtonX().whilePressed(new SpinIndexerManual(1));
     }
 
     public XboxGamepad getDriverGamepad() {
