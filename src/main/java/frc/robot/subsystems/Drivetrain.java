@@ -53,43 +53,45 @@ public class Drivetrain extends SubsystemBase {
     public static final Translation2d BACK_LEFT_LOCATION = new Translation2d(-Drivetrain.DT_WIDTH/2, -Drivetrain.DT_LENGTH/2);
     public static final Translation2d BACK_RIGHT_LOCATION = new Translation2d(Drivetrain.DT_WIDTH/2, -Drivetrain.DT_LENGTH/2);
 
-    private static final boolean TL_DRIVE_INVERTED = false;
+    private static final boolean TL_DRIVE_INVERTED = true;
+    private static final boolean TR_DRIVE_INVERTED = true;
+    private static final boolean BL_DRIVE_INVERTED = true;
+    private static final boolean BR_DRIVE_INVERTED = true;
+
     private static final boolean TL_ANGLE_INVERTED = false;
-    private static final boolean TR_DRIVE_INVERTED = false;
     private static final boolean TR_ANGLE_INVERTED = true;
-    private static final boolean BL_DRIVE_INVERTED = false;
-    private static final boolean BL_ANGLE_INVERTED = true;
-    private static final boolean BR_DRIVE_INVERTED = false;
+    private static final boolean BL_ANGLE_INVERTED = false;
     private static final boolean BR_ANGLE_INVERTED = true;
 
     private static final boolean TL_DRIVE_SENSOR_PHASE = true;
-    private static final boolean TL_ANGLE_SENSOR_PHASE = false;
     private static final boolean TR_DRIVE_SENSOR_PHASE = true;
-    private static final boolean TR_ANGLE_SENSOR_PHASE = true;
     private static final boolean BL_DRIVE_SENSOR_PHASE = true;
-    private static final boolean BL_ANGLE_SENSOR_PHASE = true;
     private static final boolean BR_DRIVE_SENSOR_PHASE = true;
+
+    private static final boolean TL_ANGLE_SENSOR_PHASE = false;
+    private static final boolean TR_ANGLE_SENSOR_PHASE = true;
+    private static final boolean BL_ANGLE_SENSOR_PHASE = false;
     private static final boolean BR_ANGLE_SENSOR_PHASE = true;
 
     public static final int ANGLE_POSITION_SLOT = 0;
-    private static final double ANGLE_POSITION_KP = 0.0;
+    private static final double ANGLE_POSITION_KP = 1.1;
     private static final double ANGLE_POSITION_KI = 0.0;
-    private static final double ANGLE_POSITION_KD = 0.0;
+    private static final double ANGLE_POSITION_KD = 11;
 
     public static final int DRIVE_VELOCITY_SLOT = 0;
-    private static final double DRIVE_VELOCITY_KP = 0.0;
+    private static final double DRIVE_VELOCITY_KP = 0.5;
     private static final double DRIVE_VELOCITY_KI = 0.0;
-    private static final double DRIVE_VELOCITY_KD = 0.0;
-    private static final double DRIVE_VELOCITY_KF = 0.0; // theoretical: 0.034;
+    private static final double DRIVE_VELOCITY_KD = 5;
+    private static final double DRIVE_VELOCITY_KF = 0.034; // theoretical: 0.034;
 
     public static final double MAX_DRIVE_VELOCITY = 2;
     public static final double MAX_ROTATION_VELOCITY = (2 * Math.PI);
     public static final double MAX_ROTATION_ACCELERATION = 2 * (2 * Math.PI);
     public static final double MAX_DRIVE_ACCELERATION = 0;
 
-    public static final double DRIVE_RAMP_RATE = 0.0;
-    public static final double ANGLE_RAMP_RATE = 0.0;
-    public static final double GEAR_RATIO = 0;
+    public static final double DRIVE_RAMP_RATE = 0.1;
+    public static final double ANGLE_RAMP_RATE = 0.1;
+    public static final double GEAR_RATIO = 6;
 
     //conversions
     public static final double METERS_PER_FOOT = 0.3048;
@@ -104,10 +106,10 @@ public class Drivetrain extends SubsystemBase {
      */
     public static final double DT_LENGTH = 0.535; //20.6 feet;
 
-    public static final int TL_OFFSET = 2212;
-    public static final int TR_OFFSET = 6730;
-    public static final int BL_OFFSET = 11327;
-    private static final int BR_OFFSET = 4605;
+    public static final int TL_OFFSET = 15561;
+    public static final int TR_OFFSET = 2492;
+    public static final int BL_OFFSET = 15351;
+    private static final int BR_OFFSET = 10413;
 
     public static final double PIGEON_kP = 0.10;
 
@@ -161,12 +163,12 @@ public class Drivetrain extends SubsystemBase {
         kinematics = new SwerveDriveKinematics(Drivetrain.FRONT_LEFT_LOCATION, Drivetrain.FRONT_RIGHT_LOCATION,
                 Drivetrain.BACK_LEFT_LOCATION, Drivetrain.BACK_RIGHT_LOCATION);
 
-        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(pigeon.getFusedHeading()), new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
 
     @Override
     public void periodic() {
-        odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading()),
+        odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading() + 90),
                 Drivetrain.getInstance().getTopLeft().getState(), Drivetrain.getInstance().getTopRight().getState(),
                 Drivetrain.getInstance().getBackLeft().getState(), Drivetrain.getInstance().getBackRight().getState());
 

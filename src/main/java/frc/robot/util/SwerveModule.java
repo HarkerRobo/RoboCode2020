@@ -3,10 +3,13 @@ package frc.robot.util;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.util.Conversions;
 import harkerrobolib.util.Conversions.SpeedUnit;
@@ -39,7 +42,7 @@ public class SwerveModule {
     private static final int DRIVE_CURRENT_PEAK = 60;
     private static final int ANGLE_CURRENT_CONTINUOUS = 15;
     private static final int ANGLE_CURRENT_PEAK = 15;
-    private static final int CURRENT_PEAK_DUR = 50;
+    private static final int CURRENT_PEAK_DUR = 20;
 
     // Motor inversions
     private final boolean DRIVE_INVERTED;
@@ -73,7 +76,7 @@ public class SwerveModule {
     public void driveFalconInit(TalonFX falcon) {
         falcon.configFactoryDefault();
         
-        falcon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        falcon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, 10);
 
         falcon.setNeutralMode(NeutralMode.Brake);
 
@@ -127,9 +130,9 @@ public class SwerveModule {
      */
     public void setDriveOutput(double output, boolean isPercentOutput) {
         if(isPercentOutput) {
-            driveMotor.set(ControlMode.PercentOutput, output);
+            driveMotor.set(TalonFXControlMode.PercentOutput, output);
         } else {
-            driveMotor.set(ControlMode.Velocity, Conversions.convert(SpeedUnit.FEET_PER_SECOND, output * Drivetrain.FEET_PER_METER, SpeedUnit.ENCODER_UNITS) * Drivetrain.GEAR_RATIO);
+            driveMotor.set(TalonFXControlMode.Velocity, Conversions.convert(SpeedUnit.FEET_PER_SECOND, output * Drivetrain.FEET_PER_METER, SpeedUnit.ENCODER_UNITS) * Drivetrain.GEAR_RATIO);
         }
     }
     

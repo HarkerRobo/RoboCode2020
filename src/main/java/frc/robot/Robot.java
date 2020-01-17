@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.bottomintake.SpinBottomIntakeManual;
@@ -24,15 +25,15 @@ import frc.robot.subsystems.Shooter;
  * They stepped back calmly from their controllers and just wait out the end of the game
  * I was confused, thought maybe they just were done with what they were doing in the match, and shrugged
  * 
- * they did it 3 more times before I was like “Ok somethings wierd” because they finally didnt look like they had hit end game like they wanted but the bot wasnt moving
+ * they did it 3 more times before I was like "Ok somethings wierd" because they finally didnt look like they had hit end game like they wanted but the bot wasnt moving
  * 
  * I went over and was like what
  * 
- * “We ran out of code”
+ * "We ran out of code"
  * 
  * You What
  * 
- * “Oh we just ran out of code. It happens.”
+ * "Oh we just ran out of code. It happens."
  * 
  * Let me see your code
  * 
@@ -40,9 +41,9 @@ import frc.robot.subsystems.Shooter;
  * 
  * copied and pasted as many times as they could fit on the rio
  * 
- * “Have you heard of this magical thing called a loop”
+ * "Have you heard of this magical thing called a loop"
  * 
- * “A loop? Whats that?”
+ * "A loop? Whats that?"
  * 
  * Subsystems:
  *  8 drive
@@ -60,9 +61,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        BottomIntake.getInstance();
-        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
-        Indexer.getInstance();
+        // BottomIntake.getInstance();
+        // Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
+        // Indexer.getInstance();
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
         
         OI.getInstance();
@@ -80,6 +81,27 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("BR Rise to Fall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+
+        SmartDashboard.putNumber("TL Angle POS", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        SmartDashboard.putNumber("TR Angle POS", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        SmartDashboard.putNumber("BL Angle POS", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        SmartDashboard.putNumber("BR Angle POS", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+
+        SmartDashboard.putNumber("TL Drive POS", Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("TR Drive POS", Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("BL Drive POS", Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("BR Drive POS", Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+
+        SmartDashboard.putNumber("TL Closed Loop Error", Drivetrain.getInstance().getTopLeft().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("TR Closed Loop Error", Drivetrain.getInstance().getTopRight().getDriveMotor().getClosedLoopError()/ Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("BL Closed Loop Error", Drivetrain.getInstance().getBackLeft().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("BR Closed Loop Error", Drivetrain.getInstance().getBackRight().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
+
+        SmartDashboard.putNumber("TL Current", Drivetrain.getInstance().getTopLeft().getAngleMotor().getOutputCurrent());
     }
 
     /**
