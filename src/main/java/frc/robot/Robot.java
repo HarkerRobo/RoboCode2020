@@ -81,21 +81,27 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
-        SmartDashboard.putNumber("TL Angle Pos", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("TR Angle Pos", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("BL Angle Pos", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition(0));
-        SmartDashboard.putNumber("BR Angle Pos", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("BR Rise to Fall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
 
-        SmartDashboard.putNumber("TL Absolute Angle Pos", Drivetrain.getInstance().getTopLeft().getCANCoder().getAbsolutePosition());
-        SmartDashboard.putNumber("TR Absolute Angle Pos", Drivetrain.getInstance().getTopRight().getCANCoder().getAbsolutePosition());
-        SmartDashboard.putNumber("BL Absolute Angle Pos", Drivetrain.getInstance().getBackLeft().getCANCoder().getAbsolutePosition());
-        SmartDashboard.putNumber("BR Absolute Angle Pos", Drivetrain.getInstance().getBackRight().getCANCoder().getAbsolutePosition());
+        SmartDashboard.putNumber("TL Angle POS", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        SmartDashboard.putNumber("TR Angle POS", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        SmartDashboard.putNumber("BL Angle POS", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        SmartDashboard.putNumber("BR Angle POS", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
 
-        SmartDashboard.putNumber("Pigeon heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
-        // SmartDashboard.putNumber("TL Angle Pos", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition());
-        // SmartDashboard.putNumber("TR Angle Pos", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition());
-        // SmartDashboard.putNumber("BL Angle Pos", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition());
-        // SmartDashboard.putNumber("BR Angle Pos", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition());
+        SmartDashboard.putNumber("TL Drive POS", Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("TR Drive POS", Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("BL Drive POS", Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("BR Drive POS", Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+
+        SmartDashboard.putNumber("TL Closed Loop Error", Drivetrain.getInstance().getTopLeft().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("TR Closed Loop Error", Drivetrain.getInstance().getTopRight().getDriveMotor().getClosedLoopError()/ Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("BL Closed Loop Error", Drivetrain.getInstance().getBackLeft().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("BR Closed Loop Error", Drivetrain.getInstance().getBackRight().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
+
+        SmartDashboard.putNumber("TL Current", Drivetrain.getInstance().getTopLeft().getAngleMotor().getOutputCurrent());
     }
 
     /**

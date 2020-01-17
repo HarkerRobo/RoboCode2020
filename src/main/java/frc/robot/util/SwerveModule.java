@@ -45,7 +45,7 @@ public class SwerveModule {
     private static final int DRIVE_CURRENT_PEAK = 60;
     private static final int ANGLE_CURRENT_CONTINUOUS = 15;
     private static final int ANGLE_CURRENT_PEAK = 15;
-    private static final int CURRENT_PEAK_DUR = 50;
+    private static final int CURRENT_PEAK_DUR = 20;
 
     // Motor inversions
     private final boolean DRIVE_INVERTED;
@@ -91,7 +91,7 @@ public class SwerveModule {
     
     public void driveFalconInit(TalonFX falcon) {
         falcon.configFactoryDefault();
-    
+
         falcon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, 10);
 
         falcon.setNeutralMode(NeutralMode.Brake);
