@@ -96,6 +96,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("TR Closed Loop Error", Drivetrain.getInstance().getTopRight().getDriveMotor().getClosedLoopError()/ Drivetrain.GEAR_RATIO);
         SmartDashboard.putNumber("BL Closed Loop Error", Drivetrain.getInstance().getBackLeft().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
         SmartDashboard.putNumber("BR Closed Loop Error", Drivetrain.getInstance().getBackRight().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
+
+        SmartDashboard.putNumber("TL Target Angle", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopTarget());
     }
 
     /**

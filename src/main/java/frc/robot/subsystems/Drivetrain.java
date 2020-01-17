@@ -145,10 +145,10 @@ public class Drivetrain extends SubsystemBase {
         // backLeft.getCANCoder().setPosition(backLeft.getCANCoder().getAbsolutePosition() - BL_ABSOLUTE_OFFSET);
         // backRight.getCANCoder().setPosition(backRight.getCANCoder().getAbsolutePosition() - BR_ABSOLUTE_OFFSET);
 
-        topLeft.getAngleMotor().setSelectedSensorPosition((TL_OFFSET - topLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs()) / 4);
-        topRight.getAngleMotor().setSelectedSensorPosition((TR_OFFSET - topRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs()) / 4);
-        backLeft.getAngleMotor().setSelectedSensorPosition((BL_OFFSET - backLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs()) / 4);
-        backRight.getAngleMotor().setSelectedSensorPosition((BR_OFFSET - backRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs()) / 4);
+        topLeft.getAngleMotor().setSelectedSensorPosition((topLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - TL_OFFSET) / 4);
+        topRight.getAngleMotor().setSelectedSensorPosition((topRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - TR_OFFSET) / 4);
+        backLeft.getAngleMotor().setSelectedSensorPosition((backLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - BL_OFFSET) / 4);
+        backRight.getAngleMotor().setSelectedSensorPosition((backRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - BR_OFFSET) / 4);
 
         applyToAllDrive((motor) -> motor.setSelectedSensorPosition(0));
 
@@ -171,7 +171,7 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading() + 90),
+        odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading()),
                 Drivetrain.getInstance().getTopLeft().getState(), Drivetrain.getInstance().getTopRight().getState(),
                 Drivetrain.getInstance().getBackLeft().getState(), Drivetrain.getInstance().getBackRight().getState());
 
