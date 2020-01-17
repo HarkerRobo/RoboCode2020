@@ -2,10 +2,13 @@ package frc.robot.util;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
@@ -56,26 +59,39 @@ public class SwerveModule {
     
     private TalonFX driveMotor;
     private HSTalon angleMotor;
+    private CANCoder canCoder;
 
-    public SwerveModule(int driveId, boolean invertDriveTalon, boolean driveSensorPhase, int angleId, boolean invertAngleTalon, boolean angleSensorPhase) {
+    private int driveId;
+    private int angleId;
+
+    private int canCoderID;
+
+    public SwerveModule(int driveId, boolean invertDriveTalon, boolean driveSensorPhase, int angleId, boolean invertAngleTalon, boolean angleSensorPhase, int canCoderID) {
         swerveDriveInverted = false;
-        
+
         driveMotor = new TalonFX(driveId);
         angleMotor = new HSTalon(angleId);
 
+        this.driveId = driveId;
+        this.angleId = angleId;
+
+        canCoder = new CANCoder(canCoderID);
+
         DRIVE_INVERTED = invertDriveTalon;
         ANGLE_INVERTED = invertAngleTalon;
-
+        
         DRIVE_SENSOR_PHASE = driveSensorPhase;
         ANGLE_SENSOR_PHASE = angleSensorPhase;
-
+        
         driveFalconInit(driveMotor);
-        angleTalonInit(angleMotor);
+        angleTalonInit(angleMotor); 
+
+        this.canCoderID = canCoderID;
     }
     
     public void driveFalconInit(TalonFX falcon) {
         falcon.configFactoryDefault();
-        
+
         falcon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, 10);
 
         falcon.setNeutralMode(NeutralMode.Brake);
@@ -85,7 +101,7 @@ public class SwerveModule {
         
         falcon.configForwardSoftLimitEnable(false);
         falcon.configReverseSoftLimitEnable(false);
-        falcon.overrideLimitSwitchesEnable(false); 
+        falcon.overrideLimitSwitchesEnable(false);
 
         falcon.setSelectedSensorPosition(0);
         
@@ -97,13 +113,14 @@ public class SwerveModule {
 
     public void angleTalonInit(HSTalon talon) {
         talon.configFactoryDefault();
-        
-        talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+
+        talon.configRemoteFeedbackFilter(canCoderID, RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_DEVICE_0);
+        talon.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_INDEX);
 
         talon.setNeutralMode(NeutralMode.Brake);
 
         talon.setInverted(ANGLE_INVERTED);
-        talon.setSensorPhase(ANGLE_SENSOR_PHASE);
+        canCoder.configSensorDirection(ANGLE_SENSOR_PHASE);
 
         talon.configForwardSoftLimitEnable(false);
         talon.configReverseSoftLimitEnable(false);
@@ -151,9 +168,9 @@ public class SwerveModule {
             setDriveOutput(output, isPercentOutput);
         }
         
-        int targetPos = (int)((targetAngle / 360) * 4096);
+        // int targetPos = (int)((targetAngle / 360) * 4096);
 
-        angleMotor.set(ControlMode.Position, targetPos);
+        angleMotor.set(ControlMode.Position, targetAngle);
     }
 
     public void setAngleAndDrivePosition(double targetAngle, double position, double feedForward) {
@@ -190,6 +207,16 @@ public class SwerveModule {
         return driveMotor;
     }
 
+    public CANCoder getCANCoder() {
+        return canCoder;
+    }
+    
+
+    public double getAngleDegreesCANCoder() {
+        return canCoder.getPosition() / 4096 * 360;
+    }
+    
+
      /**
      * Returns the current state of the module.
      *
@@ -197,6 +224,6 @@ public class SwerveModule {
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND) * Drivetrain.METERS_PER_FOOT, 
-            new Rotation2d(angleMotor.getSelectedSensorPosition() * 2 * Math.PI / 4096));
+            new Rotation2d(Math.toRadians(canCoder.getPosition())));
     }
 }

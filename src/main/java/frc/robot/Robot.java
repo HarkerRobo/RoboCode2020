@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.commands.bottomintake.SpinBottomIntakeManual;
 import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
@@ -81,6 +80,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
         SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());

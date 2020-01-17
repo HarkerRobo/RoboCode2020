@@ -75,6 +75,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static final int ANGLE_POSITION_SLOT = 0;
     private static final double ANGLE_POSITION_KP = 1.1;
+
     private static final double ANGLE_POSITION_KI = 0.0;
     private static final double ANGLE_POSITION_KD = 11;
 
@@ -91,6 +92,7 @@ public class Drivetrain extends SubsystemBase {
 
     public static final double DRIVE_RAMP_RATE = 0.1;
     public static final double ANGLE_RAMP_RATE = 0.1;
+
     public static final double GEAR_RATIO = 6;
 
     //conversions
@@ -111,6 +113,7 @@ public class Drivetrain extends SubsystemBase {
     public static final int BL_OFFSET = 15351;
     private static final int BR_OFFSET = 10413;
 
+
     public static final double PIGEON_kP = 0.10;
 
     public static final double WHEEL_DIAMETER = 4;
@@ -126,27 +129,32 @@ public class Drivetrain extends SubsystemBase {
     public static final double MP_THETA_KP = 3.1;
     public static final double MP_THETA_KI = 0;
     public static final double MP_THETA_KD = 0;
-	public static final Constraints THETA_CONSTRAINTS = new Constraints(MAX_ROTATION_VELOCITY, MAX_ROTATION_ACCELERATION);
+    public static final Constraints THETA_CONSTRAINTS = new Constraints(MAX_ROTATION_VELOCITY, MAX_ROTATION_ACCELERATION);
+    
+    private static final double TL_ABSOLUTE_OFFSET = /*352.88*/262.88;
+    private static final double TR_ABSOLUTE_OFFSET =/*418.09*/328.09;
+    private static final double BL_ABSOLUTE_OFFSET = /*356.044*/ 266.044;
+    private static final double BR_ABSOLUTE_OFFSET = /*234.756*/144.756;
 
     private Drivetrain() {
         topLeft = new SwerveModule(RobotMap.CAN_IDS.TL_DRIVE_ID, TL_DRIVE_INVERTED, TL_DRIVE_SENSOR_PHASE, 
-                RobotMap.CAN_IDS.TL_ANGLE_ID, TL_ANGLE_INVERTED, TL_ANGLE_SENSOR_PHASE);
+                RobotMap.CAN_IDS.TL_ANGLE_ID, TL_ANGLE_INVERTED, TL_ANGLE_SENSOR_PHASE, RobotMap.CAN_IDS.TL_ANGLE_ENCODER);
         topRight = new SwerveModule(RobotMap.CAN_IDS.TR_DRIVE_ID, TR_DRIVE_INVERTED, TR_DRIVE_SENSOR_PHASE,
-                RobotMap.CAN_IDS.TR_ANGLE_ID, TR_ANGLE_INVERTED, TR_ANGLE_SENSOR_PHASE);
+                RobotMap.CAN_IDS.TR_ANGLE_ID, TR_ANGLE_INVERTED, TR_ANGLE_SENSOR_PHASE, RobotMap.CAN_IDS.TR_ANGLE_ENCODER);
         backLeft = new SwerveModule(RobotMap.CAN_IDS.BL_DRIVE_ID, BL_DRIVE_INVERTED, BL_DRIVE_SENSOR_PHASE,
-                RobotMap.CAN_IDS.BL_ANGLE_ID, BL_ANGLE_INVERTED, BL_ANGLE_SENSOR_PHASE);
+                RobotMap.CAN_IDS.BL_ANGLE_ID, BL_ANGLE_INVERTED, BL_ANGLE_SENSOR_PHASE, RobotMap.CAN_IDS.BL_ANGLE_ENCODER);
         backRight = new SwerveModule(RobotMap.CAN_IDS.BR_DRIVE_ID, BR_DRIVE_INVERTED, BR_DRIVE_SENSOR_PHASE,
-                RobotMap.CAN_IDS.BR_ANGLE_ID, BR_ANGLE_INVERTED, BR_ANGLE_SENSOR_PHASE);
+                RobotMap.CAN_IDS.BR_ANGLE_ID, BR_ANGLE_INVERTED, BR_ANGLE_SENSOR_PHASE, RobotMap.CAN_IDS.BR_ANGLE_ENCODER);
 
-        int tlAngleOffset = (topLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - TL_OFFSET) / 4;
-        int trAngleOffset = (topRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - TR_OFFSET) / 4;
-        int blAngleOffset = (backLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - BL_OFFSET) / 4;
-        int brAngleOffset = (backRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - BR_OFFSET) / 4;
+    //    int tlAngleOffset = (topLeft.getCANCoder() .getPulseWidthRiseToFallUs() - TL_OFFSET) / 4;
+    //    int trAngleOffset = (topRight.getCANCoder() - TR_OFFSET) / 4;
+    //    int blAngleOffset = (backLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - BL_OFFSET) / 4;
+    //    int brAngleOffset = (backRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - BR_OFFSET) / 4;
 
-        topLeft.getAngleMotor().setSelectedSensorPosition(tlAngleOffset);
-        topRight.getAngleMotor().setSelectedSensorPosition(trAngleOffset);
-        backLeft.getAngleMotor().setSelectedSensorPosition(blAngleOffset);
-        backRight.getAngleMotor().setSelectedSensorPosition(brAngleOffset);
+        topLeft.getCANCoder().setPosition(topLeft.getCANCoder().getAbsolutePosition() - TL_ABSOLUTE_OFFSET);
+        topRight.getCANCoder().setPosition(topRight.getCANCoder().getAbsolutePosition() - TR_ABSOLUTE_OFFSET);
+        backLeft.getCANCoder().setPosition(backLeft.getCANCoder().getAbsolutePosition() - BL_ABSOLUTE_OFFSET);
+        backRight.getCANCoder().setPosition(backRight.getCANCoder().getAbsolutePosition() - BR_ABSOLUTE_OFFSET);
 
         applyToAllDrive((motor) -> motor.setSelectedSensorPosition(0));
 
@@ -156,7 +164,7 @@ public class Drivetrain extends SubsystemBase {
         pigeon = new HSPigeon(RobotMap.CAN_IDS.PIGEON_ID);
         pigeon.configFactoryDefault();
         pigeon.zero();
-        pigeon.setFusedHeading(90);
+        // pigeon.setFusedHeading(90);
 
         Conversions.setWheelDiameter(WHEEL_DIAMETER);
 
@@ -164,6 +172,7 @@ public class Drivetrain extends SubsystemBase {
                 Drivetrain.BACK_LEFT_LOCATION, Drivetrain.BACK_RIGHT_LOCATION);
 
         odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(pigeon.getFusedHeading()), new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+
     }
 
     @Override

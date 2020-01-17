@@ -71,7 +71,7 @@ public class SwerveManual extends CommandBase {
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         turnMagnitude *= -1 * OUTPUT_MULTIPLIER * Drivetrain.MAX_ROTATION_VELOCITY;
 
-        double currentPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
+        // double currentPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
 
         // if(pigeonFlag && turnMagnitude == 0) { //If there was joystick input but now there is not
         //     long currentTime = System.currentTimeMillis();
@@ -91,7 +91,7 @@ public class SwerveManual extends CommandBase {
         // prevTime = System.currentTimeMillis();
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
+            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading() + 90)
         );
 
         // Now use this in our kinematics
