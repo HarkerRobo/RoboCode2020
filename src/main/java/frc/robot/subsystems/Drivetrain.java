@@ -91,7 +91,7 @@ public class Drivetrain extends SubsystemBase {
     public static final double MAX_DRIVE_ACCELERATION = 3;
 
     public static final double DRIVE_RAMP_RATE = 0.1;
-    public static final double ANGLE_RAMP_RATE = 0.1;
+    public static final double ANGLE_RAMP_RATE = 0.2;
 
     public static final double GEAR_RATIO = 6;
 
@@ -158,7 +158,7 @@ public class Drivetrain extends SubsystemBase {
         pigeon = new HSPigeon(RobotMap.CAN_IDS.PIGEON_ID);
         pigeon.configFactoryDefault();
         pigeon.zero();
-        pigeon.setFusedHeading(90);
+        // pigeon.setFusedHeading(90);
 
         Conversions.setWheelDiameter(WHEEL_DIAMETER);
 
