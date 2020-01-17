@@ -8,9 +8,6 @@ public class RobotMap {
     public static final int PRIMARY_INDEX = 0;
     public static final int AUXILIARY_INDEX = 1;
 
-    public static final int REMOTE_DEVICE_0 = 0;
-    public static final int REMOTE_DEVICE_1 = 1;
-
 	public static class CAN_IDS {
 		public static final int BOTTOM_INTAKE_MOTOR_ID = -1;
 		
@@ -34,7 +31,6 @@ public class RobotMap {
 
 		public static final int BR_DRIVE_ID = 6;
 		public static final int BR_ANGLE_ID = 7;
-
 
 		public static final int PIGEON_ID = 0;
 	}

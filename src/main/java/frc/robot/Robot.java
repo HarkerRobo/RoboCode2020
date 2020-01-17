@@ -11,11 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.commands.shooter.SpinShooterManual;
-import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Shooter;
     
 /**
  * Has anyone heard of the team that ran out of code? (This is a real story)
@@ -86,22 +82,20 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         SmartDashboard.putNumber("BR Rise to Fall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
 
-        SmartDashboard.putNumber("TL Angle POS", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-        SmartDashboard.putNumber("TR Angle POS", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-        SmartDashboard.putNumber("BL Angle POS", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-        SmartDashboard.putNumber("BR Angle POS", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        // SmartDashboard.putNumber("TL Angle POS", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        // SmartDashboard.putNumber("TR Angle POS", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        // SmartDashboard.putNumber("BL Angle POS", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        // SmartDashboard.putNumber("BR Angle POS", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
 
-        SmartDashboard.putNumber("TL Drive POS", Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-        SmartDashboard.putNumber("TR Drive POS", Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-        SmartDashboard.putNumber("BL Drive POS", Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-        SmartDashboard.putNumber("BR Drive POS", Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        // SmartDashboard.putNumber("TL Drive POS", Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        // SmartDashboard.putNumber("TR Drive POS", Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        // SmartDashboard.putNumber("BL Drive POS", Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        // SmartDashboard.putNumber("BR Drive POS", Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
 
         SmartDashboard.putNumber("TL Closed Loop Error", Drivetrain.getInstance().getTopLeft().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
         SmartDashboard.putNumber("TR Closed Loop Error", Drivetrain.getInstance().getTopRight().getDriveMotor().getClosedLoopError()/ Drivetrain.GEAR_RATIO);
         SmartDashboard.putNumber("BL Closed Loop Error", Drivetrain.getInstance().getBackLeft().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
         SmartDashboard.putNumber("BR Closed Loop Error", Drivetrain.getInstance().getBackRight().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
-
-        SmartDashboard.putNumber("TL Current", Drivetrain.getInstance().getTopLeft().getAngleMotor().getOutputCurrent());
     }
 
     /**

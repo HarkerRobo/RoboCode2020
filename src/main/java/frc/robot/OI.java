@@ -1,8 +1,5 @@
 package frc.robot;
 
-import frc.robot.commands.bottomintake.SpinBottomIntakeManual;
-import frc.robot.commands.indexer.SpinIndexerManual;
-import frc.robot.commands.shooter.ToggleShooterAngle;
 import harkerrobolib.wrappers.XboxGamepad;
 
 /**
