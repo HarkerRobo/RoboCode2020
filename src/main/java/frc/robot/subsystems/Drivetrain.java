@@ -52,47 +52,175 @@ public class Drivetrain extends SubsystemBase {
     public static final Translation2d FRONT_RIGHT_LOCATION = new Translation2d(Drivetrain.DT_WIDTH/2, Drivetrain.DT_LENGTH/2);
     public static final Translation2d BACK_LEFT_LOCATION = new Translation2d(-Drivetrain.DT_WIDTH/2, -Drivetrain.DT_LENGTH/2);
     public static final Translation2d BACK_RIGHT_LOCATION = new Translation2d(Drivetrain.DT_WIDTH/2, -Drivetrain.DT_LENGTH/2);
+    
+    private static boolean TL_DRIVE_INVERTED;
+    private static boolean TR_DRIVE_INVERTED;
+    private static boolean BL_DRIVE_INVERTED;
+    private static boolean BR_DRIVE_INVERTED;
 
-    private static final boolean TL_DRIVE_INVERTED = true;
-    private static final boolean TR_DRIVE_INVERTED = true;
-    private static final boolean BL_DRIVE_INVERTED = true;
-    private static final boolean BR_DRIVE_INVERTED = true;
+    private static boolean TL_ANGLE_INVERTED;
+    private static boolean TR_ANGLE_INVERTED;
+    private static boolean BL_ANGLE_INVERTED;
+    private static boolean BR_ANGLE_INVERTED;
 
-    private static final boolean TL_ANGLE_INVERTED = false;
-    private static final boolean TR_ANGLE_INVERTED = true;
-    private static final boolean BL_ANGLE_INVERTED = false;
-    private static final boolean BR_ANGLE_INVERTED = true;
+    private static boolean TL_DRIVE_SENSOR_PHASE;
+    private static boolean TR_DRIVE_SENSOR_PHASE;
+    private static boolean BL_DRIVE_SENSOR_PHASE;
+    private static boolean BR_DRIVE_SENSOR_PHASE;
 
-    private static final boolean TL_DRIVE_SENSOR_PHASE = true;
-    private static final boolean TR_DRIVE_SENSOR_PHASE = true;
-    private static final boolean BL_DRIVE_SENSOR_PHASE = true;
-    private static final boolean BR_DRIVE_SENSOR_PHASE = true;
+    private static boolean TL_ANGLE_SENSOR_PHASE;
+    private static boolean TR_ANGLE_SENSOR_PHASE;
+    private static boolean BL_ANGLE_SENSOR_PHASE;
+    private static boolean BR_ANGLE_SENSOR_PHASE;
 
-    private static final boolean TL_ANGLE_SENSOR_PHASE = false;
-    private static final boolean TR_ANGLE_SENSOR_PHASE = true;
-    private static final boolean BL_ANGLE_SENSOR_PHASE = false;
-    private static final boolean BR_ANGLE_SENSOR_PHASE = true;
+    public static final int TL_OFFSET;//15561;
+    public static final int TR_OFFSET;//2492;
+    public static final int BL_OFFSET;//15351;
+    private static final int BR_OFFSET;//10413;
 
     public static final int ANGLE_POSITION_SLOT = 0;
-    private static final double ANGLE_POSITION_KP = 1.1;
+    private static final double ANGLE_POSITION_KP;
 
-    private static final double ANGLE_POSITION_KI = 0.0;
-    private static final double ANGLE_POSITION_KD = 11;
+    private static final double ANGLE_POSITION_KI;
+    private static final double ANGLE_POSITION_KD;
 
     public static final int DRIVE_VELOCITY_SLOT = 0;
-    private static final double DRIVE_VELOCITY_KP = 0.5;
-    private static final double DRIVE_VELOCITY_KI = 0.0;
-    private static final double DRIVE_VELOCITY_KD = 5;
-    private static final double DRIVE_VELOCITY_KF = 0.034; // theoretical: 0.034;
+    private static final double DRIVE_VELOCITY_KP;
+    private static final double DRIVE_VELOCITY_KI;
+    private static final double DRIVE_VELOCITY_KD;
+    private static final double DRIVE_VELOCITY_KF; // theoretical: 0.034;
+
+
+    public static final double PIGEON_kP;
+    public static final double MP_X_KP;//2.6;
+    public static final double MP_X_KI;
+    public static final double MP_X_KD;//15;
+
+    public static final double MP_Y_KP;//0.7;
+    public static final double MP_Y_KI;
+    public static final double MP_Y_KD;
+
+    public static final double MP_THETA_KP;//3.1;
+    public static final double MP_THETA_KI;
+    public static final double MP_THETA_KD;
+
+    public static final double DRIVE_RAMP_RATE;
+    public static final double ANGLE_RAMP_RATE;
+
+    static {
+        //practice constants
+        if (RobotMap.IS_PRACTICE) {
+            TL_DRIVE_INVERTED = false;
+            TR_DRIVE_INVERTED = false;
+            BL_DRIVE_INVERTED = false;
+            BR_DRIVE_INVERTED = false;
+
+            TL_ANGLE_INVERTED = false;
+            TR_ANGLE_INVERTED = false;
+            BL_ANGLE_INVERTED = false;
+            BR_ANGLE_INVERTED = false;
+
+            TL_DRIVE_SENSOR_PHASE = false;
+            TR_DRIVE_SENSOR_PHASE = false;
+            BL_DRIVE_SENSOR_PHASE = false;
+            BR_DRIVE_SENSOR_PHASE = false;
+
+            TL_ANGLE_SENSOR_PHASE = false;
+            TR_ANGLE_SENSOR_PHASE = false;
+            BL_ANGLE_SENSOR_PHASE = false;
+            BR_ANGLE_SENSOR_PHASE = false;
+
+            TL_OFFSET = 11575;//15561;
+            TR_OFFSET = 14161;//2492;
+            BL_OFFSET = 11400;//15351;
+            BR_OFFSET = 6447;//10413;
+            
+            ANGLE_POSITION_KP = 1.1;
+            ANGLE_POSITION_KI = 0.0;
+            ANGLE_POSITION_KD = 11;
+            
+            DRIVE_VELOCITY_KP = 0.5;
+            DRIVE_VELOCITY_KI = 0.0;
+            DRIVE_VELOCITY_KD = 5;
+            DRIVE_VELOCITY_KF = 0.034; // theoretical: 0.034;
+
+            DRIVE_RAMP_RATE = 0.1;
+            ANGLE_RAMP_RATE = 0.2;  
+            
+            PIGEON_kP = 0.02;
+            MP_X_KP = 0;//2.6;
+            MP_X_KI = 0;
+            MP_X_KD = 0;//15;
+
+            MP_Y_KP = 0;//0.7;
+            MP_Y_KI = 0;
+            MP_Y_KD = 0;
+
+            MP_THETA_KP = 0;//3.1;
+            MP_THETA_KI = 0;
+            MP_THETA_KD = 0;
+        
+        } else { // competitive bot contants
+            TL_DRIVE_INVERTED = true;
+            TR_DRIVE_INVERTED = true;
+            BL_DRIVE_INVERTED = true;
+            BR_DRIVE_INVERTED = true;
+
+            TL_ANGLE_INVERTED = false;
+            TR_ANGLE_INVERTED = true;
+            BL_ANGLE_INVERTED = false;
+            BR_ANGLE_INVERTED = true;
+
+            TL_DRIVE_SENSOR_PHASE = true;
+            TR_DRIVE_SENSOR_PHASE = true;
+            BL_DRIVE_SENSOR_PHASE = true;
+            BR_DRIVE_SENSOR_PHASE = true;
+            
+            TL_ANGLE_SENSOR_PHASE = false;
+            TR_ANGLE_SENSOR_PHASE = true;
+            BL_ANGLE_SENSOR_PHASE = false;
+            BR_ANGLE_SENSOR_PHASE = true;
+
+            TL_OFFSET = 11575;//15561;
+            TR_OFFSET = 14161;//2492;
+            BL_OFFSET = 11400;//15351;
+            BR_OFFSET = 6447;//10413;
+            
+            ANGLE_POSITION_KP = 1.1;
+            ANGLE_POSITION_KI = 0.0;
+            ANGLE_POSITION_KD = 11;
+            
+            DRIVE_VELOCITY_KP = 0.5;
+            DRIVE_VELOCITY_KI = 0.0;
+            DRIVE_VELOCITY_KD = 5;
+            DRIVE_VELOCITY_KF = 0.034; // theoretical: 0.034;
+
+            DRIVE_RAMP_RATE = 0.1;
+            ANGLE_RAMP_RATE = 0.2;  
+            
+            PIGEON_kP = 0.02;
+            MP_X_KP = 0;//2.6;
+            MP_X_KI = 0;
+            MP_X_KD = 0;//15;
+
+            MP_Y_KP = 0;//0.7;
+            MP_Y_KI = 0;
+            MP_Y_KD = 0;
+
+            MP_THETA_KP = 0;//3.1;
+            MP_THETA_KI = 0;
+            MP_THETA_KD = 0;
+        }
+    }
+
+    
 
     public static final double MAX_DRIVE_VELOCITY = 2;
     public static final double MAX_ROTATION_VELOCITY = (2 * Math.PI);
     public static final double MAX_ROTATION_ACCELERATION = 2 * (2 * Math.PI);
     public static final double MAX_DRIVE_ACCELERATION = 3;
 
-    public static final double DRIVE_RAMP_RATE = 0.1;
-    public static final double ANGLE_RAMP_RATE = 0.2;
-
+   
     public static final double GEAR_RATIO = 6;
 
     //conversions
@@ -108,28 +236,20 @@ public class Drivetrain extends SubsystemBase {
      */
     public static final double DT_LENGTH = 0.535; //20.6 feet;
 
-    public static final int TL_OFFSET = 11575;//15561;
-    public static final int TR_OFFSET = 14161;//2492;
-    public static final int BL_OFFSET = 11400;//15351;
-    private static final int BR_OFFSET = 6447;//10413;
 
-    public static final double PIGEON_kP = 0.02;
-
+    
     public static final double WHEEL_DIAMETER = 4;
-
-    public static final double MP_X_KP = 0;//2.6;
-    public static final double MP_X_KI = 0;
-    public static final double MP_X_KD = 0;//15;
-
-    public static final double MP_Y_KP = 0;//0.7;
-    public static final double MP_Y_KI = 0;
-    public static final double MP_Y_KD = 0;
-
-    public static final double MP_THETA_KP = 0;//3.1;
-    public static final double MP_THETA_KI = 0;
-    public static final double MP_THETA_KD = 0;
+    
     public static final Constraints THETA_CONSTRAINTS = new Constraints(MAX_ROTATION_VELOCITY, MAX_ROTATION_ACCELERATION);
 
+    /**
+     * Default constructor for Drivetrain
+     * Initializes SwerveModules with inverts for drive and angle motors 
+     * and sensor phases, resets the encoders to the offset position and 
+     * zeroes the angle motors so that all modules are facing forward at
+     * 90 degrees, zeroes the pigeon to 90 degrees, and initializes 
+     * SwerveDriveKinematics and Odometry.
+     */
     private Drivetrain() {
         topLeft = new SwerveModule(RobotMap.CAN_IDS.TL_DRIVE_ID, TL_DRIVE_INVERTED, TL_DRIVE_SENSOR_PHASE, 
                 RobotMap.CAN_IDS.TL_ANGLE_ID, TL_ANGLE_INVERTED, TL_ANGLE_SENSOR_PHASE);
@@ -169,6 +289,10 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
+    /**
+     * Updates odometry periodically based on the pigeon heading and
+     * the states of the SwerveModules.
+     */
     @Override
     public void periodic() {
         odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading()),

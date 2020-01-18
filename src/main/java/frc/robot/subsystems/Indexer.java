@@ -17,7 +17,14 @@ import frc.robot.RobotMap;
 public class Indexer implements Subsystem {
     private static Indexer instance;
     
-    private static final TalonFXInvertType FALCON_INVERT = TalonFXInvertType.Clockwise;
+    private static TalonFXInvertType FALCON_INVERT;
+    static {
+        if(RobotMap.IS_PRACTICE) {
+            FALCON_INVERT = TalonFXInvertType.Clockwise; //Change accordingly
+        } else {
+            FALCON_INVERT = TalonFXInvertType.Clockwise; //Change accordingly
+        }
+    }  
     
     private TalonFX falcon;
     public static final int VOLTAGE_COMP = 10;

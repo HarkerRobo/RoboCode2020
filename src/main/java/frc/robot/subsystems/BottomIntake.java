@@ -18,7 +18,14 @@ public class BottomIntake extends SubsystemBase {
 
     private TalonFX Falcon;
     
-    private static final TalonFXInvertType MOTOR_INVERT = TalonFXInvertType.Clockwise; //Change accordingly
+    private static TalonFXInvertType MOTOR_INVERT;
+    static {
+        if(RobotMap.IS_PRACTICE) {
+            MOTOR_INVERT = TalonFXInvertType.Clockwise; //Change accordingly
+        } else {
+            MOTOR_INVERT = TalonFXInvertType.Clockwise; //Change accordingly
+        }
+    }  
 
     private static final double VOLTAGE_COMPENSATION = 10;
     

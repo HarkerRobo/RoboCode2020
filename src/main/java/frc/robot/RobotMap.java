@@ -1,12 +1,14 @@
 package frc.robot;
 
 public class RobotMap {
+	public static final boolean IS_PRACTICE = true;
 
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;
     
     public static final int PRIMARY_INDEX = 0;
-    public static final int AUXILIARY_INDEX = 1;
+	public static final int AUXILIARY_INDEX = 1;
+
 
 	public static class CAN_IDS {
 		public static final int BOTTOM_INTAKE_MOTOR_ID = -1;
