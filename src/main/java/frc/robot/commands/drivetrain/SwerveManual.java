@@ -25,11 +25,12 @@ import harkerrobolib.util.MathUtil;
  * @author Shahzeb Lakhani
  * @author Anirudh Kotamraju
  * @author Arjun Dixit
+ * @author Rohan Bhowmik
  * @since 11/4/19
  */
 public class SwerveManual extends CommandBase {
-    private static final double OUTPUT_MULTIPLIER = 0.3;
-    private static final double VELOCITY_HEADING_MULTIPLIER = -50;
+    private static final double OUTPUT_MULTIPLIER = 0.7;
+    private static final double VELOCITY_HEADING_MULTIPLIER = -100;
     private static final boolean IS_PERCENT_OUTPUT = false;
 
     private double translateX, translateY, turnMagnitude;
@@ -44,8 +45,8 @@ public class SwerveManual extends CommandBase {
         addRequirements(Drivetrain.getInstance());
 
         pigeonFlag = false;
-        pigeonAngle = 0;
-        prevPigeonHeading = 0;
+        pigeonAngle = 90;
+        prevPigeonHeading = 90;
         prevTime = System.currentTimeMillis();
     }
 
@@ -80,6 +81,9 @@ public class SwerveManual extends CommandBase {
             long currentTime = System.currentTimeMillis();
             double deltaTime = (double)(currentTime - prevTime);
             double turnVel = (currentPigeonHeading - prevPigeonHeading) / deltaTime;
+
+            SmartDashboard.putNumber("Turn Vel", turnVel);
+
             pigeonAngle = currentPigeonHeading - turnVel * VELOCITY_HEADING_MULTIPLIER; // account for momentum when turning
         }
 
@@ -96,8 +100,12 @@ public class SwerveManual extends CommandBase {
         prevTime = System.currentTimeMillis();
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
+            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading() - 90)
         );
+
+        SmartDashboard.putNumber("Speed x", speeds.vxMetersPerSecond);
+        SmartDashboard.putNumber("Speed y", speeds.vyMetersPerSecond);
+        SmartDashboard.putNumber("Speed rot", speeds.omegaRadiansPerSecond);
 
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);

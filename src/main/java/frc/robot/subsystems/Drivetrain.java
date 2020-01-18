@@ -108,10 +108,10 @@ public class Drivetrain extends SubsystemBase {
      */
     public static final double DT_LENGTH = 0.535; //20.6 feet;
 
-    public static final int TL_OFFSET = 15561;
-    public static final int TR_OFFSET = 2492;
-    public static final int BL_OFFSET = 15351;
-    private static final int BR_OFFSET = 10413;
+    public static final int TL_OFFSET = 11575;//15561;
+    public static final int TR_OFFSET = 14161;//2492;
+    public static final int BL_OFFSET = 11400;//15351;
+    private static final int BR_OFFSET = 6447;//10413;
 
     public static final double PIGEON_kP = 0.02;
 
@@ -254,7 +254,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public static double convertAngle(SwerveModule module, double targetAngle) {
         // Step 1
-        targetAngle -= 90;
+        // targetAngle += 90;
 
         double currDegrees = module.getAngleDegrees();
 
