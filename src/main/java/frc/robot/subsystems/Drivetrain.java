@@ -113,7 +113,7 @@ public class Drivetrain extends SubsystemBase {
     public static final int BL_OFFSET = 15351;
     private static final int BR_OFFSET = 10413;
 
-    public static final double PIGEON_kP = 0.10;
+    public static final double PIGEON_kP = 0.02;
 
     public static final double WHEEL_DIAMETER = 4;
 
@@ -158,7 +158,7 @@ public class Drivetrain extends SubsystemBase {
         pigeon = new HSPigeon(RobotMap.CAN_IDS.PIGEON_ID);
         pigeon.configFactoryDefault();
         pigeon.zero();
-        // pigeon.setFusedHeading(90);
+        pigeon.setFusedHeading(90);
 
         Conversions.setWheelDiameter(WHEEL_DIAMETER);
 
@@ -175,9 +175,9 @@ public class Drivetrain extends SubsystemBase {
                 Drivetrain.getInstance().getTopLeft().getState(), Drivetrain.getInstance().getTopRight().getState(),
                 Drivetrain.getInstance().getBackLeft().getState(), Drivetrain.getInstance().getBackRight().getState());
 
-        SmartDashboard.putNumber("Current X", getPose().getTranslation().getX());
-        SmartDashboard.putNumber("Current Y", getPose().getTranslation().getY());
-        SmartDashboard.putNumber("Current Rot", getPose().getRotation().getDegrees());
+        // SmartDashboard.putNumber("Current X", getPose().getTranslation().getX());
+        // SmartDashboard.putNumber("Current Y", getPose().getTranslation().getY());
+        // SmartDashboard.putNumber("Current Rot", getPose().getRotation().getDegrees());
     }
 
     /**
