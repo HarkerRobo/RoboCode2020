@@ -29,7 +29,7 @@ import harkerrobolib.util.MathUtil;
  */
 public class SwerveManual extends CommandBase {
     private static final double OUTPUT_MULTIPLIER = 0.3;
-    private static final double VELOCITY_HEADING_MULTIPLIER = 0;
+    private static final double VELOCITY_HEADING_MULTIPLIER = -50;
     private static final boolean IS_PERCENT_OUTPUT = false;
 
     private double translateX, translateY, turnMagnitude;
@@ -65,6 +65,7 @@ public class SwerveManual extends CommandBase {
         translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
         turnMagnitude = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
+
         SmartDashboard.putNumber("translate x", translateX);
         SmartDashboard.putNumber("translate y", translateY);
         SmartDashboard.putNumber("turn mag", turnMagnitude);
@@ -73,24 +74,26 @@ public class SwerveManual extends CommandBase {
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         turnMagnitude *= -1 * OUTPUT_MULTIPLIER * Drivetrain.MAX_ROTATION_VELOCITY;
 
-        // double currentPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
+        double currentPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
 
-        // if(pigeonFlag && turnMagnitude == 0) { //If there was joystick input but now there is not
-        //     long currentTime = System.currentTimeMillis();
-        //     double deltaTime = (double)(currentTime - prevTime);
-        //     double turnVel = (currentPigeonHeading - prevPigeonHeading) / deltaTime;
-        //     pigeonAngle = currentPigeonHeading - turnVel * VELOCITY_HEADING_MULTIPLIER; // account for momentum when turning
-        // }
+        if(pigeonFlag && turnMagnitude == 0) { //If there was joystick input but now there is not
+            long currentTime = System.currentTimeMillis();
+            double deltaTime = (double)(currentTime - prevTime);
+            double turnVel = (currentPigeonHeading - prevPigeonHeading) / deltaTime;
+            pigeonAngle = currentPigeonHeading - turnVel * VELOCITY_HEADING_MULTIPLIER; // account for momentum when turning
+        }
 
-        // pigeonFlag = Math.abs(turnMagnitude) > 0; //Update pigeon flag
+        pigeonFlag = Math.abs(turnMagnitude) > 0; //Update pigeon flag
 
-        // if(!pigeonFlag) { //If there is no joystick input currently
-        //     turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
-        //     SmartDashboard.putNumber("Pigeon Error", pigeonAngle - currentPigeonHeading);
-        // }
+        if(!pigeonFlag) { //If there is no joystick input currently
+            turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
+            SmartDashboard.putNumber("Pigeon Error", pigeonAngle - currentPigeonHeading);
+        }
 
-        // prevPigeonHeading = currentPigeonHeading;
-        // prevTime = System.currentTimeMillis();
+        SmartDashboard.putNumber("turn mag", turnMagnitude);
+
+        prevPigeonHeading = currentPigeonHeading;
+        prevTime = System.currentTimeMillis();
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
