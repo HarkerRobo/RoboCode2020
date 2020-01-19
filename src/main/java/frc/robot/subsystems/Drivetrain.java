@@ -17,6 +17,7 @@ import harkerrobolib.wrappers.HSTalon;
 
 import java.util.function.Consumer;
 
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 /**
@@ -53,10 +54,10 @@ public class Drivetrain extends SubsystemBase {
     public static final Translation2d BACK_LEFT_LOCATION = new Translation2d(-Drivetrain.DT_WIDTH/2, -Drivetrain.DT_LENGTH/2);
     public static final Translation2d BACK_RIGHT_LOCATION = new Translation2d(Drivetrain.DT_WIDTH/2, -Drivetrain.DT_LENGTH/2);
     
-    private static boolean TL_DRIVE_INVERTED;
-    private static boolean TR_DRIVE_INVERTED;
-    private static boolean BL_DRIVE_INVERTED;
-    private static boolean BR_DRIVE_INVERTED;
+    private static TalonFXInvertType TL_DRIVE_INVERTED;
+    private static TalonFXInvertType TR_DRIVE_INVERTED;
+    private static TalonFXInvertType BL_DRIVE_INVERTED;
+    private static TalonFXInvertType BR_DRIVE_INVERTED;
 
     private static boolean TL_ANGLE_INVERTED;
     private static boolean TR_ANGLE_INVERTED;
@@ -92,6 +93,7 @@ public class Drivetrain extends SubsystemBase {
 
 
     public static final double PIGEON_kP;
+
     public static final double MP_X_KP;//2.6;
     public static final double MP_X_KI;
     public static final double MP_X_KD;//15;
@@ -110,30 +112,30 @@ public class Drivetrain extends SubsystemBase {
     static {
         //practice constants
         if (RobotMap.IS_PRACTICE) {
-            TL_DRIVE_INVERTED = false;
-            TR_DRIVE_INVERTED = false;
-            BL_DRIVE_INVERTED = false;
-            BR_DRIVE_INVERTED = false;
+            TL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
+            TR_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
+            BL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
+            BR_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
 
-            TL_ANGLE_INVERTED = false;
-            TR_ANGLE_INVERTED = false;
-            BL_ANGLE_INVERTED = false;
+            TL_ANGLE_INVERTED = true;
+            TR_ANGLE_INVERTED = true;
+            BL_ANGLE_INVERTED = true;
             BR_ANGLE_INVERTED = false;
 
-            TL_DRIVE_SENSOR_PHASE = false;
-            TR_DRIVE_SENSOR_PHASE = false;
+            TL_DRIVE_SENSOR_PHASE = true;
+            TR_DRIVE_SENSOR_PHASE = true;
             BL_DRIVE_SENSOR_PHASE = false;
             BR_DRIVE_SENSOR_PHASE = false;
 
-            TL_ANGLE_SENSOR_PHASE = false;
-            TR_ANGLE_SENSOR_PHASE = false;
-            BL_ANGLE_SENSOR_PHASE = false;
+            TL_ANGLE_SENSOR_PHASE = true;
+            TR_ANGLE_SENSOR_PHASE = true;
+            BL_ANGLE_SENSOR_PHASE = true;
             BR_ANGLE_SENSOR_PHASE = false;
 
-            TL_OFFSET = 11575;//15561;
-            TR_OFFSET = 14161;//2492;
-            BL_OFFSET = 11400;//15351;
-            BR_OFFSET = 6447;//10413;
+            TL_OFFSET = 9154;
+            TR_OFFSET = 5915;
+            BL_OFFSET = 1604;
+            BR_OFFSET = 5724;
             
             ANGLE_POSITION_KP = 1.1;
             ANGLE_POSITION_KI = 0.0;
@@ -147,7 +149,8 @@ public class Drivetrain extends SubsystemBase {
             DRIVE_RAMP_RATE = 0.1;
             ANGLE_RAMP_RATE = 0.2;  
             
-            PIGEON_kP = 0.02;
+            PIGEON_kP = 0.1;
+
             MP_X_KP = 0;//2.6;
             MP_X_KI = 0;
             MP_X_KD = 0;//15;
@@ -160,11 +163,11 @@ public class Drivetrain extends SubsystemBase {
             MP_THETA_KI = 0;
             MP_THETA_KD = 0;
         
-        } else { // competitive bot contants
-            TL_DRIVE_INVERTED = true;
-            TR_DRIVE_INVERTED = true;
-            BL_DRIVE_INVERTED = true;
-            BR_DRIVE_INVERTED = true;
+        } else { // competitive bot constants
+            TL_DRIVE_INVERTED = TalonFXInvertType.CounterClockwise;
+            TR_DRIVE_INVERTED = TalonFXInvertType.CounterClockwise;
+            BL_DRIVE_INVERTED = TalonFXInvertType.CounterClockwise;
+            BR_DRIVE_INVERTED = TalonFXInvertType.CounterClockwise;
 
             TL_ANGLE_INVERTED = false;
             TR_ANGLE_INVERTED = true;
@@ -190,7 +193,7 @@ public class Drivetrain extends SubsystemBase {
             ANGLE_POSITION_KI = 0.0;
             ANGLE_POSITION_KD = 11;
             
-            DRIVE_VELOCITY_KP = 0.5;
+            DRIVE_VELOCITY_KP = 0.5;//0.5
             DRIVE_VELOCITY_KI = 0.0;
             DRIVE_VELOCITY_KD = 5;
             DRIVE_VELOCITY_KF = 0.034; // theoretical: 0.034;
@@ -199,6 +202,7 @@ public class Drivetrain extends SubsystemBase {
             ANGLE_RAMP_RATE = 0.2;  
             
             PIGEON_kP = 0.02;
+
             MP_X_KP = 0;//2.6;
             MP_X_KI = 0;
             MP_X_KD = 0;//15;

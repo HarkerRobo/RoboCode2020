@@ -90,7 +90,7 @@ public class SwerveManual extends CommandBase {
         pigeonFlag = Math.abs(turnMagnitude) > 0; //Update pigeon flag
 
         if(!pigeonFlag) { //If there is no joystick input currently
-            turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
+            turnMagnitude = !RobotMap.IS_PRACTICE ? Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading) : turnMagnitude;
             SmartDashboard.putNumber("Pigeon Error", pigeonAngle - currentPigeonHeading);
         }
 
