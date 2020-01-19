@@ -309,9 +309,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Returns the currently-estimated pose of the robot.
-     *
-     * @return The pose
+     * Returns the currently-estimated pose of the robot based on odometry.
      */
     public Pose2d getPose() {
         Pose2d rawPose = odometry.getPoseMeters();
@@ -320,6 +318,9 @@ public class Drivetrain extends SubsystemBase {
                 rawPose.getRotation());
     }
 
+    /**
+     * Binds PID slots and ramp rate for angle motors.
+     */
     public void setupPositionPID() {
         applyToAllAngle((angleMotor) -> angleMotor.config_kP(ANGLE_POSITION_SLOT, ANGLE_POSITION_KP));
         applyToAllAngle((angleMotor) -> angleMotor.config_kI(ANGLE_POSITION_SLOT, ANGLE_POSITION_KI));
@@ -327,6 +328,9 @@ public class Drivetrain extends SubsystemBase {
         applyToAllAngle((angleMotor) -> angleMotor.configClosedloopRamp(ANGLE_RAMP_RATE));
     }
 
+    /**
+     * Binds PID slots and ramp rate for drive motors.
+     */
     public void setupVelocityPID() {
         applyToAllDrive((driveMotor) -> driveMotor.config_kF(DRIVE_VELOCITY_SLOT, DRIVE_VELOCITY_KF));
         applyToAllDrive((driveMotor) -> driveMotor.config_kP(DRIVE_VELOCITY_SLOT, DRIVE_VELOCITY_KP));
@@ -335,6 +339,11 @@ public class Drivetrain extends SubsystemBase {
         applyToAllDrive((driveMotor) -> driveMotor.configClosedloopRamp(DRIVE_RAMP_RATE));
     }
 
+    /**
+     * Sets the velocity and angle of the drivetrain motors based on the properties 
+     * of the passed SwerveModuleStates, with feedforward set to 0, percent output 
+     * as false, and motion profile as true.
+     */
     public void setDrivetrainModuleStates(SwerveModuleState[] states) {
         setDrivetrainVelocity(states[0], states[1], states[2], states[3], 0, false, true);
     }

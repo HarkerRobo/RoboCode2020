@@ -8,19 +8,20 @@ import frc.robot.subsystems.BottomIntake;
 /**
  * Spins the Bottom Intake 
  */
-public class SpinBottomIntakeManual extends CommandBase {
+public class SpinBottomIntake extends CommandBase {
+    private static final double SPEED_MULTIPLIER = 1;
 
-    private double bottomIntakeMagnitude;
+    private double outputMagnitude;
 
-    public SpinBottomIntakeManual(double magnitude) {
+    public SpinBottomIntake(double outputMagnitude) {
         addRequirements(BottomIntake.getInstance());
-        bottomIntakeMagnitude = magnitude;
+        this.outputMagnitude = outputMagnitude;
     }
 
     @Override
     public void execute() {
         // bottomIntakeMagnitude = 1;
-        BottomIntake.getInstance().getFalcon().set(TalonFXControlMode.PercentOutput, bottomIntakeMagnitude);
+        BottomIntake.getInstance().getFalcon().set(TalonFXControlMode.PercentOutput, outputMagnitude * SPEED_MULTIPLIER);
     }
 
     @Override

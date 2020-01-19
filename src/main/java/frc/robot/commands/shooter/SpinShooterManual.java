@@ -1,5 +1,7 @@
 package frc.robot.commands.shooter;
 
+import frc.robot.OI;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
@@ -8,22 +10,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 /**
- * Spins the shooter at a certain velocity
+ * Spins the shooter at a velocity determined by the driver right y value
  * 
  * @param
  */
-public class SpinShooter extends CommandBase {
+public class SpinShooterManual extends CommandBase {
     private static final double SPEED_MULTIPLIER = 1;
-    
-    private double outputMagnitude;
 
-    public SpinShooter(double outputMagnitude) {
+    public SpinShooterManual() {
         addRequirements(Shooter.getInstance());
-        this.outputMagnitude = outputMagnitude;
     }
 
     public void execute() {
-        Shooter.getInstance().getMaster().set(TalonFXControlMode.PercentOutput, outputMagnitude * SPEED_MULTIPLIER);
+        double rightY = OI.getInstance().getDriverGamepad().getRightY();
+
+        Shooter.getInstance().getMaster().set(TalonFXControlMode.PercentOutput, rightY * SPEED_MULTIPLIER);
     }
 
     public void end(boolean interrupted) {

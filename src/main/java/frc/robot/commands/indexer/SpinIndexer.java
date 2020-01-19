@@ -4,16 +4,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
-public class SpinIndexerManual extends CommandBase {
-    public static double magnitude = 0;
+public class SpinIndexer extends CommandBase {
+    private static final double SPEED_MULTIPLIER = 1;
+
+    public double outputMagnitude;
     
-    public SpinIndexerManual(double outputMagnitude) {
+    public SpinIndexer(double outputMagnitude) {
         addRequirements(Indexer.getInstance());
-        magnitude = outputMagnitude;
+        this.outputMagnitude = outputMagnitude;
     }
     
     public void execute() { 
-        Indexer.getInstance().getFalcon().set(TalonFXControlMode.PercentOutput, magnitude);
+        Indexer.getInstance().getFalcon().set(TalonFXControlMode.PercentOutput, outputMagnitude * SPEED_MULTIPLIER);
     }
 
     @Override

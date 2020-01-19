@@ -34,6 +34,9 @@ public class RobotMap {
 		public static final int BR_DRIVE_ID = 6;
 		public static final int BR_ANGLE_ID = 7;
 
+		public static final int LEFT_CLIMBER_ID = 12;
+		public static final int RIGHT_CLIMBER_ID = 13;
+
 		public static final int PIGEON_ID = 0;
 	}
 }

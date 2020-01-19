@@ -30,8 +30,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
  * @since 11/1/19
  */
 public class SwerveModule {
-
-    //Encoder ticks per one rotation of the wheel angle gear, gear ratio is 1:1
     public static final int ENCODER_TICKS = 4096;
 
     //Voltage/Current Constants
