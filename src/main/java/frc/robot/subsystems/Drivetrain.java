@@ -246,6 +246,27 @@ public class Drivetrain extends SubsystemBase {
     
     public static final Constraints THETA_CONSTRAINTS = new Constraints(MAX_ROTATION_VELOCITY, MAX_ROTATION_ACCELERATION);
 
+	public static final double TX_kP = 0;
+
+	public static final double TX_kI = 0;
+
+    public static final double TX_kD = 0;
+    
+	public static final double THOR_kP = 0;
+
+	public static final double THOR_kI = 0;
+
+	public static final double THOR_kD = 0;
+
+	public static final double TX_SETPOINT = 0;
+
+    public static final double THOR_SETPOINT = 0;
+    
+    public static final double TX_ALLOWABLE_ERROR = 0;
+    
+    public static final double THOR_ALLOWABLE_ERROR = 0;
+
+
     /**
      * Default constructor for Drivetrain
      * Initializes SwerveModules with inverts for drive and angle motors 
