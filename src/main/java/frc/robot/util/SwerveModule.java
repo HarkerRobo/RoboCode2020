@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.util.Conversions;
@@ -182,7 +183,8 @@ public class SwerveModule {
       * @return The current state of the module.
       */
     public SwerveModuleState getState() {
+        // System.out.println(angleMotor.getSelectedSensorPosition() * 360 / 4096 % 360);
         return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND) * Drivetrain.METERS_PER_FOOT, 
-            new Rotation2d(angleMotor.getSelectedSensorPosition() * 2 * Math.PI / 4096));
+            Rotation2d.fromDegrees(angleMotor.getSelectedSensorPosition() * 360 / 4096));
     }
 }

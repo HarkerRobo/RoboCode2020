@@ -265,7 +265,7 @@ public class Drivetrain extends SubsystemBase {
     public static final double TX_ALLOWABLE_ERROR = 0.4;
     
     public static final double THOR_ALLOWABLE_ERROR = 0;
-
+    private static int index = 0;
 
     /**
      * Default constructor for Drivetrain
@@ -310,7 +310,15 @@ public class Drivetrain extends SubsystemBase {
         kinematics = new SwerveDriveKinematics(Drivetrain.FRONT_LEFT_LOCATION, Drivetrain.FRONT_RIGHT_LOCATION,
                 Drivetrain.BACK_LEFT_LOCATION, Drivetrain.BACK_RIGHT_LOCATION);
 
+
+        
         odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(pigeon.getFusedHeading()), new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+        Pose2d initialPose = new Pose2d(new Translation2d(), 
+                Rotation2d.fromDegrees(pigeon.getFusedHeading()));
+
+        Rotation2d currentRot = Rotation2d.fromDegrees(pigeon.getFusedHeading());
+
+        odometry.resetPosition(initialPose, currentRot);
 
     }
 
@@ -320,23 +328,36 @@ public class Drivetrain extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading()),
-                Drivetrain.getInstance().getTopLeft().getState(), Drivetrain.getInstance().getTopRight().getState(),
-                Drivetrain.getInstance().getBackLeft().getState(), Drivetrain.getInstance().getBackRight().getState());
+        if(index  <= 1)
+        {
+            System.out.println(getPose().getRotation().getDegrees());
+            System.out.println(pigeon.getFusedHeading());
+            // Drivetrain.().
+            System.out.println(topLeft.getState().angle.getDegrees());
+            System.out.println(topRight.getState().angle.getDegrees());
+            System.out.println(backLeft.getState().angle.getDegrees());
+            System.out.println(backRight.getState().angle.getDegrees());
+            
+            index++;
+        }
 
-        // SmartDashboard.putNumber("Current X", getPose().getTranslation().getX());
-        // SmartDashboard.putNumber("Current Y", getPose().getTranslation().getY());
-        // SmartDashboard.putNumber("Current Rot", getPose().getRotation().getDegrees());
+        odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading() - 90),
+                topLeft.getState(), topRight.getState(),
+                backLeft.getState(), backRight.getState());
+
+        SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
+        SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
+        SmartDashboard.putNumber("Current Rot", odometry.getPoseMeters().getRotation().getDegrees());
     }
 
     /**
      * Returns the currently-estimated pose of the robot based on odometry.
      */
     public Pose2d getPose() {
-        Pose2d rawPose = odometry.getPoseMeters();
+        return odometry.getPoseMeters();
 
-        return new Pose2d(new Translation2d(-rawPose.getTranslation().getY(), rawPose.getTranslation().getX()), 
-                rawPose.getRotation());
+        // return new Pose2d(new Translation2d(-rawPose.getTranslation().getY(), rawPose.getTranslation().getX()), 
+        //         rawPose.getRotation());
     }
 
     /**
