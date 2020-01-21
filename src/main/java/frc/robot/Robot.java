@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.sensors.PigeonIMU.CalibrationMode;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -42,27 +40,31 @@ import frc.robot.subsystems.Drivetrain;
  * 
  * "A loop? Whats that?"
  * 
- * Subsystems:
- *  8 drive
- *  2 climb
- *  2 shooter
- *  1 intake
- *  1 agitator/feeder
- *  1 upper intake and control panel
+ * Subsystems (motor #):
+ *  drive (8)
+ *  climb (2)
+ *  shooter (2)
+ *  intake (1)
+ *  hopper/indexer (1)
+ *  control panel spinner (1)
+ * 
+ * @since 01/06/20
  */
 public class Robot extends TimedRobot {
 
     /**
      * This function is run when the robot is first started up and should be used
-     * for any initialization code.
+     * for any initialization code. This is where all subsystems are instantiated and 
+     * default commands are set.
      */
     @Override
     public void robotInit() {
+        Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
         // BottomIntake.getInstance();
         // Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
         // Indexer.getInstance();
-        Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
-        // Drivetrain.getInstance().getPigeon().enterCalibrationMode(CalibrationMode.Magnetometer360);
+        // Climber.getInstance();
+
         OI.getInstance();
     }
 
@@ -80,12 +82,11 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
 
         SmartDashboard.putString("Robot Type", RobotMap.IS_PRACTICE ? "Practice Bot" : "Comp Bot");
-        // SmartDashboard.putString("Pigeon State", Drivetrain.getInstance().getPigeon().getState().toString());
 
-        SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        SmartDashboard.putNumber("BR Rise to Fall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        // SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        // SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        // SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        // SmartDashboard.putNumber("BR Rise to Fall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
 
         SmartDashboard.putNumber("TL Angle POS", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
         SmartDashboard.putNumber("TR Angle POS", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
@@ -107,27 +108,9 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putNumber("BL Drive Error", Drivetrain.getInstance().getBackLeft().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
         // SmartDashboard.putNumber("BR Drive Error", Drivetrain.getInstance().getBackRight().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
 
-        // SmartDashboard.putNumber("TL Target Angle", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopTarget());
         SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
         SmartDashboard.putNumber("Pigeon Yaw", Drivetrain.getInstance().getPigeon().getYaw());
         SmartDashboard.putNumber("Pigeon Compass", Drivetrain.getInstance().getPigeon().getAbsoluteCompassHeading());
-    }
-
-    /**
-     * This autonomous (along with the chooser code above) shows how to select
-     * between different autonomous modes using the dashboard. The sendable chooser
-     * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
-     * remove all of the chooser code and uncomment the getString line to get the
-     * auto name from the text box below the Gyro
-     *
-     * <p>
-     * You can add additional auto modes by adding additional comparisons to the
-     * switch structure below with additional strings. If using the SendableChooser
-     * make sure to add them to the chooser code above as well.
-     */
-    @Override
-    public void autonomousInit() {
-
     }
 
     /**

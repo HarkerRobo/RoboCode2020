@@ -20,7 +20,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 /**
  * A swerve module on the drivetrain.
- * A swerve module contains one motor to spin the wheel and another to change the wheel's angle.
+ * A swerve module contains one Falcon 500 to rotate the wheel and one TalonSRX/775pro combo to angle the wheel.
  * 
  * @author Angela Jia
  * @author Jatin Kohli
@@ -28,7 +28,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
  * @author Anirudh Kotamraju
  * @author Chirag Kaushik
  * @author Arjun Dixit
- * @since 11/1/19
+ * @author Aimee Wang
+ * 
+ * @since 01/13/20
  */
 public class SwerveModule {
     public static final int ENCODER_TICKS = 4096;
@@ -52,12 +54,22 @@ public class SwerveModule {
     private TalonFX driveMotor;
     private HSTalon angleMotor;
 
-    public SwerveModule(int driveId, TalonFXInvertType invertDriveTalon, boolean driveSensorPhase, int angleId, boolean invertAngleTalon, boolean angleSensorPhase) {
+    /**
+     * Creates a SwerveModule object
+     * 
+     * @param driveId The CAN id of the drive motor controller.
+     * @param invertDrive Whether or not to invert the output of the drive motor controller.
+     * @param driveSensorPhase Whether or not to invert the sensor phase of the drive motor controller's encoder.
+     * @param angleId The CAN id of the angle motor controller.
+     * @param invertAngle Whether or not to invert the output of the angle motor controller.
+     * @param angleSensorPhase Whether or not to invert the sensor phase of the angle motor controller's encoder.
+     */
+    public SwerveModule(int driveId, TalonFXInvertType invertDrive, boolean driveSensorPhase, int angleId, boolean invertAngle, boolean angleSensorPhase) {
         driveMotor = new TalonFX(driveId);
         angleMotor = new HSTalon(angleId);
 
-        DRIVE_INVERTED = invertDriveTalon;
-        ANGLE_INVERTED = invertAngleTalon;
+        DRIVE_INVERTED = invertDrive;
+        ANGLE_INVERTED = invertAngle;
         
         DRIVE_SENSOR_PHASE = driveSensorPhase;
         ANGLE_SENSOR_PHASE = angleSensorPhase;
@@ -66,10 +78,15 @@ public class SwerveModule {
         angleTalonInit(angleMotor);
     }
     
+    /**
+     * Resets the drive motor controller to its factory default and configures all relevant settings.
+     * 
+     * @param falcon The drive motor controller (Falcon 500) of this SwerveModule.
+     */
     public void driveFalconInit(TalonFX falcon) {
         falcon.configFactoryDefault();
 
-        falcon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, 10);
+        falcon.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, RobotMap.DEFAULT_TIMEOUT);
 
         falcon.setNeutralMode(NeutralMode.Brake);
 
@@ -88,6 +105,11 @@ public class SwerveModule {
         falcon.enableVoltageCompensation(true);
     }
 
+    /**
+     * Resets the angle motor controller to its factory default and configures all relevant settings.
+     * 
+     * @param falcon The angle motor controller (TalonSRX) of this SwerveModule.
+     */
     public void angleTalonInit(HSTalon talon) {
         talon.configFactoryDefault();
 
@@ -112,8 +134,8 @@ public class SwerveModule {
     /**
      * Sets the drive output of the swerve module in either percent output or velocity in feet per second.
      * 
-     * @param output the output of the swerve module
-     * @param isPercentOutput true if the output is in percent output, false if it is in feet per second.
+     * @param output The output of the swerve module, with units corresponding to isPercentOutput.
+     * @param isPercentOutput True if the output's units are a percentage of maximum output, false if the units are meters per second.
      */
     public void setDriveOutput(double output, boolean isPercentOutput) {
         if(isPercentOutput) {
@@ -123,6 +145,14 @@ public class SwerveModule {
         }
     }
     
+    /**
+     * Sets the module's output to have the desired angle and output. 90 degree optimizations are performed if needed.
+     * 
+     * @param targetAngle The angle in degrees for the module's angle motor to have. Zero degrees is in the positive x direction.
+     * @param output The output for the module's drive motor to have, with units corresponding to isPercentOutput.
+     * @param isPercentOutput True if the output's units are a percentage of maximum output, false if the units are meters per second.
+     * @param isMotionProfile True if the robot is currently in a motion profile and should not perform 90 degree optimizations, false if otherwise.
+     */
     public void setAngleAndDriveVelocity(double targetAngle, double output, boolean isPercentOutput, boolean isMotionProfile) {
         boolean shouldReverse = !isMotionProfile && Math.abs(targetAngle - getAngleDegrees()) > 90;
         
@@ -143,25 +173,6 @@ public class SwerveModule {
         angleMotor.set(ControlMode.Position, targetPos);
     }
 
-    // public void setAngleAndDrivePosition(double targetAngle, double position, double feedForward) {
-    //     boolean shouldReverse = Math.abs(targetAngle - getAngleDegrees()) > 90;
-        
-    //     if (shouldReverse) {
-    //         position = driveMotor.getSelectedSensorPosition() - Math.signum(position) * (position - driveMotor.getSelectedSensorPosition());
-    //         if (targetAngle - getAngleDegrees() > 90) {
-    //             targetAngle -= 180;
-    //         }
-    //         else {
-    //             targetAngle += 180;
-    //         }
-    //     }
-        
-    //     int targetPos = (int)((targetAngle / 360) * 4096);
-
-    //     angleMotor.set(ControlMode.Position, targetPos);
-    //     driveMotor.set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
-    // }
-
     /**
      * Returns the current angle in degrees
      */
@@ -169,21 +180,24 @@ public class SwerveModule {
         return angleMotor.getSelectedSensorPosition() * 360.0 / SwerveModule.ENCODER_TICKS; //Convert encoder ticks to degrees
     }
 
-    public HSTalon getAngleMotor() {
-        return angleMotor;    
-    }            
-        
+    /**
+     * Returns the SwerveModule's drive motor (Falcon 500).
+     */
     public TalonFX getDriveMotor() {
         return driveMotor;
     }
+    
+    /**
+     * Returns the SwerveModule's angle motor (TalonSRX).
+     */
+    public HSTalon getAngleMotor() {
+        return angleMotor;    
+    }            
 
      /**
-      * Returns the current state of the module.
-      *
-      * @return The current state of the module.
+      * Returns the current SwerveModuleState of the module, which contains the angle (Rotation2d) and speed (m/s) of the module.
       */
     public SwerveModuleState getState() {
-        // System.out.println(angleMotor.getSelectedSensorPosition() * 360 / 4096 % 360);
         return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND) * Drivetrain.METERS_PER_FOOT, 
             Rotation2d.fromDegrees(angleMotor.getSelectedSensorPosition() * 360 / 4096));
     }

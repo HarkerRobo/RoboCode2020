@@ -1,48 +1,43 @@
 package frc.robot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator.ControlVectorList;
 import edu.wpi.first.wpilibj.trajectory.constraint.SwerveDriveKinematicsConstraint;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Shooter;
 import harkerrobolib.wrappers.XboxGamepad;
-import jaci.pathfinder.Waypoint;
 
 /**
  * The OI class reads inputs from the joysticks and binds them to commands.
  * 
- * @since January 6, 2020
+ * @since 01/06/20
  */
 public class OI
 {
     public static final double XBOX_JOYSTICK_DEADBAND = 0.1;
-    private static final double SHOOTER_SPEED = 2;
+    // private static final double SHOOTER_SPEED = 2;
     private static SwerveDriveKinematicsConstraint constraint;
     private static OI instance;
 
     private XboxGamepad driverGamepad;
     private XboxGamepad operatorGamepad;
     
-
     private OI() {
         driverGamepad = new XboxGamepad(RobotMap.DRIVER_PORT);
         operatorGamepad = new XboxGamepad(RobotMap.OPERATOR_PORT);
 
         initBindings();
-
     }
 
+    /**
+     * Sets up button bindings on the driver and operator controllers
+     */
     private void initBindings() {
         // operatorGamepad.getButtonB().whilePressed(new ToggleShooterAngle());
         // operatorGamepad.getButtonA().whilePressed(new SpinBottomIntakeManual(1));
@@ -64,14 +59,23 @@ public class OI
         driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(linearTrajectory));
     }
 
+    /**
+     * Returns the driver Xbox controller
+     */
     public XboxGamepad getDriverGamepad() {
         return driverGamepad;
     }
 
+    /**
+     * Returns the operator Xbox controller
+     */
     public XboxGamepad getOperatorGamepad() {
         return operatorGamepad;
     }
 
+    /**
+     * Returns the global instance of OI
+     */
     public static OI getInstance() {
         if(instance == null)
             instance = new OI();

@@ -110,8 +110,7 @@ public class Drivetrain extends SubsystemBase {
     public static final double ANGLE_RAMP_RATE;
 
     static {
-        //practice constants
-        if (RobotMap.IS_PRACTICE) {
+        if (RobotMap.IS_PRACTICE) { //Practice constants
             TL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             TR_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             BL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
@@ -163,7 +162,7 @@ public class Drivetrain extends SubsystemBase {
             MP_THETA_KI = 0;
             MP_THETA_KD = 0;
         
-        } else { // competitive bot constants
+        } else { //Comp constants
             TL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             TR_DRIVE_INVERTED = TalonFXInvertType.Clockwise; 
             BL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;

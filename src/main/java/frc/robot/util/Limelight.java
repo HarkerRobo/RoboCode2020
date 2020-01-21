@@ -4,11 +4,12 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
- * Wraps Limelight functionality into a more easy-to-use class.
+ * Wraps Limelight functionality into a class.
  * 
  * @author Finn Frankis
  * @author Chirag Kaushik
- * @since 1/12/19
+ * 
+ * @since 01/20/20
  */
 public class Limelight {
     public static final String LIMELIGHT_TABLE_KEY = "limelight";
@@ -31,7 +32,9 @@ public class Limelight {
     public static final String CAMTRAN_KEY = "camtran";
     public static final String LED_MODE = "ledMode";
 
+    public static final int LED_PIPELINE = 0;
     public static final int LED_OFF = 1;
+    public static final int LED_BLINK = 2;
     public static final int LED_ON = 3;
 
     public static final int VISION_MODE = 0;
@@ -40,11 +43,7 @@ public class Limelight {
     public static final int NO_SNAPSHOT = 0;
     public static final int SNAPSHOT = 1;
 
-    // public static double THOR_EXPONENT = 0.62291;
-    // public static double THOR_COEFF = 1000;
     public static double TX_SETPOINT = 0;
-    // public static Function<Double, Double> THOR_LINEARIZATION_FUNCTION = (thor)
-    // -> (THOR_COEFF / Math.pow(thor, THOR_EXPONENT));
 
     private static double[] nullArr;
 
@@ -88,8 +87,7 @@ public class Limelight {
     /**
      * Toggles the limelight LEDs on or off.
      */
-    public static void toggleLEDs() 
-    {
+    public static void toggleLEDs() {
         if(table.getEntry(LED_MODE).getNumber(0).intValue() == LED_ON) 
             table.getEntry(LED_MODE).setNumber(LED_OFF);
         else
@@ -99,8 +97,7 @@ public class Limelight {
     /**
      * Sets the LEDS to be on or off
      */
-    public static void setLEDS(boolean on)
-    {
+    public static void setLEDS(boolean on) {
         table.getEntry(LED_MODE).setNumber(on ? LED_ON : LED_OFF);
     }
 
