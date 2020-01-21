@@ -104,7 +104,7 @@ public class SwerveManual extends CommandBase {
         prevTime = System.currentTimeMillis();
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading() - 90)
+            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
 
         SmartDashboard.putNumber("Speed x", speeds.vxMetersPerSecond);

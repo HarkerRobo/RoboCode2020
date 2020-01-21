@@ -109,8 +109,8 @@ public class Robot extends TimedRobot {
 
         // SmartDashboard.putNumber("TL Target Angle", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopTarget());
         SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
-        // SmartDashboard.putNumber("Pigeon Yaw", Drivetrain.getInstance().getPigeon().getYaw() + 90);
-        // SmartDashboard.putNumber("Pigeon Compass", Drivetrain.getInstance().getPigeon().getAbsoluteCompassHeading());
+        SmartDashboard.putNumber("Pigeon Yaw", Drivetrain.getInstance().getPigeon().getYaw());
+        SmartDashboard.putNumber("Pigeon Compass", Drivetrain.getInstance().getPigeon().getAbsoluteCompassHeading());
     }
 
     /**

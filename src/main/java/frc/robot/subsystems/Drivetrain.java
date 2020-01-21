@@ -263,7 +263,6 @@ public class Drivetrain extends SubsystemBase {
     public static final double TX_ALLOWABLE_ERROR = 0.4;
     
     public static final double THOR_ALLOWABLE_ERROR = 0;
-    private static int index = 0;
 
     /**
      * Default constructor for Drivetrain
@@ -301,7 +300,7 @@ public class Drivetrain extends SubsystemBase {
         pigeon = new HSPigeon(RobotMap.CAN_IDS.PIGEON_ID);
         pigeon.configFactoryDefault();
         pigeon.zero();
-        pigeon.setFusedHeading(90);
+        pigeon.setFusedHeading(0);
 
         Conversions.setWheelDiameter(WHEEL_DIAMETER);
 
@@ -326,20 +325,7 @@ public class Drivetrain extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        if(index  <= 1)
-        {
-            System.out.println(getPose().getRotation().getDegrees());
-            System.out.println(pigeon.getFusedHeading());
-            // Drivetrain.().
-            System.out.println(topLeft.getState().angle.getDegrees());
-            System.out.println(topRight.getState().angle.getDegrees());
-            System.out.println(backLeft.getState().angle.getDegrees());
-            System.out.println(backRight.getState().angle.getDegrees());
-            
-            index++;
-        }
-
-        odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading() - 90),
+        odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading()),
                 topLeft.getState(), topRight.getState(),
                 backLeft.getState(), backRight.getState());
 
