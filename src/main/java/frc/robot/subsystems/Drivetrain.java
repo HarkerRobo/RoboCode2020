@@ -164,30 +164,30 @@ public class Drivetrain extends SubsystemBase {
             MP_THETA_KD = 0;
         
         } else { // competitive bot constants
-            TL_DRIVE_INVERTED = TalonFXInvertType.CounterClockwise;
-            TR_DRIVE_INVERTED = TalonFXInvertType.CounterClockwise;
-            BL_DRIVE_INVERTED = TalonFXInvertType.CounterClockwise;
-            BR_DRIVE_INVERTED = TalonFXInvertType.CounterClockwise;
+            TL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
+            TR_DRIVE_INVERTED = TalonFXInvertType.Clockwise; 
+            BL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
+            BR_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
 
             TL_ANGLE_INVERTED = false;
             TR_ANGLE_INVERTED = true;
             BL_ANGLE_INVERTED = false;
             BR_ANGLE_INVERTED = true;
 
-            TL_DRIVE_SENSOR_PHASE = true;
-            TR_DRIVE_SENSOR_PHASE = true;
-            BL_DRIVE_SENSOR_PHASE = true;
-            BR_DRIVE_SENSOR_PHASE = true;
+            TL_DRIVE_SENSOR_PHASE = false;
+            TR_DRIVE_SENSOR_PHASE = false;
+            BL_DRIVE_SENSOR_PHASE = false;
+            BR_DRIVE_SENSOR_PHASE = false;
             
             TL_ANGLE_SENSOR_PHASE = false;
             TR_ANGLE_SENSOR_PHASE = true;
             BL_ANGLE_SENSOR_PHASE = false;
             BR_ANGLE_SENSOR_PHASE = true;
 
-            TL_OFFSET = 11575;//15561;
-            TR_OFFSET = 14161;//2492;
-            BL_OFFSET = 11400;//15351;
-            BR_OFFSET = 6447;//10413;
+            TL_OFFSET = 11484;//11575;//15561;
+            TR_OFFSET = 14079;//14161;//2492;
+            BL_OFFSET = 11444;//11400;//15351;
+            BR_OFFSET = 6291;//6447;//10413;
             
             ANGLE_POSITION_KP = 1.1;
             ANGLE_POSITION_KI = 0.0;
@@ -216,8 +216,6 @@ public class Drivetrain extends SubsystemBase {
             MP_THETA_KD = 0;
         }
     }
-
-    
 
     public static final double MAX_DRIVE_VELOCITY = 2;
     public static final double MAX_ROTATION_VELOCITY = (2 * Math.PI);
