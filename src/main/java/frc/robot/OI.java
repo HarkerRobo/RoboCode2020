@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.wrappers.XboxGamepad;
 
@@ -32,6 +33,7 @@ public class OI
         // operatorGamepad.getButtonX().whilePressed(new SpinIndexerManual(1));
         // driverGamepad.getButtonY().whenPressed(new InstantCommand(Shooter::toggleAngle, Shooter.getInstance()));
         // driverGamepad.getButtonA().whilePressed(() -> Shooter.spinShooter(SHOOTER_SPEED));
+        driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
     }
 
     public XboxGamepad getDriverGamepad() {

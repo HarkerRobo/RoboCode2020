@@ -45,8 +45,8 @@ public class SwerveManual extends CommandBase {
         addRequirements(Drivetrain.getInstance());
 
         pigeonFlag = false;
-        pigeonAngle = 90;
-        prevPigeonHeading = 90;
+        // pigeonAngle = 90;
+        // prevPigeonHeading = 90;
         prevTime = System.currentTimeMillis();
     }
 
@@ -59,6 +59,9 @@ public class SwerveManual extends CommandBase {
         Drivetrain.getInstance().applyToAllAngle(
             (angleMotor) -> angleMotor.selectProfileSlot(Drivetrain.ANGLE_POSITION_SLOT, RobotMap.PRIMARY_INDEX)
         );
+        pigeonFlag = true;
+        prevPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
+        pigeonAngle = prevPigeonHeading;
     }
 
     @Override
@@ -90,7 +93,8 @@ public class SwerveManual extends CommandBase {
         pigeonFlag = Math.abs(turnMagnitude) > 0; //Update pigeon flag
 
         if(!pigeonFlag) { //If there is no joystick input currently
-            turnMagnitude = !RobotMap.IS_PRACTICE ? Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading) : turnMagnitude;
+            // turnMagnitude = !RobotMap.IS_PRACTICE ? Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading) : turnMagnitude;
+            turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
             SmartDashboard.putNumber("Pigeon Error", pigeonAngle - currentPigeonHeading);
         }
 
