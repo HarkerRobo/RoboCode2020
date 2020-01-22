@@ -16,6 +16,7 @@ public class RobotMap {
     
     public static final int DEFAULT_TIMEOUT = 10; //ms
 
+
     /**
      * Class to store CAN Id constants
      */
@@ -47,5 +48,7 @@ public class RobotMap {
 		public static final int BR_ANGLE_ID = 7;
 
 		public static final int PIGEON_ID = 0;
+
+		public static final int SPINNER_TALON = 0;
 	}
 }

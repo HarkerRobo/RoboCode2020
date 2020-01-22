@@ -6,7 +6,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BottomIntake;
 
 /**
- * Spins the Bottom Intake 
+ * Spins the Bottom Intake
+ * 
+ * @author Shahzeb Lakhani
+ * @version 1/21/20
  */
 public class SpinBottomIntake extends CommandBase {
     private static final double SPEED_MULTIPLIER = 1;

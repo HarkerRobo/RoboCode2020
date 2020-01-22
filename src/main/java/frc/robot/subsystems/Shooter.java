@@ -11,7 +11,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotMap;
-
+/**
+ * Our flywheel shooter for shooting balls everytime into the inner goal quickly
+ * 
+ * @author Shahzeb Lakhani
+ * @version 1/21/20
+ */
 public class Shooter implements Subsystem {
 
     static {
@@ -26,7 +31,7 @@ public class Shooter implements Subsystem {
             FOLLOWER_INVERT = TalonFXInvertType.FollowMaster;
         } else {
             FLYWHEEL_KP = 0.0; // tune;
-            FLYWHEEL_KF = 0.0; // tune;
+            FLYWHEEL_KF = 0.0; // tune; frc characterization tool
 
             SHOOTER_HIGH_ANGLE = Value.kForward;
             SHOOTER_LOW_ANGLE = Value.kReverse;
@@ -56,6 +61,16 @@ public class Shooter implements Subsystem {
     private static final int CURRENT_CONTINUOUS = 50;
     private static final int CURRENT_PEAK = 70;
     private static final int CURRENT_PEAK_DUR = 50;
+
+	public static final int SHOOTER_VELOCITY_SLOT = 0;
+
+	public static final double SHOOTER_RAMP_RATE = 0;
+
+	public static final double TY_SETPOINT = 0;
+
+	public static final double MAX_SHOOTER_VELOCITY = 0;
+
+	public static final double TY_VELOCITY_COMPENSATION = 0;
     
     public static TalonFXInvertType MASTER_INVERT;
     public static TalonFXInvertType FOLLOWER_INVERT;
@@ -68,7 +83,7 @@ public class Shooter implements Subsystem {
         setupFlywheel();
     }
 
-    public void setupFlywheel() {
+    private void setupFlywheel() {
         flywheelFollower.follow(flywheelMaster);
 
         flywheelMaster.setInverted(MASTER_INVERT);
@@ -88,7 +103,7 @@ public class Shooter implements Subsystem {
         setupVelocityPID();
     }
 
-    public void setupVelocityPID() {
+    private void setupVelocityPID() {
         flywheelMaster.config_kP(FLYWHEEL_VELOCITY_SLOT, FLYWHEEL_KP);
         flywheelMaster.config_kF(FLYWHEEL_VELOCITY_SLOT, FLYWHEEL_KF);
     }

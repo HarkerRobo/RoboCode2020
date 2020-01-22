@@ -12,7 +12,6 @@ import frc.robot.subsystems.Shooter;
 /**
  * Spins the shooter at a velocity determined by the driver right y value
  * 
- * @param
  */
 public class SpinShooterManual extends CommandBase {
     private static final double SPEED_MULTIPLIER = 1;

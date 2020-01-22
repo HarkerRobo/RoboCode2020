@@ -12,6 +12,7 @@ import frc.robot.RobotMap;
  * of a single motor that spins a belt. 
  * 
  * @author Chirag Kaushik
+ * @author Shahzeb Lakhani
  * @since January 6, 2020
  */
 public class Indexer implements Subsystem {
