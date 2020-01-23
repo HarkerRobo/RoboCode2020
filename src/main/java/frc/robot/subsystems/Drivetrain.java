@@ -91,7 +91,6 @@ public class Drivetrain extends SubsystemBase {
     private static final double DRIVE_VELOCITY_KD;
     private static final double DRIVE_VELOCITY_KF; // theoretical: 0.034;
 
-
     public static final double PIGEON_kP;
 
     public static final double MP_X_KP;//2.6;
@@ -221,7 +220,6 @@ public class Drivetrain extends SubsystemBase {
     public static final double MAX_ROTATION_ACCELERATION = 2 * (2 * Math.PI);
     public static final double MAX_DRIVE_ACCELERATION = 3;
 
-   
     public static final double GEAR_RATIO = 6;
 
     //conversions
@@ -236,8 +234,6 @@ public class Drivetrain extends SubsystemBase {
      * Feet between both of the wheels on the left or right
      */
     public static final double DT_LENGTH = 0.535; //20.6 feet;
-
-
     
     public static final double WHEEL_DIAMETER = 4;
     

@@ -1,36 +1,34 @@
 package frc.robot.commands.bottomintake;
 
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
 import frc.robot.subsystems.BottomIntake;
+import harkerrobolib.commands.IndefiniteCommand;
 
 /**
  * Spins the Bottom Intake 
  */
-public class SpinBottomIntake extends CommandBase {
-    private static final double SPEED_MULTIPLIER = 1;
+public class SpinBottomIntake extends IndefiniteCommand {
 
-    private double outputMagnitude;
-
-    public SpinBottomIntake(double outputMagnitude) {
+    public SpinBottomIntake() {
         addRequirements(BottomIntake.getInstance());
-        this.outputMagnitude = outputMagnitude;
     }
 
     @Override
     public void execute() {
         // bottomIntakeMagnitude = 1;
-        BottomIntake.getInstance().getFalcon().set(TalonFXControlMode.PercentOutput, outputMagnitude * SPEED_MULTIPLIER);
+        if (OI.getInstance().getDriverGamepad().getButtonX().get()) {
+            BottomIntake.getInstance().spinIntake(1);
+        } 
+        else if (OI.getInstance().getDriverGamepad().getButtonA().get()) {
+            BottomIntake.getInstance().spinIntake(-1); 
+        } 
+        else {
+            BottomIntake.getInstance().spinIntake(0);
+        }
     }
 
     @Override
     public void end(boolean interrupted) {
-        BottomIntake.getInstance().getFalcon().set(TalonFXControlMode.Disabled, 0);
-    }  
-
-    @Override
-    public boolean isFinished() {
-        return false;
+        BottomIntake.getInstance().spinIntake(0);
     }
 }

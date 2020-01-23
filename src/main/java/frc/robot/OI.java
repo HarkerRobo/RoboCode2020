@@ -21,7 +21,8 @@ import harkerrobolib.wrappers.XboxGamepad;
 public class OI
 {
     public static final double XBOX_JOYSTICK_DEADBAND = 0.1;
-    // private static final double SHOOTER_SPEED = 2;
+    public static final double XBOX_TRIGGER_DEADBAND = 0.1;
+
     private static SwerveDriveKinematicsConstraint constraint;
     private static OI instance;
 
@@ -44,6 +45,8 @@ public class OI
         // operatorGamepad.getButtonX().whilePressed(new SpinIndexerManual(1));
         // driverGamepad.getButtonY().whenPressed(new InstantCommand(Shooter::toggleAngle, Shooter.getInstance()));
         // driverGamepad.getButtonA().whilePressed(() -> Shooter.spinShooter(SHOOTER_SPEED));
+        // driverGamepad.getButtonX().whilePressed(new InstantCommand(BottomIntake::spinIntake(1), BottomIntake.getInstance()));
+        // driverGamepad.getButtonA().whilePressed(new InstantCommand(BottomIntake::spinIntake(-1), BottomIntake.getInstance()));
         constraint = new SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(), Drivetrain.MAX_DRIVE_VELOCITY);
 
         TrajectoryConfig config = new TrajectoryConfig(Drivetrain.MAX_DRIVE_VELOCITY, Drivetrain.MAX_DRIVE_ACCELERATION)

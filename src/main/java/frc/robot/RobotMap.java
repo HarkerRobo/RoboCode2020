@@ -29,6 +29,8 @@ public class RobotMap {
 		public static final int SHOOTER_SOLENOID_REVERSE = -1;
 
         public static final int HOPPER_TALON_ID = -1;
+
+        public static final int BAG_TALON_ID = -1; //For Color Spinner and one Hopper motor
         
 		public static final int LEFT_CLIMBER_ID = -1;
 		public static final int RIGHT_CLIMBER_ID = -1;

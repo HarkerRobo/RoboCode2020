@@ -45,7 +45,7 @@ import frc.robot.subsystems.Drivetrain;
  *  climb (2)
  *  shooter (2)
  *  intake (1)
- *  hopper/indexer (1)
+ *  hopper/indexer (2)
  *  control panel spinner (1)
  * 
  * @since 01/06/20

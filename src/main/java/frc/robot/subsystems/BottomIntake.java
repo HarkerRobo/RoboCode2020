@@ -1,68 +1,87 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import harkerrobolib.wrappers.HSTalon;
 
 /**
  * Represents the Bottom Intake Subsystem, controlled by 1 Falcon.
  * 
+ * @author Anirudh Kotamraju
  * @author Chirag Kaushik
- * @since 1/6/20
+ * @since January 6, 2020
  */
 public class BottomIntake extends SubsystemBase {
-    private static BottomIntake instance;
 
-    private TalonFX Falcon;
-    
-    private static TalonFXInvertType MOTOR_INVERT;
     static {
         if(RobotMap.IS_PRACTICE) {
-            MOTOR_INVERT = TalonFXInvertType.Clockwise; //Change accordingly
+            MOTOR_INVERT = false; //Change accordingly
         } else {
-            MOTOR_INVERT = TalonFXInvertType.Clockwise; //Change accordingly
+            MOTOR_INVERT = false; //Change accordingly
         }
     }  
+
+    private static BottomIntake instance;
+
+    private HSTalon talon;
+    
+    private static boolean MOTOR_INVERT;
 
     private static final double VOLTAGE_COMPENSATION = 10;
     
     public static final double DEFAULT_ROLLER_MAGNITUDE_INTAKE = 0;
+
+    private static final int INTAKE_CURRENT_CONTINUOUS = 40;
+
+    private static final int INTAKE_CURRENT_PEAK = 50;
+
+    private static final int INTAKE_CURRENT_PEAK_DUR = 100;
+
+    private static final double OUTPUT_MULTIPLIER = 0.5;
     
     private BottomIntake() {
-        Falcon = new TalonFX(RobotMap.CAN_IDS.BOTTOM_INTAKE_MOTOR_ID);
+        talon = new HSTalon(RobotMap.CAN_IDS.BOTTOM_INTAKE_MOTOR_ID);
 
         setupTalons();
     }
     
     private void setupTalons() {
-        invert();
-        enableVoltageComp();
-        enableNeutralMode();
+        talon.configFactoryDefault();
+
+        talon.setInverted(MOTOR_INVERT);
+
+        talon.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
+        talon.enableVoltageCompensation(true);
+        
+        talon.setNeutralMode(NeutralMode.Coast);
+
+        talon.configForwardSoftLimitEnable(false);
+        talon.configReverseSoftLimitEnable(false);
+        talon.overrideLimitSwitchesEnable(false);
+
+        talon.configContinuousCurrentLimit(INTAKE_CURRENT_CONTINUOUS);
+        talon.configPeakCurrentLimit(INTAKE_CURRENT_PEAK);
+        talon.configPeakCurrentDuration(INTAKE_CURRENT_PEAK_DUR);
+        talon.enableCurrentLimit(true);
+    
+        talon.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
+        talon.enableVoltageCompensation(true);
     }
 
-    private void invert() {
-        Falcon.setInverted(MOTOR_INVERT);
-    }
-
-    public void enableVoltageComp() {
-        Falcon.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
-        Falcon.enableVoltageCompensation(true);
-    }
-
-    public void enableNeutralMode() {
-        Falcon.setNeutralMode(NeutralMode.Brake);
-    }
-
-    public TalonFX getFalcon() {
-        return Falcon;
+    public HSTalon getTalon() {
+        return talon;
     }
 
     public static BottomIntake getInstance() {
         if(instance == null)
             instance = new BottomIntake();
         return instance;
+    }
+
+    public void spinIntake(double magnitude) {
+        talon.set(ControlMode.PercentOutput, OUTPUT_MULTIPLIER * magnitude);
     }
 }

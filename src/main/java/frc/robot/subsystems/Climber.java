@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * Represents the climber on the robot.
  * 
  * @author Chirag Kaushik
- * @author Shahzeb
+ * @author Shahzeb Lakhani
  * @since January 18, 2020
  */
 public class Climber extends SubsystemBase {
