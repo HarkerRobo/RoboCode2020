@@ -34,11 +34,14 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
     private static final double OUTPUT_MULTIPLIER = 0.5;
 
+	private static final int TX_VELOCITY_MULTIPLIER = 0;
+
     private PIDController txController;
     private PIDController thorController;
 
     public SwerveAlignWithLimelight() {
         addRequirements(Drivetrain.getInstance());
+
         txController = new PIDController(Drivetrain.TX_kP, Drivetrain.TX_kI, Drivetrain.TX_kD, PID_CONTROLLER_PERIOD);
         thorController = new PIDController(Drivetrain.THOR_kP, Drivetrain.THOR_kI, Drivetrain.THOR_kD, PID_CONTROLLER_PERIOD);
         txController.setSetpoint(Drivetrain.TX_SETPOINT);
@@ -67,6 +70,12 @@ public class SwerveAlignWithLimelight extends CommandBase {
         double translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
+
+        turn -= ((Math.cos(Drivetrain.getInstance().getTopLeft().getAngleDegrees()) * Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorVelocity() +
+                Math.cos(Drivetrain.getInstance().getTopRight().getAngleDegrees()) * Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorVelocity() +
+                Math.cos(Drivetrain.getInstance().getBackLeft().getAngleDegrees()) * Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorVelocity() +
+                Math.cos(Drivetrain.getInstance().getBackRight().getAngleDegrees()) * Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorVelocity()) / 4) * TX_VELOCITY_MULTIPLIER;
+        // turn += (Drivetrain.getInstance().getTopLeft().getState().speedMetersPerSecond) * TX_VELOCITY_MULTIPLIER;
         // speed = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, speed, SpeedUnit.ENCODER_UNITS);
         // turn = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, turn, SpeedUnit.ENCODER_UNITS);
 
@@ -75,21 +84,9 @@ public class SwerveAlignWithLimelight extends CommandBase {
         // SwerveModuleState blState = Drivetrain.getInstance().getBackLeft().getState();
         // SwerveModuleState brState = Drivetrain.getInstance().getBackRight().getState();
 
-        // double translateX = (Math.cos(tlState.angle.getDegrees()) * tlState.speedMetersPerSecond +
-        // Math.cos(trState.angle.getDegrees()) * trState.speedMetersPerSecond +
-        // Math.cos(blState.angle.getDegrees()) * blState.speedMetersPerSecond +
-        // Math.cos(brState.angle.getDegrees()) * brState.speedMetersPerSecond) / 4;
-
-        // double translateY = (Math.sin(tlState.angle.getDegrees()) * tlState.speedMetersPerSecond +
-        // Math.sin(trState.angle.getDegrees()) * trState.speedMetersPerSecond +
-        // Math.sin(blState.angle.getDegrees()) * blState.speedMetersPerSecond +
-        // Math.sin(brState.angle.getDegrees()) * brState.speedMetersPerSecond) / 4;
-
-
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             translateX, translateY, turn, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
-
 
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);

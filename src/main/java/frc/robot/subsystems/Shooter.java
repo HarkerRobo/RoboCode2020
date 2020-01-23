@@ -21,6 +21,7 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  * @author Chirag Kaushik
  * @author Arjun Dixit
  * @author Anirudh Kotamraju
+ * @author Aimee Wang
  * @since 1/22/20
  */
 public class Shooter implements Subsystem {
@@ -77,8 +78,12 @@ public class Shooter implements Subsystem {
 
     private static final double VOLTAGE_COMPENSATION = 0;
 
+
+
     public static TalonFXInvertType MASTER_INVERT;
     public static TalonFXInvertType FOLLOWER_INVERT;
+
+
     
     /**
      * Constructs a Shooter.
