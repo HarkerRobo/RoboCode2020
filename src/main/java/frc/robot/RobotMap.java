@@ -28,14 +28,15 @@ public class RobotMap {
 		public static final int SHOOTER_SOLENOID_FORWARD = -1;
 		public static final int SHOOTER_SOLENOID_REVERSE = -1;
 
-        public static final int HOPPER_TALON_ID = -1;
+        public static final int INDEXER_TALON_ID = -1;
 
-        public static final int BAG_TALON_ID = -1; //For Color Spinner and one Hopper motor
+        public static final int INDEXER_FOLLOWER_TALON_ID = -1; //For Color Spinner and one indexer motor
         
 		public static final int LEFT_CLIMBER_ID = -1;
 		public static final int RIGHT_CLIMBER_ID = -1;
         
-        //Drivetrain CAN ids.
+		public static final int SPINNER_ID = 0;
+
 		public static final int TL_DRIVE_ID = 0;
 		public static final int TL_ANGLE_ID = 1;
 
@@ -48,10 +49,6 @@ public class RobotMap {
 		public static final int BR_DRIVE_ID = 6;
 		public static final int BR_ANGLE_ID = 7;
 
-		public static final int PIGEON_ID = 0;
-
-		public static final int RETROREFLECTIVE_SENSOR = 0;
-
-		public static final int[] sensorIDS = {0, 0, 0};
+		public static final int PIGEON_ID = 0; 
 	}
 }

@@ -13,31 +13,31 @@ import harkerrobolib.wrappers.HSTalon;
  * The indexer stores and transfers power cells from the intake to the shooter. It consists
  * of a single motor that spins a belt. 
  * 
+ * @author Shahzeb Lakhani
  * @author Anirudh Kotamraju
  * @author Chirag Kaushik
  * @author Jatin Kohli
  * @author Aimee Wang
- * @author Shahzeb Lakhani
  * @since January 23, 2020
  */
 public class Indexer implements Subsystem {
     static {
         if(RobotMap.IS_PRACTICE) {
             MASTER_INVERT = false; //Change accordingly
-            BAG_INVERT = false;
+            FOLLOWER_INVERT = false;
         } else {
             MASTER_INVERT = false; //Change accordingly
-            BAG_INVERT = false;
+            FOLLOWER_INVERT = false;
         }
     } 
     
     private static Indexer instance;
     
     private static boolean MASTER_INVERT;
-    private static boolean BAG_INVERT;
+    private static boolean FOLLOWER_INVERT;
     
     private HSTalon master;
-    private HSTalon bagMotor;
+    private HSTalon follower;
     
     public static final double OUTPUT_MULTIPLIER = 0.5;
 
@@ -47,34 +47,36 @@ public class Indexer implements Subsystem {
     private static final int INTAKE_CURRENT_CONTINUOUS = 40;
     private static final int INTAKE_CURRENT_PEAK = 50;
 
-    // private DigitalInput[] sensors;
-    // private int[] sensorIDS = {0, 0, 0};
-
     private DigitalInput intakeSensor;  // The first sensor when a ball is intaked
-    private DigitalInput hopperSensor;  // The second sensor in the indexer
-    private DigitalInput shooterSensor; // Determines if the hopper is full
+    private DigitalInput indexerSensor;  // The second sensor in the indexer
+    private DigitalInput shooterSensor; // Determines if the indexer is full
     
     private static final int INTAKE_SENSOR_ID = 0;
-    private static final int HOPPER_SENSOR_ID = 0;
+    private static final int INDEXER_SENSOR_ID = 0;
     private static final int SHOOTER_SENSOR_ID = 0;
 
+    public int numPowerCells = 0;
+
     private Indexer() {
-        master = new HSTalon(RobotMap.CAN_IDS.HOPPER_TALON_ID);
-        bagMotor = new HSTalon(RobotMap.CAN_IDS.BAG_TALON_ID);
+        master = new HSTalon(RobotMap.CAN_IDS.INDEXER_TALON_ID);
+        follower = new HSTalon(RobotMap.CAN_IDS.INDEXER_FOLLOWER_TALON_ID);
         initializeSensors();
         setupTalons();
+        numPowerCells = 0;
     }
 
     public void initializeSensors() {
         intakeSensor = new DigitalInput(INTAKE_SENSOR_ID);
-        hopperSensor = new DigitalInput(HOPPER_SENSOR_ID);
+        indexerSensor = new DigitalInput(INDEXER_SENSOR_ID);
         shooterSensor = new DigitalInput(SHOOTER_SENSOR_ID);
     }
     
     public void setupTalons() {
         master.configFactoryDefault();
-        bagMotor.configFactoryDefault();
-
+        follower.configFactoryDefault();
+        
+        follower.follow(master);
+        follower.setInverted(FOLLOWER_INVERT);
         //Setup master
         master.setInverted(MASTER_INVERT);
 
@@ -91,32 +93,13 @@ public class Indexer implements Subsystem {
         master.configPeakCurrentLimit(INTAKE_CURRENT_PEAK);
         master.configPeakCurrentDuration(INTAKE_CURRENT_PEAK_DUR);
         master.enableCurrentLimit(true);
-
-        //Setup bagmotor
-        bagMotor.follow(master);
-        
-        bagMotor.setInverted(BAG_INVERT);
-
-        bagMotor.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
-        bagMotor.enableVoltageCompensation(true);
-        
-        bagMotor.setNeutralMode(NeutralMode.Brake);
-
-        bagMotor.configForwardSoftLimitEnable(false);
-        bagMotor.configReverseSoftLimitEnable(false);
-        bagMotor.overrideLimitSwitchesEnable(false);
-
-        bagMotor.configContinuousCurrentLimit(INTAKE_CURRENT_CONTINUOUS);
-        bagMotor.configPeakCurrentLimit(INTAKE_CURRENT_PEAK);
-        bagMotor.configPeakCurrentDuration(INTAKE_CURRENT_PEAK_DUR);
-        bagMotor.enableCurrentLimit(true);
-    
-        bagMotor.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
-        bagMotor.enableVoltageCompensation(true);
     }
 
     public void spinIndexer(double percentOutput) {
-        master.set(ControlMode.PercentOutput, percentOutput * OUTPUT_MULTIPLIER);
+        if(percentOutput == 0)
+            master.set(ControlMode.Disabled, 0);
+        else
+            master.set(ControlMode.PercentOutput, percentOutput * OUTPUT_MULTIPLIER);
     }
 
     public DigitalInput getShooterSensor() {
@@ -128,14 +111,15 @@ public class Indexer implements Subsystem {
     }
 
     public DigitalInput getHopperSensor() {
-        return hopperSensor;
+        return indexerSensor;
     }
-    public HSTalon getTalon() {
+
+    public HSTalon getMaster() {
         return master;
     }
 
-    public HSTalon getBagMotor() {
-        return bagMotor;
+    public HSTalon getFollower() {
+        return follower;
     }
 
     public static Indexer getInstance() {
