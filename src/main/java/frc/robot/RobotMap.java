@@ -49,5 +49,9 @@ public class RobotMap {
 		public static final int BR_ANGLE_ID = 7;
 
 		public static final int PIGEON_ID = 0;
+
+		public static final int RETROREFLECTIVE_SENSOR = 0;
+
+		public static final int[] sensorIDS = {0, 0, 0};
 	}
 }

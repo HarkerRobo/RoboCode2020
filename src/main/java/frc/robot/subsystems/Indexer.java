@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotMap;
 import harkerrobolib.wrappers.HSTalon;
@@ -16,7 +18,7 @@ import harkerrobolib.wrappers.HSTalon;
  * @author Jatin Kohli
  * @author Aimee Wang
  * @author Shahzeb Lakhani
- * @since January 6, 2020
+ * @since January 23, 2020
  */
 public class Indexer implements Subsystem {
     static {
@@ -45,11 +47,28 @@ public class Indexer implements Subsystem {
     private static final int INTAKE_CURRENT_CONTINUOUS = 40;
     private static final int INTAKE_CURRENT_PEAK = 50;
 
+    // private DigitalInput[] sensors;
+    // private int[] sensorIDS = {0, 0, 0};
+
+    private DigitalInput intakeSensor;  // The first sensor when a ball is intaked
+    private DigitalInput hopperSensor;  // The second sensor in the indexer
+    private DigitalInput shooterSensor; // Determines if the hopper is full
+    
+    private static final int INTAKE_SENSOR_ID = 0;
+    private static final int HOPPER_SENSOR_ID = 0;
+    private static final int SHOOTER_SENSOR_ID = 0;
+
     private Indexer() {
         master = new HSTalon(RobotMap.CAN_IDS.HOPPER_TALON_ID);
         bagMotor = new HSTalon(RobotMap.CAN_IDS.BAG_TALON_ID);
-
+        initializeSensors();
         setupTalons();
+    }
+
+    public void initializeSensors() {
+        intakeSensor = new DigitalInput(INTAKE_SENSOR_ID);
+        hopperSensor = new DigitalInput(HOPPER_SENSOR_ID);
+        shooterSensor = new DigitalInput(SHOOTER_SENSOR_ID);
     }
     
     public void setupTalons() {
@@ -72,7 +91,6 @@ public class Indexer implements Subsystem {
         master.configPeakCurrentLimit(INTAKE_CURRENT_PEAK);
         master.configPeakCurrentDuration(INTAKE_CURRENT_PEAK_DUR);
         master.enableCurrentLimit(true);
-    
 
         //Setup bagmotor
         bagMotor.follow(master);
@@ -101,6 +119,17 @@ public class Indexer implements Subsystem {
         master.set(ControlMode.PercentOutput, percentOutput * OUTPUT_MULTIPLIER);
     }
 
+    public DigitalInput getShooterSensor() {
+        return shooterSensor;
+    }
+
+    public DigitalInput getIntakeSensor() {
+        return intakeSensor;
+    }
+
+    public DigitalInput getHopperSensor() {
+        return hopperSensor;
+    }
     public HSTalon getTalon() {
         return master;
     }
