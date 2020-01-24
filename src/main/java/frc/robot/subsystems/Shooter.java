@@ -78,13 +78,9 @@ public class Shooter implements Subsystem {
 
     private static final double VOLTAGE_COMPENSATION = 0;
 
-
-
     public static TalonFXInvertType MASTER_INVERT;
     public static TalonFXInvertType FOLLOWER_INVERT;
 
-
-    
     /**
      * Constructs a Shooter.
      */
@@ -145,8 +141,8 @@ public class Shooter implements Subsystem {
      * Spins the shooter flywheel at a certain velocity (in feet/second)
      */
     public void spinShooter(double velocity) {
-        double velocityEncoders = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, velocity, SpeedUnit.ENCODER_UNITS);
-        flywheelMaster.set(ControlMode.Velocity, velocityEncoders);
+        double velocityInTicks = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, velocity, SpeedUnit.ENCODER_UNITS);
+        flywheelMaster.set(ControlMode.Velocity, velocityInTicks);
     }
 
     /**

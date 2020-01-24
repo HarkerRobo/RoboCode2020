@@ -55,14 +55,14 @@ public class Indexer implements Subsystem {
     private static final int INDEXER_SENSOR_ID = 0;
     private static final int SHOOTER_SENSOR_ID = 0;
 
-    public int numPowerCells = 0;
+    // public int numPowerCells = 0;
 
     private Indexer() {
         master = new HSTalon(RobotMap.CAN_IDS.INDEXER_TALON_ID);
         follower = new HSTalon(RobotMap.CAN_IDS.INDEXER_FOLLOWER_TALON_ID);
         initializeSensors();
         setupTalons();
-        numPowerCells = 0;
+        // numPowerCells = 0;
     }
 
     public void initializeSensors() {

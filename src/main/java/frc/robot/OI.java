@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.SwerveDriveKinematicsConstraint;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
+import frc.robot.commands.indexer.MoveBallsToShooter;
+import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.wrappers.XboxGamepad;
 
@@ -40,13 +43,11 @@ public class OI
      * Sets up button bindings on the driver and operator controllers
      */
     private void initBindings() {
-        // operatorGamepad.getButtonB().whilePressed(new ToggleShooterAngle());
-        // operatorGamepad.getButtonA().whilePressed(new SpinBottomIntakeManual(1));
-        // operatorGamepad.getButtonX().whilePressed(new SpinIndexerManual(1));
-        // driverGamepad.getButtonY().whenPressed(new InstantCommand(Shooter::toggleAngle, Shooter.getInstance()));
-        // driverGamepad.getButtonA().whilePressed(() -> Shooter.spinShooter(SHOOTER_SPEED));
-        // driverGamepad.getButtonX().whilePressed(new InstantCommand(BottomIntake::spinIntake(1), BottomIntake.getInstance()));
-        // driverGamepad.getButtonA().whilePressed(new InstantCommand(BottomIntake::spinIntake(-1), BottomIntake.getInstance()));
+        driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(
+                                                            new SwerveAlignWithLimelight(), 
+                                                            new SpinShooterLimelight()));
+        driverGamepad.getButtonBumperLeft().whilePressed(new MoveBallsToShooter());
+
         constraint = new SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(), Drivetrain.MAX_DRIVE_VELOCITY);
 
         TrajectoryConfig config = new TrajectoryConfig(Drivetrain.MAX_DRIVE_VELOCITY, Drivetrain.MAX_DRIVE_ACCELERATION)

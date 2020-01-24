@@ -38,12 +38,12 @@ public class SpinIndexer extends IndefiniteCommand {
             // If something is currently next to the intake sensor, say that a ball has passed through this sensor.
             if(intakeDetected && !intakeFlag) {
                 intakeFlag = true;
-                Indexer.getInstance().numPowerCells++;
+                // Indexer.getInstance().numPowerCells++;
             }
             // Once the ball in front of the indexer has left, wait for the intake ball to reach the indexer
             if(intakeFlag && !indexerDetected) {
                 indexerFlag = true;
-                Indexer.getInstance().numPowerCells++;
+                // Indexer.getInstance().numPowerCells++;
             }
             //If there is a ball that needs to be indexed - i.e one that has passed through the intake.
             if(intakeFlag) {
@@ -55,7 +55,7 @@ public class SpinIndexer extends IndefiniteCommand {
                 Indexer.getInstance().spinIndexer(0); 
                 intakeFlag = false;
                 indexerFlag = false;
-                Indexer.getInstance().numPowerCells--;
+                // Indexer.getInstance().numPowerCells--;
             }
         }
     }

@@ -1,12 +1,12 @@
 package frc.robot.commands.shooter;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
 
+/**
+ * Aligns the drivetrain to a target using limelight and revs up the shooter to be prepared to shoot.
+ */
 public class SpinShooterLimelight extends IndefiniteCommand {
     private static final double LIMELIGHT_ANGLE = 20; // tune
     private static final double LIMELIGHT_HEIGHT = 10; // tune
@@ -29,8 +29,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
 
     public void execute() {
         double distance = Math.sqrt(Math.pow(Limelight.getCamtranZ(), 2) + Math.pow(Limelight.getCamtranX(), 2)) / 12.0;
-        Shooter.getInstance().spinShooter(distance * SCALE);
-        
+        Shooter.getInstance().spinShooter(distance * SCALE); //Distance will be proportional to our velocity (use the SCALE to tune)
         
         //If we try to optimize use this code:
         // Shooter.getInstance().getAngleSolenoid().set(distance > THRESHOLD ? Shooter.SHOOTER_LOW_ANGLE : Shooter.SHOOTER_HIGH_ANGLE);
@@ -41,5 +40,4 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         //     (2 * (Math.tan(Math.toRadians(angle)) * DISTANCE_Y - DISTANCE_Y) * Math.pow(Math.cos(Math.toRadians(angle)), 2))
         // );
     }
-
 }

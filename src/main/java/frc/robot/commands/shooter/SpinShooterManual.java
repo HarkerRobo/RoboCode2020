@@ -33,7 +33,7 @@ public class SpinShooterManual extends IndefiniteCommand {
         
         //Checks which trigger has more output and picks between them.
         //Left trigger means reject the current ball.
-        double output = rightTrigger > leftTrigger ? rightTrigger : -leftTrigger; // From [-1, 1]
+        double output = rightTrigger - leftTrigger; // From [-1, 1]
         
         Shooter.getInstance().spinShooter(output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
     }
