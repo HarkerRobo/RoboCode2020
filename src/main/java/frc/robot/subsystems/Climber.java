@@ -115,6 +115,7 @@ public class Climber extends SubsystemBase {
     
     private void setupPositionPID() {
         leftClimber.selectProfileSlot(CLIMBER_POSITION_SLOT, RobotMap.PRIMARY_INDEX);
+        leftClimber.configClosedloopRamp(CLIMBER_RAMP_RATE);
         leftClimber.config_kP(CLIMBER_POSITION_SLOT, CLIMBER_POSITION_KP);
         leftClimber.config_kI(CLIMBER_POSITION_SLOT, CLIMBER_POSITION_KI);
         leftClimber.config_kD(CLIMBER_POSITION_SLOT, CLIMBER_POSITION_KD);

@@ -240,23 +240,16 @@ public class Drivetrain extends SubsystemBase {
     public static final Constraints THETA_CONSTRAINTS = new Constraints(MAX_ROTATION_VELOCITY, MAX_ROTATION_ACCELERATION);
 
 	public static final double TX_kP = 0.015;
-
 	public static final double TX_kI = 0;
-
     public static final double TX_kD = 0.;
     
 	public static final double THOR_kP = 0;
-
 	public static final double THOR_kI = 0;
-
 	public static final double THOR_kD = 0;
 
 	public static final double TX_SETPOINT = 0.0;
-
     public static final double THOR_SETPOINT = 0;
-    
     public static final double TX_ALLOWABLE_ERROR = 0.4;
-    
     public static final double THOR_ALLOWABLE_ERROR = 0;
 
     /**
@@ -301,8 +294,6 @@ public class Drivetrain extends SubsystemBase {
 
         kinematics = new SwerveDriveKinematics(Drivetrain.FRONT_LEFT_LOCATION, Drivetrain.FRONT_RIGHT_LOCATION,
                 Drivetrain.BACK_LEFT_LOCATION, Drivetrain.BACK_RIGHT_LOCATION);
-
-
         
         odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(pigeon.getFusedHeading()), new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
         Pose2d initialPose = new Pose2d(new Translation2d(), 

@@ -1,4 +1,4 @@
-package frc.robot.commands.drivetrain;
+package frc.robot.commands.drivetrain.auton;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,17 +19,9 @@ import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import harkerrobolib.util.MathUtil;
-/**
- * Aligns the Robot with the target, using the Limelight's tX to turn towards the target
- * and its thor to get close enough to the target
- * 
- * @author Angela Jia
- * @author Jatin Kohli
- * 
- * @since 8/14/19
- */
-public class SwerveAlignWithLimelight extends CommandBase {
-     
+
+public class SwerveAutonAlignWithLimelight extends CommandBase {
+
     public static final double PID_CONTROLLER_PERIOD = 0.01; //In seconds
 
     private static final double OUTPUT_MULTIPLIER = 0.5;
@@ -39,7 +31,8 @@ public class SwerveAlignWithLimelight extends CommandBase {
     private PIDController txController;
     private PIDController thorController;
 
-    public SwerveAlignWithLimelight() {
+
+    public SwerveAutonAlignWithLimelight() {
         addRequirements(Drivetrain.getInstance());
 
         txController = new PIDController(Drivetrain.TX_kP, Drivetrain.TX_kI, Drivetrain.TX_kD, PID_CONTROLLER_PERIOD);
@@ -49,7 +42,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
         txController.setTolerance(Drivetrain.TX_ALLOWABLE_ERROR);
         thorController.setTolerance(Drivetrain.THOR_ALLOWABLE_ERROR);
     }
-    
+
     @Override
     public void initialize() {
         Drivetrain.getInstance().applyToAllDrive((talon) -> talon.selectProfileSlot(Drivetrain.DRIVE_VELOCITY_SLOT, RobotMap.PRIMARY_INDEX));
@@ -58,32 +51,16 @@ public class SwerveAlignWithLimelight extends CommandBase {
         Drivetrain.getInstance().applyToAllAngle((angleMotor) -> angleMotor.selectProfileSlot(Drivetrain.ANGLE_POSITION_SLOT, RobotMap.PRIMARY_INDEX));
         Drivetrain.getInstance().applyToAllDrive((falcon) -> falcon.setNeutralMode(NeutralMode.Brake));
         Drivetrain.getInstance().applyToAllAngle((talon) -> talon.configClosedloopRamp(Drivetrain.ANGLE_RAMP_RATE));
-        Limelight.setLEDS(true);
         Limelight.setCamModeVision();
     }
 
     @Override
     public void execute() {
-        //double speed = -thorController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_DRIVE_VELOCITY;
         double turn = txController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_ROTATION_VELOCITY;
 
-        double translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
-        double translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
-        translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
-        translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
-
-        turn -= ((Math.cos(Drivetrain.getInstance().getTopLeft().getAngleDegrees()) * Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorVelocity() +
-                Math.cos(Drivetrain.getInstance().getTopRight().getAngleDegrees()) * Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorVelocity() +
-                Math.cos(Drivetrain.getInstance().getBackLeft().getAngleDegrees()) * Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorVelocity() +
-                Math.cos(Drivetrain.getInstance().getBackRight().getAngleDegrees()) * Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorVelocity()) / 4) * TX_VELOCITY_MULTIPLIER;
-        // turn += (Drivetrain.getInstance().getTopLeft().getState().speedMetersPerSecond) * TX_VELOCITY_MULTIPLIER;
-        // speed = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, speed, SpeedUnit.ENCODER_UNITS);
-        // turn = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, turn, SpeedUnit.ENCODER_UNITS);
-
-        // SwerveModuleState tlState = Drivetrain.getInstance().getTopLeft().getState();
-        // SwerveModuleState trState = Drivetrain.getInstance().getTopRight().getState();
-        // SwerveModuleState blState = Drivetrain.getInstance().getBackLeft().getState();
-        // SwerveModuleState brState = Drivetrain.getInstance().getBackRight().getState();
+        //No translation
+        double translateX = 0;
+        double translateY = 0; 
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             translateX, translateY, turn, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
@@ -95,7 +72,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
         Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], 0, false, false);
 
 
-        SmartDashboard.putNumber("Limelight tx error", txController.getPositionError());
+        SmartDashboard.putNumber("Limelight auton tx error", txController.getPositionError());
     }
 
     @Override
@@ -103,6 +80,5 @@ public class SwerveAlignWithLimelight extends CommandBase {
         txController.reset();
         thorController.reset();
         Drivetrain.getInstance().stopAllDrive();
-        Limelight.setLEDS(false);
     }
 }

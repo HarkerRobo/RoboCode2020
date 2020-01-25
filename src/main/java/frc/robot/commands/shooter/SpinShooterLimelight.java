@@ -13,11 +13,10 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     private static final double TARGET_HEIGHT = 50; // tune
     private static final double THRESHOLD = 0;
 
-    
     public static final double SHOOTER_HIGH_ANGLE_DEGREES = 50;
     public static final double SHOOTER_LOW_ANGLE_DEGREES = 21;
 
-    public static final double GRAVITY = 9.8;
+    public static final double GRAVITATIONAL_FIELD_STRENGTH = 9.8;
 
     public static final double DISTANCE_Y = 0;
     
@@ -28,6 +27,18 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     }
 
     public void execute() {
+        
+        // double yDisplacement = Limelight.getCamtranY();
+        // double xDisplacement = Limelight.getCamtranX();
+
+        // double initialVelocityY = Math.sqrt(2 * 9.8 * yDisplacement);
+        // double angle = Limelight.getTy(); //Y angle
+        // double initialVelocityX = Math.tan(90 - angle) * yDisplacement; //90-angle is complement
+
+        // double initialVelocity = Math.sqrt(Math.pow(initialVelocityY, 2) , Math.pow(initialVelocityX, 2));
+        
+        // Shooter.getInstance().spinShooter(initialVelocity + MULTIPLIER * distance);
+
         double distance = Math.sqrt(Math.pow(Limelight.getCamtranZ(), 2) + Math.pow(Limelight.getCamtranX(), 2)) / 12.0;
         Shooter.getInstance().spinShooter(distance * SCALE); //Distance will be proportional to our velocity (use the SCALE to tune)
         

@@ -1,7 +1,5 @@
 package frc.robot.commands.indexer;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import frc.robot.subsystems.Indexer;
 import harkerrobolib.commands.IndefiniteCommand;
 

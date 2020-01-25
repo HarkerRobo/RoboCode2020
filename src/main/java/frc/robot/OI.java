@@ -8,18 +8,15 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.SwerveDriveKinematicsConstraint;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
-import frc.robot.commands.indexer.MoveBallsToShooter;
-import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.wrappers.XboxGamepad;
 
 /**
  * The OI class reads inputs from the joysticks and binds them to commands.
  * 
- * @since 01/06/20
+ * @since January 6, 2020
  */
 public class OI
 {
@@ -31,6 +28,20 @@ public class OI
 
     private XboxGamepad driverGamepad;
     private XboxGamepad operatorGamepad;
+
+    // //Go from auton left starting position to shooting position
+    // private static final Trajectory leftStartingToShooting = TrajectoryGenerator.generateTrajectory(List.of( 
+    //     new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+    //     new Pose2d(0, 10, Rotation2d.fromDegrees(180))), config);
+            
+    // private static final Trajectory middleStartingToShooting = TrajectoryGenerator.generateTrajectory(List.of( 
+    //     new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+    //     new Pose2d(0, 10, Rotation2d.fromDegrees(0)),
+    //     new Pose2d(-9.72, 0, Rotation2d.fromDegrees(180))), config);
+
+    // private static final Trajectory rightStartingToShooting = TrajectoryGenerator.generateTrajectory(List.of( 
+    //     new Pose2d(0, 0, Rotation2d.fromDegrees(-90)),
+    //     new Pose2d(1.676, -6.447, Rotation2d.fromDegrees(-90))), config);
     
     private OI() {
         driverGamepad = new XboxGamepad(RobotMap.DRIVER_PORT);
@@ -61,6 +72,15 @@ public class OI
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
 
         driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(linearTrajectory));
+
+        // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(new SwerveDriveWithOdometryProfiling(leftStartingToShooting), 
+        //     new SwerveAutonAlignWithLimelight()), new SpinShooterLimelight());
+
+        // driverGamepad.getButtonB().whenPressed(new SequentialCommandGroup(new SwerveDriveWithOdometryProfiling(middleStartingToShooting), 
+        //     new SwerveAutonAlignWithLimelight()), new SpinShooterLimelight());
+
+        // driverGamepad.getButtonX().whenPressed(new SequentialCommandGroup(new SwerveDriveWithOdometryProfiling(rightStartingToShooting), 
+        //     new SwerveAutonAlignWithLimelight()), new SpinShooterLimelight());
     }
 
     /**
