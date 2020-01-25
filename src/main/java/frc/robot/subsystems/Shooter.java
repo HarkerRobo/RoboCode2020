@@ -6,8 +6,7 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotMap;
 import harkerrobolib.util.Conversions;
@@ -22,6 +21,7 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  * @author Arjun Dixit
  * @author Anirudh Kotamraju
  * @author Aimee Wang
+ * @author Rohan Bhowmik
  * @since 1/22/20
  */
 public class Shooter implements Subsystem {
@@ -30,8 +30,8 @@ public class Shooter implements Subsystem {
             FLYWHEEL_KP = 0.0; // tune;
             FLYWHEEL_KF = 0.0; // tune;
 
-            SHOOTER_HIGH_ANGLE = Value.kForward;
-            SHOOTER_LOW_ANGLE = Value.kReverse;
+            SHOOTER_HIGH_ANGLE = true;
+            SHOOTER_LOW_ANGLE = false;
 
             MASTER_INVERT = TalonFXInvertType.Clockwise;
             FOLLOWER_INVERT = TalonFXInvertType.FollowMaster;
@@ -41,8 +41,8 @@ public class Shooter implements Subsystem {
             FLYWHEEL_KP = 0.0; // tune;
             FLYWHEEL_KF = 0.0; // tune;
 
-            SHOOTER_HIGH_ANGLE = Value.kForward;
-            SHOOTER_LOW_ANGLE = Value.kReverse;
+            SHOOTER_HIGH_ANGLE = true;
+            SHOOTER_LOW_ANGLE = false;
 
             MASTER_INVERT = TalonFXInvertType.Clockwise;
             FOLLOWER_INVERT = TalonFXInvertType.FollowMaster;
@@ -65,10 +65,10 @@ public class Shooter implements Subsystem {
     private static double FLYWHEEL_KF;
     private static double FLYWHEEL_KP;
     
-    private static DoubleSolenoid hoodSolenoid;
+    private static Solenoid solenoid;
     
-    public static DoubleSolenoid.Value SHOOTER_HIGH_ANGLE; 
-    public static DoubleSolenoid.Value SHOOTER_LOW_ANGLE; 
+    public static boolean SHOOTER_HIGH_ANGLE; 
+    public static boolean SHOOTER_LOW_ANGLE; 
     
     public static final int FLYWHEEL_VOLTAGE_COMP = 10;
     
@@ -87,8 +87,8 @@ public class Shooter implements Subsystem {
     public Shooter() {
         flywheelMaster = new TalonFX(RobotMap.CAN_IDS.SHOOTER_MASTER_ID);
         flywheelFollower = new TalonFX(RobotMap.CAN_IDS.SHOOTER_FOLLOWER_ID);
-        hoodSolenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_SOLENOID_REVERSE);
-
+        solenoid = new Solenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID);
+        
         setupFlywheel();
     }
 
@@ -134,7 +134,7 @@ public class Shooter implements Subsystem {
      * at low it switches the position to high.
      */
     public void toggleAngle() {
-        hoodSolenoid.set(hoodSolenoid.get() == SHOOTER_HIGH_ANGLE ? SHOOTER_LOW_ANGLE : SHOOTER_HIGH_ANGLE);
+        solenoid.set(solenoid.get() == SHOOTER_HIGH_ANGLE ? SHOOTER_LOW_ANGLE : SHOOTER_HIGH_ANGLE);
     }
 
     /**
@@ -165,8 +165,8 @@ public class Shooter implements Subsystem {
      * Gets the angle solenoid.
      * @return the angle solenoid.
      */
-    public DoubleSolenoid getAngleSolenoid() {
-        return hoodSolenoid;
+    public Solenoid getSolenoid() {
+        return solenoid;
     }
 
     /**

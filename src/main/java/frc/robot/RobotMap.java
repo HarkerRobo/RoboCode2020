@@ -1,7 +1,7 @@
 package frc.robot;
 
 /**
- * Class to store all project-wide constants, such as CAN Ids
+ * Stores all project-wide constants, such as CAN Ids
  * 
  * @since 01/06/20
  */
@@ -17,26 +17,30 @@ public class RobotMap {
     public static final int DEFAULT_TIMEOUT = 10; //ms
 
     /**
-     * Class to store CAN Id constants
+     * Stores CAN Id constants.
      */
 	public static class CAN_IDS {
-		public static final int BOTTOM_INTAKE_MOTOR_ID = -1;
-		
+        public static final int INTAKE_MOTOR_ID = -1;
+        public static final int INTAKE_SOLENOID_FORWARD = -1;
+		public static final int INTAKE_SOLENOID_REVERSE = -1;
+        
+        public static final int SPINNER_ID = 0;
+		public static final int SPINNER_SOLENOID_FORWARD = -1;
+		public static final int SPINNER_SOLENOID_REVERSE = -1;
+        		
+        public static final int INDEXER_TALON_ID = -1;
+        public static final int INDEXER_FOLLOWER_TALON_ID = -1; //For Color Spinner and one indexer motor
+        public static final int INDEXER_SOLENOID = -1;
+
 		public static final int SHOOTER_MASTER_ID = -1;
 		public static final int SHOOTER_FOLLOWER_ID = -1;
+		public static final int SHOOTER_SOLENOID = -1;
 
-		public static final int SHOOTER_SOLENOID_FORWARD = -1;
-		public static final int SHOOTER_SOLENOID_REVERSE = -1;
-
-        public static final int INDEXER_TALON_ID = -1;
-
-        public static final int INDEXER_FOLLOWER_TALON_ID = -1; //For Color Spinner and one indexer motor
-        
 		public static final int LEFT_CLIMBER_ID = -1;
 		public static final int RIGHT_CLIMBER_ID = -1;
-        
-		public static final int SPINNER_ID = 0;
-
+		public static final int CLIMBER_SOLENOID_FORWARD = -1;
+		public static final int CLIMBER_SOLENOID_REVERSE = -1;
+		
 		public static final int TL_DRIVE_ID = 0;
 		public static final int TL_ANGLE_ID = 1;
 
@@ -49,6 +53,6 @@ public class RobotMap {
 		public static final int BR_DRIVE_ID = 6;
 		public static final int BR_ANGLE_ID = 7;
 
-		public static final int PIGEON_ID = 0; 
+		public static final int PIGEON_ID = 0;
 	}
 }

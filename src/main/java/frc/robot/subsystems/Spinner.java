@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.hal.sim.mockdata.DriverStationDataJNI;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,6 +41,8 @@ public class Spinner extends SubsystemBase {
     private final Color redTarget = ColorMatch.makeColor(0.480, 0.350, 0.114);
     private final Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
+    private DoubleSolenoid solenoid;
+
     public enum ColorValue {
         RED(0),BLUE(1),GREEN(2),YELLOW(3);//Tune values for offset
         int val;
@@ -63,6 +65,8 @@ public class Spinner extends SubsystemBase {
         colorMatcher.addColorMatch(greenTarget);
         colorMatcher.addColorMatch(redTarget);
         colorMatcher.addColorMatch(yellowTarget); 
+
+        solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SPINNER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SPINNER_SOLENOID_REVERSE);
     }
 
     @Override
@@ -103,6 +107,10 @@ public class Spinner extends SubsystemBase {
     }
 
     //Don't need to re-initialize hstalon configs for bagMotor
+
+    public DoubleSolenoid getSolenoid() {
+        return solenoid;
+    }
 
     public static Spinner getInstance() {
         if(instance == null)

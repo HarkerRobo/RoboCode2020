@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotMap;
 import harkerrobolib.wrappers.HSTalon;
@@ -55,6 +55,8 @@ public class Indexer implements Subsystem {
     private static final int INDEXER_SENSOR_ID = 0;
     private static final int SHOOTER_SENSOR_ID = 0;
 
+    private Solenoid solenoid;
+
     // public int numPowerCells = 0;
 
     private Indexer() {
@@ -63,6 +65,7 @@ public class Indexer implements Subsystem {
         initializeSensors();
         setupTalons();
         // numPowerCells = 0;
+        solenoid = new Solenoid(RobotMap.CAN_IDS.INDEXER_SOLENOID);
     }
 
     public void initializeSensors() {
@@ -100,6 +103,10 @@ public class Indexer implements Subsystem {
             master.set(ControlMode.Disabled, 0);
         else
             master.set(ControlMode.PercentOutput, percentOutput * OUTPUT_MULTIPLIER);
+    }
+
+    public Solenoid getSolenoid() {
+        return solenoid;
     }
 
     public DigitalInput getShooterSensor() {

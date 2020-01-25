@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.RobotMap;
-
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -39,6 +39,8 @@ public class Climber extends SubsystemBase {
     private static final int CURRENT_PEAK = 50;
     private static final int CURRENT_PEAK_DURATION = 50;
 
+    private DoubleSolenoid solenoid;
+
     static {
         if (RobotMap.IS_PRACTICE) {
             LEFT_SENSOR_PHASE = false;
@@ -66,7 +68,8 @@ public class Climber extends SubsystemBase {
     private Climber() {
         leftClimber = new TalonFX(RobotMap.CAN_IDS.LEFT_CLIMBER_ID); 
         rightClimber = new TalonFX(RobotMap.CAN_IDS.RIGHT_CLIMBER_ID);
-
+        solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.CLIMBER_SOLENOID_FORWARD, RobotMap.CAN_IDS.CLIMBER_SOLENOID_REVERSE);
+        
         setupTalons();
         setupPositionPID();
     }
@@ -123,6 +126,10 @@ public class Climber extends SubsystemBase {
 
     public TalonFX getRightClimber() {
         return rightClimber;
+    }
+
+    public DoubleSolenoid getSolenoid() {
+        return solenoid;
     }
     
     public static Climber getInstance() {

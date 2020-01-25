@@ -11,15 +11,20 @@ import harkerrobolib.commands.IndefiniteCommand;
  * @author Jatin Kohli
  * @author Shahzeb Lakhani
  * @author Arjun Dixit
- * @author Anirudh 
+ * @author Anirudh Kotamaraju
  * 
  * @since January 23, 2020
  */
 public class MoveBallsToShooter extends IndefiniteCommand {
-    private static final double INDEX_PERCENT_OUTPUT = 0.8;
+    private static final double INDEX_PERCENT_OUTPUT = 0.8; //0.89
 
     public MoveBallsToShooter() {
-        addRequirements(Indexer.getInstance());
+        addRequirements(Indexer.getInstance()); 
+    }
+
+    @Override
+    public void initialize() {
+        Indexer.getInstance().getSolenoid().set(false);
     }
 
     @Override
@@ -30,5 +35,6 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     @Override
     public void end(boolean interrupted) {
         Indexer.getInstance().spinIndexer(0);
+        Indexer.getInstance().getSolenoid().set(true);
     }
 }
