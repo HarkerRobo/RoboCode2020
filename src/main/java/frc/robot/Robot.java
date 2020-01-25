@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -52,6 +53,8 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class Robot extends TimedRobot {
 
+    private DigitalInput input;
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code. This is where all subsystems are instantiated and 
@@ -66,6 +69,8 @@ public class Robot extends TimedRobot {
         // Climber.getInstance();
 
         OI.getInstance();
+
+        input = new DigitalInput(0);
     }
 
     /**
@@ -82,6 +87,8 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
 
         SmartDashboard.putString("Robot Type", RobotMap.IS_PRACTICE ? "Practice Bot" : "Comp Bot");
+
+        SmartDashboard.putBoolean("DIO 0 value", input.get()); 
 
         // SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         // SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());

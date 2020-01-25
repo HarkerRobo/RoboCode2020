@@ -43,10 +43,10 @@ public class OI
      * Sets up button bindings on the driver and operator controllers
      */
     private void initBindings() {
-        driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(
-                                                            new SwerveAlignWithLimelight(), 
-                                                            new SpinShooterLimelight()));
-        driverGamepad.getButtonBumperLeft().whilePressed(new MoveBallsToShooter());
+        // driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(
+        //                                                     new SwerveAlignWithLimelight(), 
+        //                                                     new SpinShooterLimelight()));
+        // driverGamepad.getButtonBumperLeft().whilePressed(new MoveBallsToShooter());
 
         constraint = new SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(), Drivetrain.MAX_DRIVE_VELOCITY);
 

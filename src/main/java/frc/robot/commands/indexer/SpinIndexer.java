@@ -29,9 +29,9 @@ public class SpinIndexer extends IndefiniteCommand {
 
     @Override
     public void execute() {
-        boolean intakeDetected = Indexer.getInstance().getIntakeSensor().get();
-        boolean indexerDetected = Indexer.getInstance().getHopperSensor().get();
-        boolean shooterDetected = Indexer.getInstance().getShooterSensor().get();
+        boolean intakeDetected = !Indexer.getInstance().getIntakeSensor().get();
+        boolean indexerDetected = !Indexer.getInstance().getHopperSensor().get();
+        boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
         
         // If the indexer is full, never move
         if(!shooterDetected) {
