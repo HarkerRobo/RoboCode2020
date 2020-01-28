@@ -200,4 +200,8 @@ public class SwerveModule {
         return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND) * Drivetrain.METERS_PER_FOOT, 
             Rotation2d.fromDegrees(angleMotor.getSelectedSensorPosition() * 360 / 4096));
     }
+
+    public static double mod360(double degrees) {
+        return (degrees % 360 + 360) % 360;
+    }
 }

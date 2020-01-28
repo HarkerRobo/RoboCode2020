@@ -67,20 +67,13 @@ public class OI
 
         Trajectory linearTrajectory = TrajectoryGenerator.generateTrajectory(List.of( 
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            new Pose2d(1, 0, Rotation2d.fromDegrees(0))), config);
+            new Pose2d(1, 1, Rotation2d.fromDegrees(45))), config);
+
+        Rotation2d heading = Rotation2d.fromDegrees(0);
 
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
 
-        driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(linearTrajectory));
-
-        // driverGamepad.getButtonA().whenPressed(new SequentialCommandGroup(new SwerveDriveWithOdometryProfiling(leftStartingToShooting), 
-        //     new SwerveAutonAlignWithLimelight()), new SpinShooterLimelight());
-
-        // driverGamepad.getButtonB().whenPressed(new SequentialCommandGroup(new SwerveDriveWithOdometryProfiling(middleStartingToShooting), 
-        //     new SwerveAutonAlignWithLimelight()), new SpinShooterLimelight());
-
-        // driverGamepad.getButtonX().whenPressed(new SequentialCommandGroup(new SwerveDriveWithOdometryProfiling(rightStartingToShooting), 
-        //     new SwerveAutonAlignWithLimelight()), new SpinShooterLimelight());
+        driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(linearTrajectory, heading));
     }
 
     /**
