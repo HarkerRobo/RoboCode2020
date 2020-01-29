@@ -1,5 +1,6 @@
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
@@ -30,16 +31,21 @@ import harkerrobolib.util.MathUtil;
  */
 public class SwerveManual extends CommandBase {
     private static final double OUTPUT_MULTIPLIER = 0.7;
-    private static final double VELOCITY_HEADING_MULTIPLIER = -100;
+    private static final double VELOCITY_HEADING_MULTIPLIER = -0;
     private static final boolean IS_PERCENT_OUTPUT = false;
+    private static final double ACCELERATION_HEADING_MULTIPLIER = -0;
 
     private double translateX, translateY, turnMagnitude;
     
     private static double prevPigeonHeading;
-    private static long prevTime;
-    
+    private static double prevTime;
+    private static double prevVel;
     private static boolean pigeonFlag; //True if the Driver Right X input is non-zero
     private static double pigeonAngle;
+
+    private static double lastPigeonUpdateTime; // seconds
+    private static double turnVel;
+    private static double turnAccel;
     
     public SwerveManual() {
         addRequirements(Drivetrain.getInstance());
@@ -47,7 +53,10 @@ public class SwerveManual extends CommandBase {
         pigeonFlag = false;
         // pigeonAngle = 90;
         // prevPigeonHeading = 90;
-        prevTime = System.currentTimeMillis();
+        prevTime = Timer.getFPGATimestamp();
+        lastPigeonUpdateTime = Timer.getFPGATimestamp();
+        prevPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
+        prevVel = 0;
     }
 
     @Override
@@ -80,14 +89,13 @@ public class SwerveManual extends CommandBase {
 
         double currentPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
 
+        SmartDashboard.putNumber("Turn acceleration", turnAccel);
+        SmartDashboard.putNumber("Turn Vel", turnVel);
+        SmartDashboard.putNumber("dtetha", currentPigeonHeading - prevPigeonHeading);
+
+
         if(pigeonFlag && turnMagnitude == 0) { //If there was joystick input but now there is not
-            long currentTime = System.currentTimeMillis();
-            double deltaTime = (double)(currentTime - prevTime);
-            double turnVel = (currentPigeonHeading - prevPigeonHeading) / deltaTime;
-
-            SmartDashboard.putNumber("Turn Vel", turnVel);
-
-            pigeonAngle = currentPigeonHeading - turnVel * VELOCITY_HEADING_MULTIPLIER; // account for momentum when turning
+            pigeonAngle = currentPigeonHeading - turnVel * VELOCITY_HEADING_MULTIPLIER- turnAccel * ACCELERATION_HEADING_MULTIPLIER; // account for momentum when turning
         }
 
         pigeonFlag = Math.abs(turnMagnitude) > 0; //Update pigeon flag
@@ -99,9 +107,6 @@ public class SwerveManual extends CommandBase {
         }
 
         SmartDashboard.putNumber("turn mag", turnMagnitude);
-
-        prevPigeonHeading = currentPigeonHeading;
-        prevTime = System.currentTimeMillis();
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
@@ -115,6 +120,20 @@ public class SwerveManual extends CommandBase {
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
         Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], 0, IS_PERCENT_OUTPUT, false);
+
+        if(Timer.getFPGATimestamp() - lastPigeonUpdateTime > 0.2) {
+            double currentTime = Timer.getFPGATimestamp();
+            double deltaTime = (double)(currentTime - prevTime);
+
+            turnVel = (currentPigeonHeading - prevPigeonHeading) / deltaTime;
+            
+            turnAccel = (turnVel - prevVel) / deltaTime;
+
+            prevPigeonHeading = currentPigeonHeading;
+            prevVel = turnVel;
+            prevTime = currentTime;
+            lastPigeonUpdateTime = Timer.getFPGATimestamp();
+        }
     }
 
     @Override

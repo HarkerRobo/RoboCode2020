@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.SwerveDriveKinematicsConstraint;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.subsystems.Drivetrain;
@@ -71,7 +72,25 @@ public class OI
 
         Rotation2d heading = Rotation2d.fromDegrees(0);
 
-        driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
+        // driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
+
+        driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
+            () -> {
+                Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition(0);
+                Drivetrain.getInstance().getTopRight().getAngleMotor().setSelectedSensorPosition(0);
+                System.out.println(Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+                System.out.println(Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+            }, 
+            Drivetrain.getInstance()));
+
+        driverGamepad.getButtonBumperRight().whenPressed(new InstantCommand(
+            () -> {
+                Drivetrain.getInstance().getBackLeft().getAngleMotor().setSelectedSensorPosition(0);
+                Drivetrain.getInstance().getBackRight().getAngleMotor().setSelectedSensorPosition(0);
+                System.out.println(Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+                System.out.println(Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+            }, 
+            Drivetrain.getInstance()));
 
         driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(linearTrajectory, heading));
     }

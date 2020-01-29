@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -58,7 +61,6 @@ import frc.robot.subsystems.Drivetrain;
  * @since 01/06/20
  */
 public class Robot extends TimedRobot {
-
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code. This is where all subsystems are instantiated and 
@@ -72,7 +74,7 @@ public class Robot extends TimedRobot {
         // Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
         // Indexer.getInstance();
         // Climber.getInstance();
-
+    
         OI.getInstance();
     }
 
@@ -91,10 +93,10 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putString("Robot Type", RobotMap.IS_PRACTICE ? "Practice Bot" : "Comp Bot");
 
-        // SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        // SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        // SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        // SmartDashboard.putNumber("BR Rise to Fall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        SmartDashboard.putNumber("BR Rise to Fall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
 
         SmartDashboard.putNumber("TL Angle POS", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
         SmartDashboard.putNumber("TR Angle POS", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
@@ -119,6 +121,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
         SmartDashboard.putNumber("Pigeon Yaw", Drivetrain.getInstance().getPigeon().getYaw());
         SmartDashboard.putNumber("Pigeon Compass", Drivetrain.getInstance().getPigeon().getAbsoluteCompassHeading());
+
     }
 
     /**

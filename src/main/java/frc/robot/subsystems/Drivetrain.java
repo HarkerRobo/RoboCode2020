@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
 /**
  * Simulates the drivetrain subsystem on the robot. A Swerve Drivetrain contains
@@ -130,14 +131,14 @@ public class Drivetrain extends SubsystemBase {
             BL_ANGLE_SENSOR_PHASE = true;
             BR_ANGLE_SENSOR_PHASE = false;
 
-            TL_OFFSET = 9154;
-            TR_OFFSET = 5915;
-            BL_OFFSET = 1604;
-            BR_OFFSET = 5724;
+            TL_OFFSET = 9084;//9154;
+            TR_OFFSET = 5951;//5915;
+            BL_OFFSET = 1582;//1604;
+            BR_OFFSET = 5891;//5724;
             
-            ANGLE_POSITION_KP = 1.1;
+            ANGLE_POSITION_KP = 0;//1.1;
             ANGLE_POSITION_KI = 0.0;
-            ANGLE_POSITION_KD = 11;
+            ANGLE_POSITION_KD = 0;//11;
             
             DRIVE_VELOCITY_KP = 0.5;
             DRIVE_VELOCITY_KI = 0.0;
@@ -147,7 +148,7 @@ public class Drivetrain extends SubsystemBase {
             DRIVE_RAMP_RATE = 0.1;
             ANGLE_RAMP_RATE = 0.2;  
             
-            PIGEON_kP = 0.05;//sh
+            PIGEON_kP = 0.05;//creates angery robot if too high
 
             MP_X_KP = 0;//2.6;
             MP_X_KI = 0;
@@ -289,6 +290,7 @@ public class Drivetrain extends SubsystemBase {
         pigeon.configFactoryDefault();
         pigeon.zero();
         pigeon.setFusedHeading(0);
+        pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.BiasedStatus_2_Gyro, 1);  
 
         Conversions.setWheelDiameter(WHEEL_DIAMETER);
 
