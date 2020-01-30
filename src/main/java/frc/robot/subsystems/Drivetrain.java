@@ -136,9 +136,9 @@ public class Drivetrain extends SubsystemBase {
             BL_OFFSET = 1582;//1604;
             BR_OFFSET = 5891;//5724;
             
-            ANGLE_POSITION_KP = 0;//1.1;
+            ANGLE_POSITION_KP = 1.1;
             ANGLE_POSITION_KI = 0.0;
-            ANGLE_POSITION_KD = 0;//11;
+            ANGLE_POSITION_KD = 11;
             
             DRIVE_VELOCITY_KP = 0.5;
             DRIVE_VELOCITY_KI = 0.0;
