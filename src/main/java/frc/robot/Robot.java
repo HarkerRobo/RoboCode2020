@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
     
 /**
  * Has anyone heard of the team that ran out of code? (This is a real story)
@@ -71,7 +73,7 @@ public class Robot extends TimedRobot {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
         
         // BottomIntake.getInstance();
-        // Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
+        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
         // Indexer.getInstance();
         // Climber.getInstance();
     

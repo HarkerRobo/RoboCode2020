@@ -40,7 +40,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         // Shooter.getInstance().spinShooter(initialVelocity + MULTIPLIER * distance);
 
         double distance = Math.sqrt(Math.pow(Limelight.getCamtranZ(), 2) + Math.pow(Limelight.getCamtranX(), 2)) / 12.0;
-        Shooter.getInstance().spinShooter(distance * SCALE); //Distance will be proportional to our velocity (use the SCALE to tune)
+        Shooter.getInstance().spinShooterVelocity(distance * SCALE); //Distance will be proportional to our velocity (use the SCALE to tune)
         
         //If we try to optimize use this code:
         // Shooter.getInstance().getAngleSolenoid().set(distance > THRESHOLD ? Shooter.SHOOTER_LOW_ANGLE : Shooter.SHOOTER_HIGH_ANGLE);

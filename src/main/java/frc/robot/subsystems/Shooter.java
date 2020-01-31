@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -34,7 +35,7 @@ public class Shooter implements Subsystem {
             SHOOTER_LOW_ANGLE = false;
 
             MASTER_INVERT = TalonFXInvertType.Clockwise;
-            FOLLOWER_INVERT = TalonFXInvertType.FollowMaster;
+            FOLLOWER_INVERT = TalonFXInvertType.Clockwise;
 
             SENSOR_PHASE = false;
         } else {
@@ -44,8 +45,8 @@ public class Shooter implements Subsystem {
             SHOOTER_HIGH_ANGLE = true;
             SHOOTER_LOW_ANGLE = false;
 
-            MASTER_INVERT = TalonFXInvertType.Clockwise;
-            FOLLOWER_INVERT = TalonFXInvertType.FollowMaster;
+            MASTER_INVERT = TalonFXInvertType.CounterClockwise;
+            FOLLOWER_INVERT = TalonFXInvertType.Clockwise;
 
             SENSOR_PHASE = false;
         }
@@ -73,7 +74,7 @@ public class Shooter implements Subsystem {
     public static final int FLYWHEEL_VOLTAGE_COMP = 10;
     
     private static final int FLYWHEEL_CURRENT_CONTINUOUS = 50;
-    private static final int FLYWHEEL_CURRENT_PEAK = 70;
+    private static final int FLYWHEEL_CURRENT_PEAK = 60;
     private static final int FLYWHEEL_CURRENT_PEAK_DUR = 50;
 
     private static final double VOLTAGE_COMPENSATION = 0;
@@ -87,7 +88,7 @@ public class Shooter implements Subsystem {
     public Shooter() {
         flywheelMaster = new TalonFX(RobotMap.CAN_IDS.SHOOTER_MASTER_ID);
         flywheelFollower = new TalonFX(RobotMap.CAN_IDS.SHOOTER_FOLLOWER_ID);
-        solenoid = new Solenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID);
+        // solenoid = new Solenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID);
         
         setupFlywheel();
     }
@@ -115,7 +116,7 @@ public class Shooter implements Subsystem {
         flywheelMaster.configReverseSoftLimitEnable(false);
         flywheelMaster.overrideLimitSwitchesEnable(false);
 
-        flywheelMaster.configGetStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, FLYWHEEL_CURRENT_CONTINUOUS, FLYWHEEL_CURRENT_PEAK, FLYWHEEL_CURRENT_PEAK_DUR));
+        flywheelMaster.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, FLYWHEEL_CURRENT_CONTINUOUS, FLYWHEEL_CURRENT_PEAK, FLYWHEEL_CURRENT_PEAK_DUR));
     
         setupVelocityPID();
     }
@@ -136,11 +137,18 @@ public class Shooter implements Subsystem {
     public void toggleAngle() {
         solenoid.set(solenoid.get() == SHOOTER_HIGH_ANGLE ? SHOOTER_LOW_ANGLE : SHOOTER_HIGH_ANGLE);
     }
+    
+    /**
+     * Spins the shooter flywheel at a certain percent output
+     */
+    public void spinShooterPercentOutput(double percentOutput) {
+        flywheelMaster.set(ControlMode.PercentOutput, percentOutput);
+    }
 
     /**
      * Spins the shooter flywheel at a certain velocity (in feet/second)
      */
-    public void spinShooter(double velocity) {
+    public void spinShooterVelocity(double velocity) {
         double velocityInTicks = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, velocity, SpeedUnit.ENCODER_UNITS);
         flywheelMaster.set(ControlMode.Velocity, velocityInTicks);
     }

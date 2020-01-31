@@ -3,6 +3,7 @@ package frc.robot.commands.shooter;
 import frc.robot.OI;
 import frc.robot.RobotMap;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 import frc.robot.subsystems.Shooter;
@@ -17,7 +18,7 @@ import harkerrobolib.util.MathUtil;
  * @since January 22, 2020
  */
 public class SpinShooterManual extends IndefiniteCommand {
-    private static final double SPEED_MULTIPLIER = 1;
+    private static final double SPEED_MULTIPLIER = 0.7;
 
     public SpinShooterManual() {
         addRequirements(Shooter.getInstance());
@@ -35,10 +36,11 @@ public class SpinShooterManual extends IndefiniteCommand {
         //Left trigger means reject the current ball.
         double output = rightTrigger - leftTrigger; // From [-1, 1]
         
-        Shooter.getInstance().spinShooter(output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
+        // Shooter.getInstance().spinShooterVelocity(output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
+        Shooter.getInstance().spinShooterPercentOutput(output * SPEED_MULTIPLIER);
     }
 
     public void end(boolean interrupted) {
-        Shooter.getInstance().getMaster().set(TalonFXControlMode.Disabled, 0);
+        Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0);
     }
 }
