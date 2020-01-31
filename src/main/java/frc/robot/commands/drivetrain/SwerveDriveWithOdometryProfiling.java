@@ -26,8 +26,8 @@ public class SwerveDriveWithOdometryProfiling extends HSSwerveDriveOdometry {
     private Timer timer;
     private Trajectory trajectory;
 
-    private final int ALLOWABLE_ERROR = 5;
-    private final int TIMEOUT = 500;
+    private final int ALLOWABLE_ERROR = 2;
+    private final int TIMEOUT = 800;
         
     public SwerveDriveWithOdometryProfiling(Trajectory trajectory, Rotation2d heading) {
         super(trajectory,
@@ -69,7 +69,7 @@ public class SwerveDriveWithOdometryProfiling extends HSSwerveDriveOdometry {
             Drivetrain.getInstance().setDrivetrainVelocity(new SwerveModuleState(0, initialPose.getRotation()), 
                 new SwerveModuleState(0, initialPose.getRotation()), 
                 new SwerveModuleState(0, initialPose.getRotation()), 
-                new SwerveModuleState(0, initialPose.getRotation()), 0, false, false);
+                new SwerveModuleState(0, initialPose.getRotation()), 0, false, true);
         }
         super.initialize();
         timer.start();

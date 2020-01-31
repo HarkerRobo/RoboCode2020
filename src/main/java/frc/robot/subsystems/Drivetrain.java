@@ -150,15 +150,15 @@ public class Drivetrain extends SubsystemBase {
             
             PIGEON_kP = 0.05;//creates angery robot if too high
 
-            MP_X_KP = 0;//2.6;
+            MP_X_KP = 0;//100;
             MP_X_KI = 0;
             MP_X_KD = 0;//15;
 
-            MP_Y_KP = 0;//0.7;
+            MP_Y_KP = 2;//0.7;
             MP_Y_KI = 0;
             MP_Y_KD = 0;
 
-            MP_THETA_KP = 3.1;
+            MP_THETA_KP = 5;
             MP_THETA_KI = 0;
             MP_THETA_KD = 0;
         
@@ -215,11 +215,14 @@ public class Drivetrain extends SubsystemBase {
             MP_THETA_KD = 0;
         }
     }
-
+    
     public static final double MAX_DRIVE_VELOCITY = 2;
     public static final double MAX_ROTATION_VELOCITY = (2 * Math.PI);
     public static final double MAX_ROTATION_ACCELERATION = 2 * (2 * Math.PI);
-    public static final double MAX_DRIVE_ACCELERATION = 3;
+    public static final double MAX_DRIVE_ACCELERATION = 5;
+    
+    public static final double MP_MAX_DRIVE_VELOCITY = 1.5;
+    public static final double MP_MAX_DRIVE_ACCELERATION = 5;
 
     public static final double GEAR_RATIO = 6;
 
@@ -252,7 +255,6 @@ public class Drivetrain extends SubsystemBase {
     public static final double THOR_SETPOINT = 0;
     public static final double TX_ALLOWABLE_ERROR = 0.4;
     public static final double THOR_ALLOWABLE_ERROR = 0;
-
     /**
      * Default constructor for Drivetrain
      * Initializes SwerveModules with inverts for drive and angle motors 

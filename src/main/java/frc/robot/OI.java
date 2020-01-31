@@ -62,13 +62,17 @@ public class OI
 
         constraint = new SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(), Drivetrain.MAX_DRIVE_VELOCITY);
 
-        TrajectoryConfig config = new TrajectoryConfig(Drivetrain.MAX_DRIVE_VELOCITY, Drivetrain.MAX_DRIVE_ACCELERATION)
+        TrajectoryConfig config = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY, Drivetrain.MP_MAX_DRIVE_ACCELERATION)
                 .setKinematics(Drivetrain.getInstance().getKinematics())
                 .addConstraint(constraint);
 
-        Trajectory linearTrajectory = TrajectoryGenerator.generateTrajectory(List.of( 
+        Trajectory horizontalTrajectory = TrajectoryGenerator.generateTrajectory(List.of( 
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            new Pose2d(1, 1, Rotation2d.fromDegrees(45))), config);
+            new Pose2d(1, 0, Rotation2d.fromDegrees(0))), config);
+        Trajectory verticalTrajectory = TrajectoryGenerator.generateTrajectory(List.of(
+            new Pose2d(0, 0, Rotation2d.fromDegrees(90)),
+            new Pose2d(0, 1, Rotation2d.fromDegrees(90))
+        ), config);
 
         Rotation2d heading = Rotation2d.fromDegrees(0);
 
@@ -92,7 +96,7 @@ public class OI
             }, 
             Drivetrain.getInstance()));
 
-        driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(linearTrajectory, heading));
+        // driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(horizontalTrajectory, heading));
     }
 
     /**

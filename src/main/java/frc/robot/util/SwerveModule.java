@@ -197,7 +197,7 @@ public class SwerveModule {
       * Returns the current SwerveModuleState of the module, which contains the angle (Rotation2d) and speed (m/s) of the module.
       */
     public SwerveModuleState getState() {
-        return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND) * Drivetrain.METERS_PER_FOOT, 
+        return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND) * Drivetrain.METERS_PER_FOOT * 2, 
             Rotation2d.fromDegrees(angleMotor.getSelectedSensorPosition() * 360 / 4096));
     }
 
