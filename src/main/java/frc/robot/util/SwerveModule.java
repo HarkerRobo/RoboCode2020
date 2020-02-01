@@ -40,7 +40,7 @@ public class SwerveModule {
     private static final int DRIVE_CURRENT_CONTINUOUS = 40;
     private static final int DRIVE_CURRENT_PEAK = 60;
     private static final int ANGLE_CURRENT_CONTINUOUS = 15;
-    private static final int ANGLE_CURRENT_PEAK = 15;
+    private static final int ANGLE_CURRENT_PEAK = 20;
     private static final int CURRENT_PEAK_DUR = 20;
 
     // Motor inversions

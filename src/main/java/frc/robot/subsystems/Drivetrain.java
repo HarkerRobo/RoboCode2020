@@ -131,22 +131,22 @@ public class Drivetrain extends SubsystemBase {
             BL_ANGLE_SENSOR_PHASE = true;
             BR_ANGLE_SENSOR_PHASE = false;
 
-            TL_OFFSET = 9084;//9154;
-            TR_OFFSET = 5951;//5915;
-            BL_OFFSET = 1582;//1604;
-            BR_OFFSET = 5891;//5724;
+            TL_OFFSET = 9084; //9154;
+            TR_OFFSET = 5951; //5915;
+            BL_OFFSET = 1582; //1604;
+            BR_OFFSET = 5891; //5724;
             
             ANGLE_POSITION_KP = 1.1;
             ANGLE_POSITION_KI = 0.0;
             ANGLE_POSITION_KD = 11;
             
-            DRIVE_VELOCITY_KP = 0.5;
+            DRIVE_VELOCITY_KP = 0.7;
             DRIVE_VELOCITY_KI = 0.0;
-            DRIVE_VELOCITY_KD = 5;
-            DRIVE_VELOCITY_KF = 0.034; // theoretical: 0.034;
+            DRIVE_VELOCITY_KD = 20;
+            DRIVE_VELOCITY_KF = 0.06; // theoretical: 0.034;
 
             DRIVE_RAMP_RATE = 0.1;
-            ANGLE_RAMP_RATE = 0.2;  
+            ANGLE_RAMP_RATE = 0.2;
             
             PIGEON_kP = 0.05;//creates angery robot if too high
 
@@ -192,7 +192,7 @@ public class Drivetrain extends SubsystemBase {
             ANGLE_POSITION_KI = 0.0;
             ANGLE_POSITION_KD = 11;
             
-            DRIVE_VELOCITY_KP = 0.5;//0.5
+            DRIVE_VELOCITY_KP = 0.5;
             DRIVE_VELOCITY_KI = 0.0;
             DRIVE_VELOCITY_KD = 5;
             DRIVE_VELOCITY_KF = 0.034; // theoretical: 0.034;
@@ -216,7 +216,7 @@ public class Drivetrain extends SubsystemBase {
         }
     }
     
-    public static final double MAX_DRIVE_VELOCITY = 2;
+    public static final double MAX_DRIVE_VELOCITY = 4;
     public static final double MAX_ROTATION_VELOCITY = (2 * Math.PI);
     public static final double MAX_ROTATION_ACCELERATION = 2 * (2 * Math.PI);
     public static final double MAX_DRIVE_ACCELERATION = 5;

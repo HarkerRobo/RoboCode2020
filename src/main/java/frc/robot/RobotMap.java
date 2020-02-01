@@ -6,7 +6,7 @@ package frc.robot;
  * @since 01/06/20
  */
 public class RobotMap {
-	public static final boolean IS_PRACTICE = false; 
+	public static final boolean IS_PRACTICE = true; 
 
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;

@@ -32,8 +32,10 @@ import harkerrobolib.util.MathUtil;
 public class SwerveManual extends CommandBase {
     private static final double OUTPUT_MULTIPLIER = 0.7;
     private static final boolean IS_PERCENT_OUTPUT = false;
-    private static final double VELOCITY_HEADING_MULTIPLIER = 0.25;
+    private static final double HIGH_VELOCITY_HEADING_MULTIPLIER = 0.5;//0.25
+    private static final double LOW_VELOCITY_HEADING_MULTIPLIER = 0.1;
     private static final double ACCELERATION_HEADING_MULTIPLIER = 0;
+    private static final double TURN_VEL_THRESHOLD = 160;
 
     private double translateX, translateY, turnMagnitude;
     
@@ -94,7 +96,10 @@ public class SwerveManual extends CommandBase {
         SmartDashboard.putNumber("dtetha", currentPigeonHeading - prevPigeonHeading);
 
         if(pigeonFlag && turnMagnitude == 0) { //If there was joystick input but now there is not
-            pigeonAngle = currentPigeonHeading + turnVel * VELOCITY_HEADING_MULTIPLIER + turnAccel * ACCELERATION_HEADING_MULTIPLIER; // account for momentum when turning
+            double velocityHeadingMultiplier = Math.abs(turnVel) > TURN_VEL_THRESHOLD ? HIGH_VELOCITY_HEADING_MULTIPLIER : LOW_VELOCITY_HEADING_MULTIPLIER;
+
+            // account for momentum when turning
+            pigeonAngle = currentPigeonHeading + turnVel * velocityHeadingMultiplier + turnAccel * ACCELERATION_HEADING_MULTIPLIER;
         }
 
         pigeonFlag = Math.abs(turnMagnitude) > 0; //Update pigeon flag

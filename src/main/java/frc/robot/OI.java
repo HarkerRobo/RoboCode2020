@@ -97,6 +97,8 @@ public class OI
             Drivetrain.getInstance()));
 
         // driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(horizontalTrajectory, heading));
+        driverGamepad.getButtonStart().whenPressed(
+                new InstantCommand(() -> { Drivetrain.getInstance().getPigeon().setFusedHeading(0); }));
     }
 
     /**
