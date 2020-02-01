@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 import harkerrobolib.wrappers.XboxGamepad;
 
 /**
@@ -59,7 +60,7 @@ public class OI
         //                                                     new SwerveAlignWithLimelight(), 
         //                                                     new SpinShooterLimelight()));
         // driverGamepad.getButtonBumperLeft().whilePressed(new MoveBallsToShooter());
-
+        driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(Shooter.getInstance()::toggleAngle, Shooter.getInstance()));
         constraint = new SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(), Drivetrain.MAX_DRIVE_VELOCITY);
 
         TrajectoryConfig config = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY, Drivetrain.MP_MAX_DRIVE_ACCELERATION)
@@ -76,25 +77,25 @@ public class OI
 
         Rotation2d heading = Rotation2d.fromDegrees(0);
 
-        // driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
+        driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
 
-        driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
-            () -> {
-                Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition(0);
-                Drivetrain.getInstance().getTopRight().getAngleMotor().setSelectedSensorPosition(0);
-                System.out.println(Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-                System.out.println(Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-            }, 
-            Drivetrain.getInstance()));
+        // driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
+        //     () -> {
+        //         Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition(0);
+        //         Drivetrain.getInstance().getTopRight().getAngleMotor().setSelectedSensorPosition(0);
+        //         System.out.println(Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        //         System.out.println(Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        //     }, 
+        //     Drivetrain.getInstance()));
 
-        driverGamepad.getButtonBumperRight().whenPressed(new InstantCommand(
-            () -> {
-                Drivetrain.getInstance().getBackLeft().getAngleMotor().setSelectedSensorPosition(0);
-                Drivetrain.getInstance().getBackRight().getAngleMotor().setSelectedSensorPosition(0);
-                System.out.println(Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-                System.out.println(Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-            }, 
-            Drivetrain.getInstance()));
+        // driverGamepad.getButtonBumperRight().whenPressed(new InstantCommand(
+        //     () -> {
+        //         Drivetrain.getInstance().getBackLeft().getAngleMotor().setSelectedSensorPosition(0);
+        //         Drivetrain.getInstance().getBackRight().getAngleMotor().setSelectedSensorPosition(0);
+        //         System.out.println(Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        //         System.out.println(Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        //     }, 
+        //     Drivetrain.getInstance()));
 
         // driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(horizontalTrajectory, heading));
         driverGamepad.getButtonStart().whenPressed(

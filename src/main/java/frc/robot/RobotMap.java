@@ -6,7 +6,7 @@ package frc.robot;
  * @since 01/06/20
  */
 public class RobotMap {
-	public static final boolean IS_PRACTICE = true; 
+	public static final boolean IS_PRACTICE = false; 
 
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;
@@ -31,10 +31,11 @@ public class RobotMap {
         public static final int INDEXER_TALON_ID = -1;
         public static final int INDEXER_FOLLOWER_TALON_ID = -1; //For Color Spinner and one indexer motor
         public static final int INDEXER_SOLENOID = -1;
-
+        
 		public static final int SHOOTER_MASTER_ID = 8;
 		public static final int SHOOTER_FOLLOWER_ID = 9;
-		public static final int SHOOTER_SOLENOID = -1;
+		public static final int SHOOTER_SOLENOID_FORWARD = 7;
+		public static final int SHOOTER_BACKWARD = 0;
 
 		public static final int LEFT_CLIMBER_ID = -1;
 		public static final int RIGHT_CLIMBER_ID = -1;

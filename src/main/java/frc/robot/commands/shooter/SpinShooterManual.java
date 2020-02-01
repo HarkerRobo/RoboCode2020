@@ -4,8 +4,8 @@ import frc.robot.OI;
 import frc.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.commands.IndefiniteCommand;
 import harkerrobolib.util.MathUtil;
@@ -18,7 +18,7 @@ import harkerrobolib.util.MathUtil;
  * @since January 22, 2020
  */
 public class SpinShooterManual extends IndefiniteCommand {
-    private static final double SPEED_MULTIPLIER = 0.7;
+    private static final double SPEED_MULTIPLIER = 0.8;
 
     public SpinShooterManual() {
         addRequirements(Shooter.getInstance());
@@ -35,9 +35,9 @@ public class SpinShooterManual extends IndefiniteCommand {
         //Checks which trigger has more output and picks between them.
         //Left trigger means reject the current ball.
         double output = rightTrigger - leftTrigger; // From [-1, 1]
-        
-        // Shooter.getInstance().spinShooterVelocity(output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
-        Shooter.getInstance().spinShooterPercentOutput(output * SPEED_MULTIPLIER);
+        SmartDashboard.putNumber("Shooter Sent Velocity", output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
+        Shooter.getInstance().spinShooterVelocity(output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY * Shooter.GEAR_RATIO);
+        // Shooter.getInstance().spinShooterPercentOutput(output * SPEED_MULTIPLIER);
     }
 
     public void end(boolean interrupted) {

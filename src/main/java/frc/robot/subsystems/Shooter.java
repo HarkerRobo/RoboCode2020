@@ -3,11 +3,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotMap;
 import harkerrobolib.util.Conversions;
@@ -28,22 +29,22 @@ import harkerrobolib.util.Conversions.SpeedUnit;
 public class Shooter implements Subsystem {
     static {
         if(RobotMap.IS_PRACTICE) {
-            FLYWHEEL_KP = 0.0; // tune;
-            FLYWHEEL_KF = 0.0; // tune;
+            FLYWHEEL_KP = 0.01; // tune;
+            FLYWHEEL_KF = 0.003; // tune;
 
-            SHOOTER_HIGH_ANGLE = true;
-            SHOOTER_LOW_ANGLE = false;
+            SHOOTER_HIGH_ANGLE = Value.kForward;
+            SHOOTER_LOW_ANGLE = Value.kReverse;
 
             MASTER_INVERT = TalonFXInvertType.Clockwise;
             FOLLOWER_INVERT = TalonFXInvertType.Clockwise;
 
             SENSOR_PHASE = false;
         } else {
-            FLYWHEEL_KP = 0.0; // tune;
-            FLYWHEEL_KF = 0.0; // tune;
+            FLYWHEEL_KP = 0.7; // tune;
+            FLYWHEEL_KF = 0.058;
 
-            SHOOTER_HIGH_ANGLE = true;
-            SHOOTER_LOW_ANGLE = false;
+            SHOOTER_HIGH_ANGLE = Value.kForward;
+            SHOOTER_LOW_ANGLE = Value.kReverse;
 
             MASTER_INVERT = TalonFXInvertType.CounterClockwise;
             FOLLOWER_INVERT = TalonFXInvertType.Clockwise;
@@ -60,16 +61,16 @@ public class Shooter implements Subsystem {
 
     private static boolean SENSOR_PHASE;
     
-    public static final double MAX_VELOCITY = 175; //Other value : 148 // TODO: Ask Aditi for a better value
+    public static final double MAX_VELOCITY = 127; //Other value : 148 // TODO: Ask Aditi for a better value
     public static final int FLYWHEEL_VELOCITY_SLOT = 0;
     
     private static double FLYWHEEL_KF;
     private static double FLYWHEEL_KP;
     
-    private static Solenoid solenoid;
+    private static DoubleSolenoid solenoid;
     
-    public static boolean SHOOTER_HIGH_ANGLE; 
-    public static boolean SHOOTER_LOW_ANGLE; 
+    public static DoubleSolenoid.Value SHOOTER_HIGH_ANGLE; 
+    public static DoubleSolenoid.Value SHOOTER_LOW_ANGLE; 
     
     public static final int FLYWHEEL_VOLTAGE_COMP = 10;
     
@@ -82,17 +83,27 @@ public class Shooter implements Subsystem {
     public static TalonFXInvertType MASTER_INVERT;
     public static TalonFXInvertType FOLLOWER_INVERT;
 
+    public static final double GEAR_RATIO = 0.675;
     /**
      * Constructs a Shooter.
      */
     public Shooter() {
         flywheelMaster = new TalonFX(RobotMap.CAN_IDS.SHOOTER_MASTER_ID);
         flywheelFollower = new TalonFX(RobotMap.CAN_IDS.SHOOTER_FOLLOWER_ID);
-        // solenoid = new Solenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID);
+        solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_BACKWARD);
         
         setupFlywheel();
     }
 
+
+    @Override
+    public void periodic() {
+        // SmartDashboard.putNumber("Shooter % error", flywheelMaster.getClosedLoopError() / (1flywheelMaster.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("Shooter error", flywheelMaster.getClosedLoopError());
+        SmartDashboard.putNumber("Shooter current", flywheelMaster.getStatorCurrent());
+        SmartDashboard.putNumber("Shooter % output", flywheelMaster.getMotorOutputPercent());
+        
+    }
     /**
      * Sets up the master and follower talons.
      */
@@ -173,7 +184,7 @@ public class Shooter implements Subsystem {
      * Gets the angle solenoid.
      * @return the angle solenoid.
      */
-    public Solenoid getSolenoid() {
+    public DoubleSolenoid getSolenoid() {
         return solenoid;
     }
 

@@ -255,6 +255,7 @@ public class Drivetrain extends SubsystemBase {
     public static final double THOR_SETPOINT = 0;
     public static final double TX_ALLOWABLE_ERROR = 0.4;
     public static final double THOR_ALLOWABLE_ERROR = 0;
+    
     /**
      * Default constructor for Drivetrain
      * Initializes SwerveModules with inverts for drive and angle motors 
