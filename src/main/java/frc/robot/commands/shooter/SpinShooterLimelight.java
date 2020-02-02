@@ -1,5 +1,6 @@
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
@@ -26,6 +27,12 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         addRequirements(Shooter.getInstance());
     }
 
+    @Override
+    public void initialize() {
+        Limelight.setLEDS(true);
+        Limelight.setCamModeVision();
+    }
+    
     public void execute() {
         
         // double yDisplacement = Limelight.getCamtranY();
@@ -40,6 +47,8 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         // Shooter.getInstance().spinShooter(initialVelocity + MULTIPLIER * distance);
 
         double distance = Math.sqrt(Math.pow(Limelight.getCamtranZ(), 2) + Math.pow(Limelight.getCamtranX(), 2)) / 12.0;
+        SmartDashboard.putNumber("Distance", distance);
+        
         Shooter.getInstance().spinShooterVelocity(distance * SCALE); //Distance will be proportional to our velocity (use the SCALE to tune)
         
         //If we try to optimize use this code:

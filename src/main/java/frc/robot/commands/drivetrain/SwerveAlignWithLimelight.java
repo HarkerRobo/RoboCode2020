@@ -6,8 +6,6 @@ import frc.robot.OI;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Limelight;
-import harkerrobolib.util.Conversions;
-import harkerrobolib.util.Conversions.SpeedUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -77,8 +75,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
                 Math.cos(Drivetrain.getInstance().getBackLeft().getAngleDegrees()) * Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorVelocity() +
                 Math.cos(Drivetrain.getInstance().getBackRight().getAngleDegrees()) * Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorVelocity()) / 4) * TX_VELOCITY_MULTIPLIER;
         // turn += (Drivetrain.getInstance().getTopLeft().getState().speedMetersPerSecond) * TX_VELOCITY_MULTIPLIER;
-        // speed = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, speed, SpeedUnit.ENCODER_UNITS);
-        // turn = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, turn, SpeedUnit.ENCODER_UNITS);
+    
 
         // SwerveModuleState tlState = Drivetrain.getInstance().getTopLeft().getState();
         // SwerveModuleState trState = Drivetrain.getInstance().getTopRight().getState();
@@ -103,6 +100,6 @@ public class SwerveAlignWithLimelight extends CommandBase {
         txController.reset();
         thorController.reset();
         Drivetrain.getInstance().stopAllDrive();
-        Limelight.setLEDS(false);
+        Limelight.setLEDS(true);
     }
 }

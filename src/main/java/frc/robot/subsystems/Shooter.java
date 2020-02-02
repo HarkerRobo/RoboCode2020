@@ -40,7 +40,7 @@ public class Shooter implements Subsystem {
 
             SENSOR_PHASE = false;
         } else {
-            FLYWHEEL_KP = 0.7; // tune;
+            FLYWHEEL_KP = 2.; // tune;
             FLYWHEEL_KF = 0.058;
 
             SHOOTER_HIGH_ANGLE = Value.kForward;
@@ -61,7 +61,7 @@ public class Shooter implements Subsystem {
 
     private static boolean SENSOR_PHASE;
     
-    public static final double MAX_VELOCITY = 127; //Other value : 148 // TODO: Ask Aditi for a better value
+    public static final double MAX_VELOCITY = 114.3; //127 //Other value : 148 // TODO: Ask Aditi for a better value
     public static final int FLYWHEEL_VELOCITY_SLOT = 0;
     
     private static double FLYWHEEL_KF;
@@ -84,6 +84,10 @@ public class Shooter implements Subsystem {
     public static TalonFXInvertType FOLLOWER_INVERT;
 
     public static final double GEAR_RATIO = 0.675;
+
+    public static final double WHEEL_DIAMETER = 4;
+
+    public static final int TICKS_PER_REV = 2048;
     /**
      * Constructs a Shooter.
      */
@@ -102,6 +106,8 @@ public class Shooter implements Subsystem {
         SmartDashboard.putNumber("Shooter error", flywheelMaster.getClosedLoopError());
         SmartDashboard.putNumber("Shooter current", flywheelMaster.getStatorCurrent());
         SmartDashboard.putNumber("Shooter % output", flywheelMaster.getMotorOutputPercent());
+
+       
         
     }
     /**
@@ -160,7 +166,7 @@ public class Shooter implements Subsystem {
      * Spins the shooter flywheel at a certain velocity (in feet/second)
      */
     public void spinShooterVelocity(double velocity) {
-        double velocityInTicks = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, velocity, SpeedUnit.ENCODER_UNITS);
+        double velocityInTicks = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, velocity * GEAR_RATIO, SpeedUnit.ENCODER_UNITS, WHEEL_DIAMETER, TICKS_PER_REV);
         flywheelMaster.set(ControlMode.Velocity, velocityInTicks);
     }
 

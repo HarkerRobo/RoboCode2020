@@ -43,6 +43,8 @@ public class SwerveModule {
     private static final int ANGLE_CURRENT_PEAK = 20;
     private static final int CURRENT_PEAK_DUR = 20;
 
+    private static final int DRIVE_TICKS_PER_REV = 2048;
+
     // Motor inversions
     private final TalonFXInvertType DRIVE_INVERTED;
     private final boolean ANGLE_INVERTED;
@@ -140,7 +142,7 @@ public class SwerveModule {
         if(isPercentOutput) {
             driveMotor.set(TalonFXControlMode.PercentOutput, output);
         } else {
-            driveMotor.set(TalonFXControlMode.Velocity, Conversions.convert(SpeedUnit.FEET_PER_SECOND, output * Drivetrain.FEET_PER_METER, SpeedUnit.ENCODER_UNITS) * Drivetrain.GEAR_RATIO);
+            driveMotor.set(TalonFXControlMode.Velocity, Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, output * Drivetrain.FEET_PER_METER, SpeedUnit.ENCODER_UNITS, Drivetrain.WHEEL_DIAMETER, DRIVE_TICKS_PER_REV) * Drivetrain.GEAR_RATIO);
         }
     }
     
@@ -197,7 +199,7 @@ public class SwerveModule {
       * Returns the current SwerveModuleState of the module, which contains the angle (Rotation2d) and speed (m/s) of the module.
       */
     public SwerveModuleState getState() {
-        return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND) * Drivetrain.METERS_PER_FOOT * 2, 
+        return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND, Drivetrain.WHEEL_DIAMETER, DRIVE_TICKS_PER_REV) * Drivetrain.METERS_PER_FOOT, 
             Rotation2d.fromDegrees(angleMotor.getSelectedSensorPosition() * 360 / 4096));
     }
 

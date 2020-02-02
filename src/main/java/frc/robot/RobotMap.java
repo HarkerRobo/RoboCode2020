@@ -24,9 +24,9 @@ public class RobotMap {
         public static final int INTAKE_SOLENOID_FORWARD = -1;
 		public static final int INTAKE_SOLENOID_REVERSE = -1;
         
-        public static final int SPINNER_ID = -1;
-		public static final int SPINNER_SOLENOID_FORWARD = -1;
-		public static final int SPINNER_SOLENOID_REVERSE = -1;
+        public static final int SPINNER_ID = 0;
+		public static final int SPINNER_SOLENOID_FORWARD = 3;
+		public static final int SPINNER_SOLENOID_REVERSE = 4;
         		
         public static final int INDEXER_TALON_ID = -1;
         public static final int INDEXER_FOLLOWER_TALON_ID = -1; //For Color Spinner and one indexer motor

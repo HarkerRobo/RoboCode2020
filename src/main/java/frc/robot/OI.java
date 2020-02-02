@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.trajectory.constraint.SwerveDriveKinematicsConstrai
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
+import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.wrappers.XboxGamepad;
@@ -61,6 +62,7 @@ public class OI
         //                                                     new SpinShooterLimelight()));
         // driverGamepad.getButtonBumperLeft().whilePressed(new MoveBallsToShooter());
         driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(Shooter.getInstance()::toggleAngle, Shooter.getInstance()));
+        driverGamepad.getButtonY().whilePressed(new SpinShooterLimelight());
         constraint = new SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(), Drivetrain.MAX_DRIVE_VELOCITY);
 
         TrajectoryConfig config = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY, Drivetrain.MP_MAX_DRIVE_ACCELERATION)

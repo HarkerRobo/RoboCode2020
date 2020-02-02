@@ -6,8 +6,6 @@ import frc.robot.OI;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Limelight;
-import harkerrobolib.util.Conversions;
-import harkerrobolib.util.Conversions.SpeedUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
