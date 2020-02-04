@@ -243,9 +243,9 @@ public class Drivetrain extends SubsystemBase {
     
     public static final Constraints THETA_CONSTRAINTS = new Constraints(MAX_ROTATION_VELOCITY, MAX_ROTATION_ACCELERATION);
 
-	public static final double TX_kP = 0.015;
+	public static final double TX_kP = 0.03;//0.015;//0.1;
 	public static final double TX_kI = 0;
-    public static final double TX_kD = 0.;
+    public static final double TX_kD = 0.3; //0.15//18
     
 	public static final double THOR_kP = 0;
 	public static final double THOR_kI = 0;

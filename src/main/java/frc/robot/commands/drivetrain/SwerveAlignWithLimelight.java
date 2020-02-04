@@ -67,6 +67,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
         double translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         double translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
+
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
 
@@ -74,6 +75,10 @@ public class SwerveAlignWithLimelight extends CommandBase {
                 Math.cos(Drivetrain.getInstance().getTopRight().getAngleDegrees()) * Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorVelocity() +
                 Math.cos(Drivetrain.getInstance().getBackLeft().getAngleDegrees()) * Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorVelocity() +
                 Math.cos(Drivetrain.getInstance().getBackRight().getAngleDegrees()) * Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorVelocity()) / 4) * TX_VELOCITY_MULTIPLIER;
+        
+        if (Math.abs(Limelight.getTx()) < Drivetrain.TX_ALLOWABLE_ERROR)
+            turn = 0;
+
         // turn += (Drivetrain.getInstance().getTopLeft().getState().speedMetersPerSecond) * TX_VELOCITY_MULTIPLIER;
     
 
@@ -91,7 +96,6 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
         Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], 0, false, false);
 
-
         SmartDashboard.putNumber("Limelight tx error", txController.getPositionError());
     }
 
@@ -100,6 +104,6 @@ public class SwerveAlignWithLimelight extends CommandBase {
         txController.reset();
         thorController.reset();
         Drivetrain.getInstance().stopAllDrive();
-        Limelight.setLEDS(true);
+        Limelight.setLEDS(false);
     }
 }

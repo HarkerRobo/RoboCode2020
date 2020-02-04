@@ -29,8 +29,8 @@ import harkerrobolib.util.Conversions.SpeedUnit;
 public class Shooter implements Subsystem {
     static {
         if(RobotMap.IS_PRACTICE) {
-            FLYWHEEL_KP = 0.01; // tune;
             FLYWHEEL_KF = 0.003; // tune;
+            FLYWHEEL_KP = 0.01; // tune;
 
             SHOOTER_HIGH_ANGLE = Value.kForward;
             SHOOTER_LOW_ANGLE = Value.kReverse;
@@ -40,8 +40,8 @@ public class Shooter implements Subsystem {
 
             SENSOR_PHASE = false;
         } else {
-            FLYWHEEL_KP = 2.; // tune;
             FLYWHEEL_KF = 0.058;
+            FLYWHEEL_KP = 2.; // tune;
 
             SHOOTER_HIGH_ANGLE = Value.kForward;
             SHOOTER_LOW_ANGLE = Value.kReverse;
@@ -105,10 +105,7 @@ public class Shooter implements Subsystem {
         // SmartDashboard.putNumber("Shooter % error", flywheelMaster.getClosedLoopError() / (1flywheelMaster.getSelectedSensorVelocity());
         SmartDashboard.putNumber("Shooter error", flywheelMaster.getClosedLoopError());
         SmartDashboard.putNumber("Shooter current", flywheelMaster.getStatorCurrent());
-        SmartDashboard.putNumber("Shooter % output", flywheelMaster.getMotorOutputPercent());
-
-       
-        
+        SmartDashboard.putNumber("Shooter % output", flywheelMaster.getMotorOutputPercent());   
     }
     /**
      * Sets up the master and follower talons.

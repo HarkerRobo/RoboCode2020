@@ -49,7 +49,9 @@ public class SwerveAutonAlignWithLimelight extends CommandBase {
         Drivetrain.getInstance().applyToAllAngle((angleMotor) -> angleMotor.selectProfileSlot(Drivetrain.ANGLE_POSITION_SLOT, RobotMap.PRIMARY_INDEX));
         Drivetrain.getInstance().applyToAllDrive((falcon) -> falcon.setNeutralMode(NeutralMode.Brake));
         Drivetrain.getInstance().applyToAllAngle((talon) -> talon.configClosedloopRamp(Drivetrain.ANGLE_RAMP_RATE));
+
         Limelight.setCamModeVision();
+        Limelight.setLEDS(true);
     }
 
     @Override
@@ -78,5 +80,7 @@ public class SwerveAutonAlignWithLimelight extends CommandBase {
         txController.reset();
         thorController.reset();
         Drivetrain.getInstance().stopAllDrive();
+
+        Limelight.setLEDS(false);
     }
 }

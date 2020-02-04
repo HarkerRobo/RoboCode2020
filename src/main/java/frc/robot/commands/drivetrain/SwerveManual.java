@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.Limelight;
 import harkerrobolib.util.MathUtil;
 
 /**
@@ -30,10 +31,21 @@ import harkerrobolib.util.MathUtil;
  * @since 11/4/19
  */
 public class SwerveManual extends CommandBase {
-    private static final double OUTPUT_MULTIPLIER = 0.7;
+
+    static {
+        if (RobotMap.IS_PRACTICE) {
+            HIGH_VELOCITY_HEADING_MULTIPLIER = 0.5;
+            LOW_VELOCITY_HEADING_MULTIPLIER = 0.1;
+        } else {
+            HIGH_VELOCITY_HEADING_MULTIPLIER = 0.17;
+            LOW_VELOCITY_HEADING_MULTIPLIER = 0.17;
+        }
+    }
+
+    private static final double OUTPUT_MULTIPLIER = 1;
     private static final boolean IS_PERCENT_OUTPUT = false;
-    private static final double HIGH_VELOCITY_HEADING_MULTIPLIER = 0.5;//0.25
-    private static final double LOW_VELOCITY_HEADING_MULTIPLIER = 0.1;
+    private static double HIGH_VELOCITY_HEADING_MULTIPLIER;
+    private static double LOW_VELOCITY_HEADING_MULTIPLIER;
     private static final double ACCELERATION_HEADING_MULTIPLIER = 0;
     private static final double TURN_VEL_THRESHOLD = 160;
 
@@ -77,6 +89,8 @@ public class SwerveManual extends CommandBase {
 
     @Override
     public void execute() {
+        Limelight.setLEDS(false);
+
         translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
         turnMagnitude = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
