@@ -71,7 +71,7 @@ public class OI
 
         Trajectory horizontalTrajectory = TrajectoryGenerator.generateTrajectory(List.of( 
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            new Pose2d(1, 0, Rotation2d.fromDegrees(0))), config);
+            new Pose2d(3, 0, Rotation2d.fromDegrees(0))), config);
         Trajectory verticalTrajectory = TrajectoryGenerator.generateTrajectory(List.of(
             new Pose2d(0, 0, Rotation2d.fromDegrees(90)),
             new Pose2d(0, 1, Rotation2d.fromDegrees(90))
@@ -80,6 +80,8 @@ public class OI
         Rotation2d heading = Rotation2d.fromDegrees(0);
 
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
+
+        driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(horizontalTrajectory, heading));
 
         // driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
         //     () -> {

@@ -36,6 +36,7 @@ import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
  * @author Anirudh Kotamraju
  * @author Chirag Kaushik
  * @author Arjun Dixit
+ * @author Ada Praun-Petrovic
  * @since 11/1/19
  */
 public class Drivetrain extends SubsystemBase {
@@ -150,15 +151,15 @@ public class Drivetrain extends SubsystemBase {
             
             PIGEON_kP = 0.05;//creates angery robot if too high
 
-            MP_X_KP = 0;//100;
+            MP_X_KP = 4.0;
             MP_X_KI = 0;
-            MP_X_KD = 0;//15;
+            MP_X_KD = 0;//80;
 
-            MP_Y_KP = 2;//0.7;
+            MP_Y_KP = 1.05;
             MP_Y_KI = 0;
             MP_Y_KD = 0;
 
-            MP_THETA_KP = 5;
+            MP_THETA_KP = 5.0;//0.61;
             MP_THETA_KI = 0;
             MP_THETA_KD = 0;
         
@@ -221,8 +222,8 @@ public class Drivetrain extends SubsystemBase {
     public static final double MAX_ROTATION_ACCELERATION = 2 * (2 * Math.PI);
     public static final double MAX_DRIVE_ACCELERATION = 5;
     
-    public static final double MP_MAX_DRIVE_VELOCITY = 1.5;
-    public static final double MP_MAX_DRIVE_ACCELERATION = 5;
+    public static final double MP_MAX_DRIVE_VELOCITY = 4;
+    public static final double MP_MAX_DRIVE_ACCELERATION = 8;
 
     public static final double GEAR_RATIO = 6;
 

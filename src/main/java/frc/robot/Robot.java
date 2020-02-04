@@ -7,17 +7,12 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.commands.shooter.SpinShooterLimelight;
-import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
     
 /**
@@ -65,6 +60,9 @@ import frc.robot.util.Limelight;
  * @since 01/06/20
  */
 public class Robot extends TimedRobot {
+
+    private Compressor c;
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code. This is where all subsystems are instantiated and 
@@ -75,11 +73,12 @@ public class Robot extends TimedRobot {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
         
         // BottomIntake.getInstance();
-        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
+        // Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
         // Indexer.getInstance();
         // Climber.getInstance();
     
         OI.getInstance();
+        c = new Compressor();
     }
 
     /**
@@ -96,6 +95,9 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
 
         SmartDashboard.putString("Robot Type", RobotMap.IS_PRACTICE ? "Practice Bot" : "Comp Bot");
+
+        if (RobotMap.IS_PRACTICE)
+            c.stop();
 
         // SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         // SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
