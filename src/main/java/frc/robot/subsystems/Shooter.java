@@ -41,7 +41,7 @@ public class Shooter implements Subsystem {
             SENSOR_PHASE = false;
         } else {
             FLYWHEEL_KF = 0.058;
-            FLYWHEEL_KP = 2.; // tune;
+            FLYWHEEL_KP = 0.1; //2
 
             SHOOTER_HIGH_ANGLE = Value.kForward;
             SHOOTER_LOW_ANGLE = Value.kReverse;
