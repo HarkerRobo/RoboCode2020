@@ -82,30 +82,29 @@ public class Drivetrain extends SubsystemBase {
     private static final int BR_OFFSET;//10413;
 
     public static final int ANGLE_POSITION_SLOT = 0;
-    private static final double ANGLE_POSITION_KP;
-
-    private static final double ANGLE_POSITION_KI;
-    private static final double ANGLE_POSITION_KD;
+    private static double ANGLE_POSITION_KP;
+    private static double ANGLE_POSITION_KI;
+    private static double ANGLE_POSITION_KD;
 
     public static final int DRIVE_VELOCITY_SLOT = 0;
-    private static final double DRIVE_VELOCITY_KP;
-    private static final double DRIVE_VELOCITY_KI;
-    private static final double DRIVE_VELOCITY_KD;
-    private static final double DRIVE_VELOCITY_KF; // theoretical: 0.034;
+    private static double DRIVE_VELOCITY_KP;
+    private static double DRIVE_VELOCITY_KI;
+    private static double DRIVE_VELOCITY_KD;
+    private static double DRIVE_VELOCITY_KF; // theoretical: 0.034;
 
     public static final double PIGEON_kP;
 
-    public static final double MP_X_KP;//2.6;
-    public static final double MP_X_KI;
-    public static final double MP_X_KD;//15;
+    public static double MP_X_KP;//2.6;
+    public static double MP_X_KI;
+    public static double MP_X_KD;//15;
 
-    public static final double MP_Y_KP;//0.7;
-    public static final double MP_Y_KI;
-    public static final double MP_Y_KD;
+    public static double MP_Y_KP;//0.7;
+    public static double MP_Y_KI;
+    public static double MP_Y_KD;
 
-    public static final double MP_THETA_KP;//3.1;
-    public static final double MP_THETA_KI;
-    public static final double MP_THETA_KD;
+    public static double MP_THETA_KP;//3.1;
+    public static double MP_THETA_KI;
+    public static double MP_THETA_KD;
 
     public static final double DRIVE_RAMP_RATE;
     public static final double ANGLE_RAMP_RATE;
@@ -149,13 +148,13 @@ public class Drivetrain extends SubsystemBase {
             DRIVE_RAMP_RATE = 0.1;
             ANGLE_RAMP_RATE = 0.2;
             
-            PIGEON_kP = 0.05;//creates angery robot if too high
+            PIGEON_kP = 0.05;//creates angry robot if too high
 
-            MP_X_KP = 4.0;
+            MP_X_KP = 6.0;
             MP_X_KI = 0;
-            MP_X_KD = 0;//80;
+            MP_X_KD = 20;
 
-            MP_Y_KP = 1.05;
+            MP_Y_KP = 6.0;
             MP_Y_KI = 0;
             MP_Y_KD = 0;
 
@@ -234,11 +233,11 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Feet between both of the wheels on the front or back
      */
-    public static final double DT_WIDTH = 0.66; //25.5 x 32
+    public static final double DT_WIDTH = 0.535;
     /**
      * Feet between both of the wheels on the left or right
      */
-    public static final double DT_LENGTH = 0.535; //20.6 feet;
+    public static final double DT_LENGTH = 0.645;
     
     public static final double WHEEL_DIAMETER = 4;
     
@@ -309,6 +308,24 @@ public class Drivetrain extends SubsystemBase {
 
         odometry.resetPosition(initialPose, currentRot);
 
+        // SmartDashboard.putNumber("Velocity kF", DRIVE_VELOCITY_KF);
+        // SmartDashboard.putNumber("Velocity kP", DRIVE_VELOCITY_KP);
+        // SmartDashboard.putNumber("Velocity kI", DRIVE_VELOCITY_KI);
+        // SmartDashboard.putNumber("Velocity kD", DRIVE_VELOCITY_KD);
+
+        // SmartDashboard.putNumber("Position kP", ANGLE_POSITION_KP);
+        // SmartDashboard.putNumber("Position kI", ANGLE_POSITION_KI);
+        // SmartDashboard.putNumber("Position kD", ANGLE_POSITION_KD);
+
+        // SmartDashboard.putNumber("MP X kP", MP_X_KP);
+        // SmartDashboard.putNumber("MP X kI", MP_X_KI);
+        // SmartDashboard.putNumber("MP X kD", MP_X_KD);
+        // SmartDashboard.putNumber("MP Y kP", MP_Y_KP);
+        // SmartDashboard.putNumber("MP Y kI", MP_Y_KI);
+        // SmartDashboard.putNumber("MP Y kD", MP_Y_KD);
+        // SmartDashboard.putNumber("MP THETA kP", MP_THETA_KP);
+        // SmartDashboard.putNumber("MP THETA kI", MP_THETA_KI);
+        // SmartDashboard.putNumber("MP THETA kD", MP_THETA_KD);
     }
 
     /**
@@ -317,14 +334,49 @@ public class Drivetrain extends SubsystemBase {
      */
     @Override
     public void periodic() {
+        // updateVelocityPID();
         odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading()),
                 topLeft.getState(), topRight.getState(),
                 backLeft.getState(), backRight.getState());
-
         SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
         SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
         SmartDashboard.putNumber("Current Rot", odometry.getPoseMeters().getRotation().getDegrees());
     }
+    public void updatePositionPID() {
+        stopAllDrive();
+
+        ANGLE_POSITION_KP = SmartDashboard.getNumber("Position kP", ANGLE_POSITION_KP);
+        ANGLE_POSITION_KI = SmartDashboard.getNumber("Position kI", ANGLE_POSITION_KI);
+        ANGLE_POSITION_KD = SmartDashboard.getNumber("Position kD", ANGLE_POSITION_KD);
+
+        setupPositionPID();
+    }
+
+    public void updateVelocityPID() {
+        stopAllDrive();
+
+        DRIVE_VELOCITY_KF = SmartDashboard.getNumber("Velocity kF", DRIVE_VELOCITY_KF);
+        DRIVE_VELOCITY_KP = SmartDashboard.getNumber("Velocity kP", DRIVE_VELOCITY_KP);
+        DRIVE_VELOCITY_KI = SmartDashboard.getNumber("Velocity kI", DRIVE_VELOCITY_KI);
+        DRIVE_VELOCITY_KD = SmartDashboard.getNumber("Velocity kD", DRIVE_VELOCITY_KD);
+
+        setupVelocityPID();
+    }
+
+    public void updateMPPID() {
+        stopAllDrive();
+
+        MP_X_KP = SmartDashboard.getNumber("MP X kP", MP_X_KP);
+        MP_X_KI = SmartDashboard.getNumber("MP X kI", MP_X_KI);
+        MP_X_KD = SmartDashboard.getNumber("MP X kD", MP_X_KD);
+        MP_Y_KP = SmartDashboard.getNumber("MP Y kP", MP_Y_KP);
+        MP_Y_KI = SmartDashboard.getNumber("MP Y kI", MP_Y_KI);
+        MP_Y_KD = SmartDashboard.getNumber("MP Y kD", MP_Y_KD);
+        MP_THETA_KP = SmartDashboard.getNumber("MP THETA kP", MP_THETA_KP);
+        MP_THETA_KI = SmartDashboard.getNumber("MP THETA kI", MP_THETA_KI);
+        MP_THETA_KD = SmartDashboard.getNumber("MP THETA kD", MP_THETA_KD);
+    }
+
 
     /**
      * Returns the currently-estimated pose of the robot based on odometry.

@@ -34,8 +34,8 @@ public class SwerveManual extends CommandBase {
 
     static {
         if (RobotMap.IS_PRACTICE) {
-            HIGH_VELOCITY_HEADING_MULTIPLIER = 0.5;
-            LOW_VELOCITY_HEADING_MULTIPLIER = 0.1;
+            HIGH_VELOCITY_HEADING_MULTIPLIER = 0.16;
+            LOW_VELOCITY_HEADING_MULTIPLIER = 0.09;
         } else {
             HIGH_VELOCITY_HEADING_MULTIPLIER = 0.17;
             LOW_VELOCITY_HEADING_MULTIPLIER = 0.17;

@@ -47,7 +47,9 @@ public class SwerveDriveWithOdometryProfiling extends HSSwerveDriveOdometry {
     }
 
     @Override
-    public void initialize() { 
+    public void initialize() {
+        Drivetrain.getInstance().updateMPPID();
+        resetPID();
 
         //Set to x and y from starting Pose2d of path but keep current rotation value from odometry
         Pose2d initialPose = new Pose2d(trajectory.getInitialPose().getTranslation(), 
@@ -78,24 +80,6 @@ public class SwerveDriveWithOdometryProfiling extends HSSwerveDriveOdometry {
     @Override
     public void execute() {
         super.execute();
-        
-        double deltaT = timer.get();
-        SmartDashboard.putNumber("Time", timer.get());
-        Trajectory.State state = trajectory.sample(deltaT);
-
-        Translation2d desiredTranslation = state.poseMeters.getTranslation();
-        double desiredRotation = state.poseMeters.getRotation().getDegrees();
-
-        Translation2d currentTranslation = Drivetrain.getInstance().getPose().getTranslation();
-        double currentRotation = Drivetrain.getInstance().getPose().getRotation().getDegrees();
-
-        SmartDashboard.putNumber("Trajectory X Error", desiredTranslation.getX() - currentTranslation.getX());
-        SmartDashboard.putNumber("Trajectory Y Error", desiredTranslation.getY() - currentTranslation.getY());
-        SmartDashboard.putNumber("Trajectory Angle Error", desiredRotation - currentRotation);
-
-        SmartDashboard.putNumber("Trajectory X", desiredTranslation.getX());
-        SmartDashboard.putNumber("Trajectory Y", desiredTranslation.getY());
-        SmartDashboard.putNumber("Trajectory Angle", desiredRotation);
     }
 
     @Override

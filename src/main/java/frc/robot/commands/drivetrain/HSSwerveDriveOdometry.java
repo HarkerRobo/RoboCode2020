@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.Drivetrain;
 
 import static edu.wpi.first.wpilibj.util.ErrorMessages.requireNonNullParam;
 
@@ -117,6 +118,12 @@ public class HSSwerveDriveOdometry extends CommandBase {
         m_timer.start();
     }
 
+    public void resetPID() {
+        m_xController.setPID(Drivetrain.getInstance().MP_X_KP, Drivetrain.getInstance().MP_X_KI, Drivetrain.getInstance().MP_X_KD);
+        m_yController.setPID(Drivetrain.getInstance().MP_Y_KP, Drivetrain.getInstance().MP_Y_KI, Drivetrain.getInstance().MP_Y_KD);
+        m_thetaController.setPID(Drivetrain.getInstance().MP_THETA_KP, Drivetrain.getInstance().MP_THETA_KI, Drivetrain.getInstance().MP_THETA_KD);
+    }
+
     @Override
     @SuppressWarnings("LocalVariableName")
     public void execute() {
@@ -147,6 +154,20 @@ public class HSSwerveDriveOdometry extends CommandBase {
         var targetChassisSpeeds = new ChassisSpeeds(targetXVel, targetYVel, targetAngularVel);
 
         var targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
+
+        // SmartDashboard.putNumber("Trajectory X Error", m_xController.getPositionError());
+        // SmartDashboard.putNumber("Trajectory Y Error", m_yController.getPositionError());
+        // SmartDashboard.putNumber("Trajectory Angle Error", Math.toDegrees(m_thetaController.getPositionError()));
+
+        // SmartDashboard.putNumber("Trajectory X Error", poseError.getTranslation().getX());
+        // SmartDashboard.putNumber("Trajectory Y Error", poseError.getTranslation().getY());
+        // SmartDashboard.putNumber("Trajectory Angle Error", poseError.getRotation().getDegrees());
+
+        // SmartDashboard.putNumber("target X Velocity", targetXVel); 
+
+        // SmartDashboard.putNumber("Trajectory X", desiredTranslation.getX());
+        // SmartDashboard.putNumber("Trajectory Y", desiredTranslation.getY());
+        // SmartDashboard.putNumber("Trajectory Angle", desiredRotation);
 
         m_outputModuleStates.accept(targetModuleStates);
 
