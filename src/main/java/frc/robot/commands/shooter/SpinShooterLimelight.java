@@ -32,7 +32,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     private static final double BB_ABOVE_OUTPUT = 0;
 
     private static final int NUM_SAMPLES = 75;
-    // private LinearFilter filter = LinearFilter.movingAverage(NUM_SAMPLES);
+    private LinearFilter averageFilter = LinearFilter.movingAverage(NUM_SAMPLES);
     private MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);
     public SpinShooterLimelight() {
         addRequirements(Shooter.getInstance());
@@ -43,7 +43,8 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     public void initialize() {
         Limelight.setLEDS(true);
         Limelight.setCamModeVision();
-        
+        medianFilter.reset();
+        averageFilter.reset();
     }
     
     public void execute() {
@@ -70,7 +71,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         // double velocity = averageDistance * averageDistance * SCALE_A + averageDistance * SCALE_B + SCALE_C;
 
         // 90% Optimization
-        double currentVel = Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getSelectedSensorVelocity() / Shooter.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV);
+        // double currentVel = Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getSelectedSensorVelocity() / Shooter.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV);
         // if(currentVel < 0.9 * desiredVel) {
         //     Shooter.getInstance().spinShooterPercentOutput(0.9);
         //     SmartDashboard.putNumber("Shooter velocity Limelight", 1072);
@@ -87,14 +88,14 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         //     SmartDashboard.putNumber("Shooter %output Limelight", BB_ABOVE_OUTPUT);
         // }
         // Bang-bang
-        double output = currentVel < desiredVel 
-            ? Shooter.FLYWHEEL_KP * (desiredVel - currentVel) + Shooter.FLYWHEEL_KF * desiredVel 
-            : Shooter.FLYWHEEL_KF * desiredVel;
-        Shooter.getInstance().getMaster().set(ControlMode.PercentOutput, output);
-        // Shooter.getInstance().spinShooterVelocity(desiredVel);
+        // double output = currentVel < desiredVel 
+        //     ? Shooter.FLYWHEEL_KP * (desiredVel - currentVel) + Shooter.FLYWHEEL_KF * desiredVel 
+        //     : Shooter.FLYWHEEL_KF * desiredVel;
+        // Shooter.getInstance().getMaster().set(ControlMode.PercentOutput, output);
+        Shooter.getInstance().spinShooterVelocity(desiredVel);
         SmartDashboard.putNumber("Shooter sent velocity Limelight", desiredVel);
-        SmartDashboard.putNumber("Shooter velocity Limelight", currentVel);
-        SmartDashboard.putNumber("Shooter error", desiredVel - currentVel);
+        SmartDashboard.putNumber("Shooter velocity Limelight", Shooter.getInstance().getMaster().getSelectedSensorVelocity());
+        SmartDashboard.putNumber("Shooter error", Shooter.getInstance().getMaster().getClosedLoopError());
             
         }
     @Override
