@@ -20,7 +20,7 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  * @since January 22, 2020
  */
 public class SpinShooterManual extends IndefiniteCommand {
-    private static final double SPEED_MULTIPLIER = 0.9;//0.8
+    private static double SPEED_MULTIPLIER = 0.9;//0.8
 
     public SpinShooterManual() {
         addRequirements(Shooter.getInstance());
@@ -37,7 +37,6 @@ public class SpinShooterManual extends IndefiniteCommand {
         //Checks which trigger has more output and picks between them.
         //Left trigger means reject the current ball.
         double output = rightTrigger - leftTrigger; // From [-1, 
-        
         SmartDashboard.putNumber("Shooter Sent Velocity", output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
         Shooter.getInstance().spinShooterVelocity(output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
 

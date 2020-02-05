@@ -104,6 +104,6 @@ public class SwerveAlignWithLimelight extends CommandBase {
         txController.reset();
         thorController.reset();
         Drivetrain.getInstance().stopAllDrive();
-        Limelight.setLEDS(false);
+        Limelight.setLEDS(true);
     }
 }

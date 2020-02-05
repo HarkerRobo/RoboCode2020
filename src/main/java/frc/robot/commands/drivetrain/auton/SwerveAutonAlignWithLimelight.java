@@ -81,6 +81,6 @@ public class SwerveAutonAlignWithLimelight extends CommandBase {
         thorController.reset();
         Drivetrain.getInstance().stopAllDrive();
 
-        Limelight.setLEDS(false);
+        Limelight.setLEDS(true);
     }
 }

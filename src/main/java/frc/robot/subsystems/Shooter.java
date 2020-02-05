@@ -41,7 +41,7 @@ public class Shooter implements Subsystem {
             SENSOR_PHASE = false;
         } else {
             FLYWHEEL_KF = 0.058;
-            FLYWHEEL_KP = 0.1; //2
+            FLYWHEEL_KP = 0.2; //2
 
             SHOOTER_HIGH_ANGLE = Value.kForward;
             SHOOTER_LOW_ANGLE = Value.kReverse;
@@ -64,8 +64,8 @@ public class Shooter implements Subsystem {
     public static final double MAX_VELOCITY = 114.3; //127 //Other value : 148 // TODO: Ask Aditi for a better value
     public static final int FLYWHEEL_VELOCITY_SLOT = 0;
     
-    private static double FLYWHEEL_KF;
-    private static double FLYWHEEL_KP;
+    public static double FLYWHEEL_KF;
+    public static double FLYWHEEL_KP;
     
     private static DoubleSolenoid solenoid;
     
