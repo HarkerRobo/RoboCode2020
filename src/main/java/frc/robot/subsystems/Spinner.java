@@ -3,22 +3,23 @@ package frc.robot.subsystems;
 import harkerrobolib.wrappers.HSTalon;
 
 import com.revrobotics.ColorSensorV3;
-import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 /**
  * The Spinner manipulates the control panel to obtain position and rotation control.
  * 
- * @author Anirudh Kotamraju
  * @author Jatin Kohli
  * @author Shahzeb Lakhani 
+ * @author Anirudh Kotamraju
  * @author Chirag Kaushik
  * @author Arjun Dixit
  * @author Aimee Wang
@@ -29,10 +30,17 @@ public class Spinner extends SubsystemBase {
 
     private HSTalon spinnerMotor;
     private DoubleSolenoid solenoid;
+    private CANCoder cancoder; 
 
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 colorSensor;
     private final ColorMatch colorMatcher = new ColorMatch();
+
+    public static final int SPINNER_POSITION_SLOT = 0;
+    private static final double SPINNER_POSITION_KP = 0.7; 
+    private static final double SPINNER_POSITION_KI = 0;
+    private static final double SPINNER_POSITION_KD = 0;
+   
     /**
      * Distance (in encoder ticks) the motor needs to turn to rotate the wheel by one wedge
      */
@@ -43,18 +51,19 @@ public class Spinner extends SubsystemBase {
     private final Color redTarget = ColorMatch.makeColor(0.480, 0.350, 0.114);
     private final Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
-    private static final boolean SPINNER_INVERT = false;
-    private static final boolean SPINNER_SENSOR_PHASE = false;
-
-    public static final int SPINNER_POSITION_SLOT = 0;
-    private static final double SPINNER_POSITION_KP = 0.7; 
-    private static final double SPINNER_POSITION_KI = 0;
-    private static final double SPINNER_POSITION_KD = 0;
+    private static final boolean SPINNER_INVERT = false; // Fix
+    private static final boolean SPINNER_SENSOR_PHASE = false; //Fix
 
     public static final int ALLOWABLE_ERROR = 100;
 
+    public static final int PEAK_DURATION = 10; // Fix
+    public static final int PEAK_LIMIT = 20; // Fix
+    public static final int CONT_LIMIT = 15; // Fix
+    
+    public static final double VOLTAGE_COMPENSATION = 0; // Fix
+
     public enum ColorValue {
-        RED(0), GREEN(1), BLUE(2), YELLOW(3);//Tune values for offset
+        RED(0), GREEN(1), BLUE(2), YELLOW(3); //Tune values for offset
         private int val;
         
         private ColorValue(int val) {
@@ -71,6 +80,7 @@ public class Spinner extends SubsystemBase {
         spinnerMotor = new HSTalon(RobotMap.CAN_IDS.SPINNER_ID);
         colorSensor = new ColorSensorV3(i2cPort);
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SPINNER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SPINNER_SOLENOID_REVERSE);
+        cancoder = new CANCoder(RobotMap.CAN_IDS.CANCODER_ID);
 
         colorMatcher.addColorMatch(blueTarget);
         colorMatcher.addColorMatch(greenTarget);
@@ -80,10 +90,35 @@ public class Spinner extends SubsystemBase {
         spinnerMotor.setInverted(SPINNER_INVERT);
         spinnerMotor.setSensorPhase(SPINNER_SENSOR_PHASE);   
              
-        setUpPositionPID();
+        setupTalons();
     }
 
-    public void setUpPositionPID() {
+    private void setupTalons() {
+        spinnerMotor.configFactoryDefault();
+                
+        spinnerMotor.setInverted(SPINNER_INVERT);
+
+        spinnerMotor.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
+        spinnerMotor.enableVoltageCompensation(true);
+        
+        spinnerMotor.setNeutralMode(NeutralMode.Coast);
+      
+        spinnerMotor.setSensorPhase(SPINNER_SENSOR_PHASE);
+
+        spinnerMotor.configForwardSoftLimitEnable(false);
+        spinnerMotor.configReverseSoftLimitEnable(false);
+
+        spinnerMotor.configContinuousCurrentLimit(CONT_LIMIT);
+        spinnerMotor.configPeakCurrentDuration(PEAK_DURATION);
+        spinnerMotor.configPeakCurrentLimit(PEAK_LIMIT);
+        spinnerMotor.enableCurrentLimit(true);
+        
+        spinnerMotor.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_INDEX);
+    
+        setupPositionPID();
+    } 
+    
+    public void setupPositionPID() {
         spinnerMotor.config_kP(SPINNER_POSITION_SLOT, SPINNER_POSITION_KP);
         spinnerMotor.config_kI(SPINNER_POSITION_SLOT, SPINNER_POSITION_KI);
         spinnerMotor.config_kD(SPINNER_POSITION_SLOT, SPINNER_POSITION_KD);

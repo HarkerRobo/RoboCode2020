@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Spinner;
 import frc.robot.subsystems.Spinner.ColorValue;
+import frc.robot.RobotMap;
 
 /**
  * Obtains position control on the control panel using the color' sensor's initial color and the encoder's position.
@@ -45,6 +46,7 @@ public class SpinnerPositionEncoder extends CommandBase {
         int deltaWedges = (stationVal.getVal() - actualVal.getVal() + 4) % 4; 
         if(deltaWedges == 3) deltaWedges -= 4;
         positionSetpoint = Spinner.COLOR_OFFSET * deltaWedges;
+        Spinner.getInstance().getSpinnerMotor().selectProfileSlot(Spinner.SPINNER_POSITION_SLOT, RobotMap.PRIMARY_INDEX);
         Spinner.getInstance().getSpinnerMotor().setSelectedSensorPosition(0);
     }
 

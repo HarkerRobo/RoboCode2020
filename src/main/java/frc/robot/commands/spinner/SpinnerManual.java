@@ -15,6 +15,12 @@ public class SpinnerManual extends IndefiniteCommand {
     }
 
     @Override
+    public void initialize() {
+        // TODO Auto-generated method stub
+        super.initialize();
+    }
+
+    @Override
     public void execute() {
         double output = MathUtil.mapJoystickOutput(OI.getInstance().getOperatorGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
         Spinner.getInstance().getSpinnerMotor().set(ControlMode.PercentOutput, OUTPUT_MULTIPLIER * output);
