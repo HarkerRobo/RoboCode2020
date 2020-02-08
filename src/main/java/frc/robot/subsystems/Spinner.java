@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 
 /**
  * The Spinner manipulates the control panel to obtain position and rotation control.
@@ -112,9 +114,8 @@ public class Spinner extends SubsystemBase {
         spinnerMotor.configPeakCurrentDuration(PEAK_DURATION);
         spinnerMotor.configPeakCurrentLimit(PEAK_LIMIT);
         spinnerMotor.enableCurrentLimit(true);
+        // spinnerMotor.configRemoteFeedbackFilter(RobotMap.CAN_IDS.CANCODER_ID, RemoteSensorSource.CANCoder, RobotMap.SPINNER_REMOTE_ORDINAL);
         
-        spinnerMotor.configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_INDEX);
-    
         setupPositionPID();
     } 
     
@@ -169,6 +170,15 @@ public class Spinner extends SubsystemBase {
         }
 
         return curVal; 
+        /*
+        switch(colorMatcher.matchClosestColor(colorSensor.getColor())) {
+            case(blueTarget): return ColorValue.BLUE;
+            case(redTarget): return ColorValue.RED;
+            case(greenTarget): return ColorValue.GREEN;
+            case(yellowTarget): return ColorValue.YELLOW;
+            default: return null;   
+        }
+        */
     }
 
     public static Spinner getInstance() {

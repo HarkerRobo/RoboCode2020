@@ -16,22 +16,23 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  * Aligns the drivetrain to a target using limelight and revs up the shooter to be prepared to shoot.
  */
 public class SpinShooterLimelight extends IndefiniteCommand {
-    private static final double LIMELIGHT_ANGLE = 10; // tune
-    private static final double LIMELIGHT_HEIGHT = 1.54; // tune
-    private static final double TARGET_HEIGHT = 7.5625; // tune
+    public static final double LIMELIGHT_ANGLE = 10; // tune
+    public static final double LIMELIGHT_HEIGHT = 1.54; // tune
+    public static final double TARGET_HEIGHT = 7.5625; // tune
 
-    private static final double SHOOTER_HIGH_ANGLE_DEGREES = 50;
-    private static final double SHOOTER_LOW_ANGLE_DEGREES = 21;
+    public static final double SHOOTER_HIGH_ANGLE_DEGREES = 50;
+    public static final double SHOOTER_LOW_ANGLE_DEGREES = 21;
     
     private static final double SCALE = 1.6;//1.6
-    private static final double SCALE_A = 0.00212;//LIN_SCALE 2.32;
-    private static final double SCALE_B = 1.914;
-    private static final double SCALE_C = 18.77;
+    private static final double SCALE_A = 0.00867972;//LIN_SCALE 2.32;
+    private static final double SCALE_B = -0.207790;
+    private static final double SCALE_C = 92.998;
 
     private static final double BB_BELOW_OUTPUT = 0.9;
     private static final double BB_ABOVE_OUTPUT = 0;
 
-    private static final int NUM_SAMPLES = 75;
+    private static final int NUM_SAMPLES = 180;
+    private static final double DISTANCE_SCALE = 0.99; //Accounts for offset in limelight
     private LinearFilter averageFilter = LinearFilter.movingAverage(NUM_SAMPLES);
     private MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);
     public SpinShooterLimelight() {
@@ -65,10 +66,10 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         SmartDashboard.putNumber("Distance", averageDistance);
         
         // linear scale
-        double desiredVel = averageDistance * SmartDashboard.getNumber("scale", SCALE);
+        // double desiredVel = averageDistance * SmartDashboard.getNumber("scale", SCALE);
 
         // quadratic
-        // double velocity = averageDistance * averageDistance * SCALE_A + averageDistance * SCALE_B + SCALE_C;
+        double desiredVel = DISTANCE_SCALE * (averageDistance * averageDistance * SCALE_A + averageDistance * SCALE_B + SCALE_C);
 
         // 90% Optimization
         // double currentVel = Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getSelectedSensorVelocity() / Shooter.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV);

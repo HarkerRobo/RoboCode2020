@@ -206,7 +206,7 @@ public class Drivetrain extends SubsystemBase {
             MP_X_KI = 0;
             MP_X_KD = 0;//15;
 
-            MP_Y_KP = 0;//0.7;
+            MP_Y_KP = 2;//0.7;
             MP_Y_KI = 0;
             MP_Y_KD = 0;
 
@@ -242,19 +242,21 @@ public class Drivetrain extends SubsystemBase {
     public static final double WHEEL_DIAMETER = 4;
     
     public static final Constraints THETA_CONSTRAINTS = new Constraints(MAX_ROTATION_VELOCITY, MAX_ROTATION_ACCELERATION);
-
-	public static final double TX_kP = 0.03;//0.015;//0.1;
-	public static final double TX_kI = 0;
-    public static final double TX_kD = 0.3; //0.15//18
+    
+    public static final double TX_kP = 0.03;//0.03;
+	public static final double TX_kI = 0.005;//0.003
+    public static final double TX_kD = 0.3;//0.3 //0.15//18
+    public static final double LIMELIGHT_KS = 0;//0.03;//0.03;
     
 	public static final double THOR_kP = 0;
 	public static final double THOR_kI = 0;
-	public static final double THOR_kD = 0;
+    public static final double THOR_kD = 0;
 
 	public static final double TX_SETPOINT = 0.0;
     public static final double THOR_SETPOINT = 0;
     public static final double TX_ALLOWABLE_ERROR = 0.4;
     public static final double THOR_ALLOWABLE_ERROR = 0;
+
     
     /**
      * Default constructor for Drivetrain
@@ -441,6 +443,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void setSwerveModuleVelocity(SwerveModule module, double output, double angle, boolean isPercentOutput,
             boolean isMotionProfile) {
+        
         module.setAngleAndDriveVelocity(angle, output, isPercentOutput, isMotionProfile);
     }
 

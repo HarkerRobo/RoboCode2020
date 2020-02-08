@@ -45,6 +45,8 @@ public class SwerveModule {
 
     private static final int DRIVE_TICKS_PER_REV = 2048;
 
+    private static final double EPSILON_OUTPUT = 1e-4;
+
     // Motor inversions
     private final TalonFXInvertType DRIVE_INVERTED;
     private final boolean ANGLE_INVERTED;
@@ -171,7 +173,8 @@ public class SwerveModule {
         
         int targetPos = (int)((targetAngle / 360) * 4096);
 
-        angleMotor.set(ControlMode.Position, targetPos);
+        if(output > EPSILON_OUTPUT) 
+            angleMotor.set(ControlMode.Position, targetPos);
     }
 
     /**

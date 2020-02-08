@@ -1,9 +1,11 @@
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.OI;
 import frc.robot.RobotMap;
+import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Limelight;
 
@@ -32,11 +34,12 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
     private static final double OUTPUT_MULTIPLIER = 0.5;
 
-	private static final int TX_VELOCITY_MULTIPLIER = 0;
+    private static final int TX_VELOCITY_MULTIPLIER = 0;
+    private static final double OFFSET = 0.003;//0.002;
 
     private PIDController txController;
     private PIDController thorController;
-
+    private MedianFilter medianFilter = new MedianFilter(180);
     public SwerveAlignWithLimelight() {
         addRequirements(Drivetrain.getInstance());
 
@@ -63,6 +66,10 @@ public class SwerveAlignWithLimelight extends CommandBase {
     @Override
     public void execute() {
         //double speed = -thorController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_DRIVE_VELOCITY;
+        double distance = (SpinShooterLimelight.TARGET_HEIGHT - SpinShooterLimelight.LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(Limelight.getTy() + SpinShooterLimelight.LIMELIGHT_ANGLE));
+        double averageDistance = medianFilter.calculate(distance);
+        SmartDashboard.putNumber("Distance", averageDistance);
+
         double turn = txController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_ROTATION_VELOCITY;
 
         double translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
@@ -75,7 +82,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
                 Math.cos(Drivetrain.getInstance().getTopRight().getAngleDegrees()) * Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorVelocity() +
                 Math.cos(Drivetrain.getInstance().getBackLeft().getAngleDegrees()) * Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorVelocity() +
                 Math.cos(Drivetrain.getInstance().getBackRight().getAngleDegrees()) * Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorVelocity()) / 4) * TX_VELOCITY_MULTIPLIER;
-        
+        turn -= OFFSET * averageDistance;
         if (Math.abs(Limelight.getTx()) < Drivetrain.TX_ALLOWABLE_ERROR)
             turn = 0;
 
@@ -94,7 +101,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
-        Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], 0, false, false);
+        Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], Drivetrain.LIMELIGHT_KS, false, false);
 
         SmartDashboard.putNumber("Limelight tx error", txController.getPositionError());
     }

@@ -128,9 +128,9 @@ public class SwerveManual extends CommandBase {
             translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
 
-        SmartDashboard.putNumber("Speed x", speeds.vxMetersPerSecond);
-        SmartDashboard.putNumber("Speed y", speeds.vyMetersPerSecond);
-        SmartDashboard.putNumber("Speed rot", speeds.omegaRadiansPerSecond);
+        // SmartDashboard.putNumber("Speed x", speeds.vxMetersPerSecond);
+        // SmartDashboard.putNumber("Speed y", speeds.vyMetersPerSecond);
+        // SmartDashboard.putNumber("Speed rot", speeds.omegaRadiansPerSecond);
 
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);

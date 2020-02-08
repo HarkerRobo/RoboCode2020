@@ -6,7 +6,7 @@ package frc.robot;
  * @since 01/06/20
  */
 public class RobotMap {
-	public static final boolean IS_PRACTICE = true; 
+	public static final boolean IS_PRACTICE = false; 
 
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;
@@ -15,6 +15,8 @@ public class RobotMap {
     public static final int AUXILIARY_INDEX = 1;
     
     public static final int DEFAULT_TIMEOUT = 10; //ms
+
+	public static final int SPINNER_REMOTE_ORDINAL = 0;
 
     /**
      * Stores CAN Id constants.

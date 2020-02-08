@@ -20,7 +20,7 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  * @since January 22, 2020
  */
 public class SpinShooterManual extends IndefiniteCommand {
-    private static double SPEED_MULTIPLIER = 0.9;//0.8
+    private static double SPEED_MULTIPLIER = 1;//0.8
 
     public SpinShooterManual() {
         addRequirements(Shooter.getInstance());

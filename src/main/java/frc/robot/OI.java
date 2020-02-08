@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.commands.shooter.SpinShooterLimelight;
+import frc.robot.commands.shooter.SpinShooterVelocity;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.wrappers.XboxGamepad;
@@ -32,6 +34,8 @@ public class OI
     private XboxGamepad driverGamepad;
     private XboxGamepad operatorGamepad;
 
+    
+
     // //Go from auton left starting position to shooting position
     // private static final Trajectory leftStartingToShooting = TrajectoryGenerator.generateTrajectory(List.of( 
     //     new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
@@ -45,6 +49,8 @@ public class OI
     // private static final Trajectory rightStartingToShooting = TrajectoryGenerator.generateTrajectory(List.of( 
     //     new Pose2d(0, 0, Rotation2d.fromDegrees(-90)),
     //     new Pose2d(1.676, -6.447, Rotation2d.fromDegrees(-90))), config);
+
+    
     
     private OI() {
         driverGamepad = new XboxGamepad(RobotMap.DRIVER_PORT);
@@ -80,11 +86,15 @@ public class OI
             new Pose2d(0, 1, Rotation2d.fromDegrees(90))
         ), config);
 
-        Rotation2d heading = Rotation2d.fromDegrees(0);
+        Trajectory initiationToBackTest = TrajectoryGenerator.generateTrajectory(List.of( 
+         new Pose2d(0, 0, Rotation2d.fromDegrees(270)),
+         new Pose2d(0, -3, Rotation2d.fromDegrees(270))), config);
 
+        Rotation2d heading = Rotation2d.fromDegrees(0);
+        driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
 
-        driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(horizontalTrajectory, heading));
+        driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(initiationToBackTest, heading));
 
         // driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
         //     () -> {

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -155,9 +156,9 @@ public class HSSwerveDriveOdometry extends CommandBase {
 
         var targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
-        // SmartDashboard.putNumber("Trajectory X Error", m_xController.getPositionError());
-        // SmartDashboard.putNumber("Trajectory Y Error", m_yController.getPositionError());
-        // SmartDashboard.putNumber("Trajectory Angle Error", Math.toDegrees(m_thetaController.getPositionError()));
+        SmartDashboard.putNumber("Trajectory X Error", m_xController.getPositionError());
+        SmartDashboard.putNumber("Trajectory Y Error", m_yController.getPositionError());
+        SmartDashboard.putNumber("Trajectory Angle Error", Math.toDegrees(m_thetaController.getPositionError()));
 
         // SmartDashboard.putNumber("Trajectory X Error", poseError.getTranslation().getX());
         // SmartDashboard.putNumber("Trajectory Y Error", poseError.getTranslation().getY());

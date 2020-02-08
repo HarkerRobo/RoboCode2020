@@ -40,8 +40,11 @@ public class Shooter implements Subsystem {
 
             SENSOR_PHASE = false;
         } else {
-            FLYWHEEL_KF = 0.058;
-            FLYWHEEL_KP = 0.2; //2
+            FLYWHEEL_KF = 0.053;//0.058;
+            FLYWHEEL_KP = 0.05;//0.2; //2
+            FLYWHEEL_KI = 0.001;
+            FLYWHEEL_KD = 0.7;
+            FLYWHEEL_IZONE = 150;
 
             SHOOTER_HIGH_ANGLE = Value.kForward;
             SHOOTER_LOW_ANGLE = Value.kReverse;
@@ -66,6 +69,9 @@ public class Shooter implements Subsystem {
     
     public static double FLYWHEEL_KF;
     public static double FLYWHEEL_KP;
+    public static double FLYWHEEL_KI;
+    public static double FLYWHEEL_KD;
+    public static int FLYWHEEL_IZONE;
     
     private static DoubleSolenoid solenoid;
     
@@ -139,8 +145,11 @@ public class Shooter implements Subsystem {
      * Set up for Velocity PID.
      */
     public void setupVelocityPID() {
-        flywheelMaster.config_kP(FLYWHEEL_VELOCITY_SLOT, FLYWHEEL_KP);
         flywheelMaster.config_kF(FLYWHEEL_VELOCITY_SLOT, FLYWHEEL_KF);
+        flywheelMaster.config_kP(FLYWHEEL_VELOCITY_SLOT, FLYWHEEL_KP);
+        flywheelMaster.config_kI(FLYWHEEL_VELOCITY_SLOT, FLYWHEEL_KI);
+        flywheelMaster.config_kD(FLYWHEEL_VELOCITY_SLOT, FLYWHEEL_KD);
+        flywheelMaster.config_IntegralZone(FLYWHEEL_VELOCITY_SLOT, FLYWHEEL_IZONE);
     }
 
     /**
