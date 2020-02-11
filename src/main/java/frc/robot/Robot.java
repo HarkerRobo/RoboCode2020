@@ -71,7 +71,8 @@ public class Robot extends TimedRobot {
     public static MedianFilter medianFilter = new MedianFilter(1);
     private static final double FAR_DISTANCE_THRESHOLD = 51.191;
     private static final double MEDIUM_DISTANCE_THRESHOLD = 17.643;
-    private static final double NO_DISTANCE = 34.155294758647656;
+    private static final double NO_DISTANCE = 18.535349102637966;
+    private static final double NIGHT_THRESHOLD = 18.4;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -115,17 +116,28 @@ public class Robot extends TimedRobot {
         double averageDistance = medianFilter.calculate(distance);
         SmartDashboard.putNumber("Distance", averageDistance);
         if (averageDistance != NO_DISTANCE) {
-            if (averageDistance > FAR_DISTANCE_THRESHOLD) {
-                Limelight.setPipeline(2);
+            if (RobotMap.IS_NIGHT)
+            {
+                if (averageDistance > NIGHT_THRESHOLD) {
+                    Limelight.setPipeline(3);
+                }
+                else {
+                    Limelight.setPipeline(4);
+                }
             }
-            else if (averageDistance > MEDIUM_DISTANCE_THRESHOLD) {
-                Limelight.setPipeline(1);
-            }
-            else {
-                Limelight.setPipeline(0);
+            else
+            {
+                if (averageDistance > FAR_DISTANCE_THRESHOLD) {
+                    Limelight.setPipeline(2);
+                }
+                else if (averageDistance > MEDIUM_DISTANCE_THRESHOLD) {
+                    Limelight.setPipeline(1);
+                }
+                else {
+                    Limelight.setPipeline(0);
+                }
             }
         }
-
        
         // SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         // SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());

@@ -32,10 +32,10 @@ public class SwerveAlignWithLimelight extends CommandBase {
      
     public static final double PID_CONTROLLER_PERIOD = 0.01; //In seconds
 
-    private static final double OUTPUT_MULTIPLIER = 0.5;
+    private static final double OUTPUT_MULTIPLIER = 1;
 
     private static final int TX_VELOCITY_MULTIPLIER = 0;
-    private static final double OFFSET = 0.003;//0.002;
+    private static final double OFFSET = 0;//0.003;//0.002;
 
     private PIDController txController;
     private PIDController thorController;

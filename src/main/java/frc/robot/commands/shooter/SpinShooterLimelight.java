@@ -19,7 +19,7 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  * Aligns the drivetrain to a target using limelight and revs up the shooter to be prepared to shoot.
  */
 public class SpinShooterLimelight extends IndefiniteCommand {
-    public static final double LIMELIGHT_ANGLE = 10; // tune
+    public static double LIMELIGHT_ANGLE = 18;
     public static final double LIMELIGHT_HEIGHT = 1.54; // tune
     public static final double TARGET_HEIGHT = 7.5625; // tune
 
@@ -35,12 +35,12 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     private static final double BB_ABOVE_OUTPUT = 0;
 
     private static final int NUM_SAMPLES = 180;
-    private static final double DISTANCE_SCALE = 0.95; //Accounts for offset in limelight
+    private static double DISTANCE_SCALE; //Accounts for offset in limelight
     private LinearFilter averageFilter = LinearFilter.movingAverage(NUM_SAMPLES);
     private MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);
     public SpinShooterLimelight() {
         addRequirements(Shooter.getInstance());
-        SmartDashboard.putNumber("scale", SCALE);
+        SmartDashboard.putNumber("angle", LIMELIGHT_ANGLE);
     }
 
     @Override
@@ -69,9 +69,9 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         
         // linear scale
         // double desiredVel = averageDistance * SmartDashboard.getNumber("scale", SCALE);
-
+        LIMELIGHT_ANGLE = SmartDashboard.getNumber("angle", LIMELIGHT_ANGLE);
         // quadratic
-        double desiredVel = DISTANCE_SCALE * (averageDistance * averageDistance * SCALE_A + averageDistance * SCALE_B + SCALE_C);
+        double desiredVel = (averageDistance * averageDistance * SCALE_A + averageDistance * SCALE_B + SCALE_C);
 
         // 90% Optimization
         // double currentVel = Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getSelectedSensorVelocity() / Shooter.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV);

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.SwerveDriveKinematicsConstraint;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
@@ -95,15 +96,23 @@ public class OI
         Rotation2d heading = Rotation2d.fromDegrees(0);
         driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
-
         driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(initiationToBackTest, heading));
-
-        driverGamepad.getDownDPadButton().whenPressed(new CallMethodCommand(() -> {Limelight.setPipeline(2);
-            Robot.medianFilter.reset();}));
-        getDriverGamepad().getRightDPadButton().whenPressed(new CallMethodCommand(() -> {Limelight.setPipeline(1);
-            Robot.medianFilter.reset();}));
-        getDriverGamepad().getUpDPadButton().whenPressed(new CallMethodCommand(() -> {Limelight.setPipeline(0);
-            Robot.medianFilter.reset();}));
+        
+        driverGamepad.getDownDPadButton().whenPressed(
+            new ConditionalCommand(
+                new CallMethodCommand(() -> {Limelight.setPipeline(2); Robot.medianFilter.reset();}), 
+                new CallMethodCommand(() -> {Limelight.setPipeline(3); Robot.medianFilter.reset();}), 
+                () -> !RobotMap.IS_NIGHT));
+        driverGamepad.getRightDPadButton().whenPressed(
+            new ConditionalCommand(
+                new CallMethodCommand(() -> {Limelight.setPipeline(1); Robot.medianFilter.reset();}), 
+                new CallMethodCommand(() -> {Limelight.setPipeline(3); Robot.medianFilter.reset();}), 
+                () -> !RobotMap.IS_NIGHT));
+        driverGamepad.getUpDPadButton().whenPressed(
+            new ConditionalCommand(
+                new CallMethodCommand(() -> {Limelight.setPipeline(0); Robot.medianFilter.reset();}), 
+                new CallMethodCommand(() -> {Limelight.setPipeline(4); Robot.medianFilter.reset();}), 
+                () -> !RobotMap.IS_NIGHT));
 
         // driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
         //     () -> {
