@@ -2,29 +2,19 @@ package frc.robot.commands.drivetrain.auton;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.OI;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.util.Limelight;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import harkerrobolib.util.MathUtil;
 
 public class SwerveAutonAlignWithLimelight extends CommandBase {
 
     public static final double PID_CONTROLLER_PERIOD = 0.01; //In seconds
-
-    private static final double OUTPUT_MULTIPLIER = 0.5;
-
-	private static final int TX_VELOCITY_MULTIPLIER = 0;
 
     private PIDController txController;
     private PIDController thorController;
@@ -70,9 +60,6 @@ public class SwerveAutonAlignWithLimelight extends CommandBase {
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
         Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], 0, false, false);
-
-
-        SmartDashboard.putNumber("Limelight auton tx error", txController.getPositionError());
     }
 
     @Override

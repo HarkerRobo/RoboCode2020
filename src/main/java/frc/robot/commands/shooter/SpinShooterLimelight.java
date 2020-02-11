@@ -38,9 +38,9 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     private static double DISTANCE_SCALE; //Accounts for offset in limelight
     private LinearFilter averageFilter = LinearFilter.movingAverage(NUM_SAMPLES);
     private MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);
+
     public SpinShooterLimelight() {
         addRequirements(Shooter.getInstance());
-        SmartDashboard.putNumber("angle", LIMELIGHT_ANGLE);
     }
 
     @Override
@@ -53,15 +53,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     
     public void execute() {
         
-        double distance = (TARGET_HEIGHT - LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(Limelight.getTy() + LIMELIGHT_ANGLE));
-        // double yDisplacement = Limelight.getCamtranY();
-        // double xDisplacement = Limelight.getCamtranX();
-
-        // double initialVelocityY = Math.sqrt(2 * 9.8 * yDisplacement);
-        // double angle = Limelight.getTy() - LIMELIGHT_ANGLE; //Y angle
-        // double initialVelocityX = Math.tan(90 - angle) * yDisplacement; //90-angle is complement
-
-        // double initialVelocity = Math.sqrt(Math.pow(initialVelocityY, 2) , Math.pow(initialVelocityX, 2));
+        double distance = Shooter.getInstance().getLimelightDistance();
         
         // Shooter.getInstance().spinShooter(initialVelocity + MULTIPLIER * distance);
        
@@ -69,7 +61,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         
         // linear scale
         // double desiredVel = averageDistance * SmartDashboard.getNumber("scale", SCALE);
-        LIMELIGHT_ANGLE = SmartDashboard.getNumber("angle", LIMELIGHT_ANGLE);
+
         // quadratic
         double desiredVel = (averageDistance * averageDistance * SCALE_A + averageDistance * SCALE_B + SCALE_C);
 
@@ -95,10 +87,12 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         //     ? Shooter.FLYWHEEL_KP * (desiredVel - currentVel) + Shooter.FLYWHEEL_KF * desiredVel 
         //     : Shooter.FLYWHEEL_KF * desiredVel;
         // Shooter.getInstance().getMaster().set(ControlMode.PercentOutput, output);
+
         Shooter.getInstance().spinShooterVelocity(desiredVel);
-        SmartDashboard.putNumber("Shooter sent velocity Limelight", desiredVel);
-        SmartDashboard.putNumber("Shooter velocity Limelight", Shooter.getInstance().getMaster().getSelectedSensorVelocity());
-        SmartDashboard.putNumber("Shooter error", Shooter.getInstance().getMaster().getClosedLoopError());
+
+        SmartDashboard.putNumber("Shooter set velocity", desiredVel);
+        SmartDashboard.putNumber("Shooter actual velocity", Shooter.getInstance().getMaster().getSelectedSensorVelocity());
+        SmartDashboard.putNumber("Shooter velocity error", Shooter.getInstance().getMaster().getClosedLoopError());
             
         }
     @Override

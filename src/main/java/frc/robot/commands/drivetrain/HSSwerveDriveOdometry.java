@@ -160,15 +160,9 @@ public class HSSwerveDriveOdometry extends CommandBase {
         SmartDashboard.putNumber("Trajectory Y Error", m_yController.getPositionError());
         SmartDashboard.putNumber("Trajectory Angle Error", Math.toDegrees(m_thetaController.getPositionError()));
 
-        // SmartDashboard.putNumber("Trajectory X Error", poseError.getTranslation().getX());
-        // SmartDashboard.putNumber("Trajectory Y Error", poseError.getTranslation().getY());
-        // SmartDashboard.putNumber("Trajectory Angle Error", poseError.getRotation().getDegrees());
-
-        // SmartDashboard.putNumber("target X Velocity", targetXVel); 
-
-        // SmartDashboard.putNumber("Trajectory X", desiredTranslation.getX());
-        // SmartDashboard.putNumber("Trajectory Y", desiredTranslation.getY());
-        // SmartDashboard.putNumber("Trajectory Angle", desiredRotation);
+        SmartDashboard.putNumber("Pose X Error", poseError.getTranslation().getX());
+        SmartDashboard.putNumber("Pose Y Error", poseError.getTranslation().getY());
+        SmartDashboard.putNumber("Pose Angle Error", poseError.getRotation().getDegrees());
 
         m_outputModuleStates.accept(targetModuleStates);
 

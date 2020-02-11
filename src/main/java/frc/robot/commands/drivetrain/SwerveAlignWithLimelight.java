@@ -101,8 +101,6 @@ public class SwerveAlignWithLimelight extends CommandBase {
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
         Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], Drivetrain.LIMELIGHT_KS, false, false);
-
-        SmartDashboard.putNumber("Limelight tx error", txController.getPositionError());
     }
 
     @Override

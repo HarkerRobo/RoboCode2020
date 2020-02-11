@@ -37,10 +37,10 @@ public class SpinShooterManual extends IndefiniteCommand {
         //Checks which trigger has more output and picks between them.
         //Left trigger means reject the current ball.
         double output = rightTrigger - leftTrigger; // From [-1, 
-        SmartDashboard.putNumber("Shooter Sent Velocity", output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
+        SmartDashboard.putNumber("Shooter set velocity", output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
         Shooter.getInstance().spinShooterVelocity(output * SPEED_MULTIPLIER * Shooter.MAX_VELOCITY);
 
-        SmartDashboard.putNumber("Shooter current vel", Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getSelectedSensorVelocity(), SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV));
+        SmartDashboard.putNumber("Shooter actual velocity", Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getSelectedSensorVelocity(), SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV));
         // Shooter.getInstance().spinShooterPercentOutput(output * SPEED_MULTIPLIER);
     }
 

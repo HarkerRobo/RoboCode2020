@@ -73,7 +73,7 @@ public class OI
         // driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {
         //     Drivetrain.getInstance().updatePositionPID();
         // }));
-        driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(Shooter.getInstance()::toggleAngle, Shooter.getInstance()));
+        driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(Shooter.getInstance()::toggleHoodAngle, Shooter.getInstance()));
         driverGamepad.getButtonY().whilePressed(new SpinShooterLimelight());
         constraint = new SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(), Drivetrain.MAX_DRIVE_VELOCITY);
 
@@ -90,8 +90,8 @@ public class OI
         ), config);
 
         Trajectory initiationToBackTest = TrajectoryGenerator.generateTrajectory(List.of( 
-         new Pose2d(0, 0, Rotation2d.fromDegrees(270)),
-         new Pose2d(0, -3, Rotation2d.fromDegrees(270))), config);
+         new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+         new Pose2d(3, 0, Rotation2d.fromDegrees(0))), config);
 
         Rotation2d heading = Rotation2d.fromDegrees(0);
         driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
@@ -100,18 +100,18 @@ public class OI
         
         driverGamepad.getDownDPadButton().whenPressed(
             new ConditionalCommand(
-                new CallMethodCommand(() -> {Limelight.setPipeline(2); Robot.medianFilter.reset();}), 
-                new CallMethodCommand(() -> {Limelight.setPipeline(3); Robot.medianFilter.reset();}), 
+                new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR); }), 
+                new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR); }), 
                 () -> !RobotMap.IS_NIGHT));
         driverGamepad.getRightDPadButton().whenPressed(
             new ConditionalCommand(
-                new CallMethodCommand(() -> {Limelight.setPipeline(1); Robot.medianFilter.reset();}), 
-                new CallMethodCommand(() -> {Limelight.setPipeline(3); Robot.medianFilter.reset();}), 
+                new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.DAY_MEDIUM); }), 
+                new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR); }), 
                 () -> !RobotMap.IS_NIGHT));
         driverGamepad.getUpDPadButton().whenPressed(
             new ConditionalCommand(
-                new CallMethodCommand(() -> {Limelight.setPipeline(0); Robot.medianFilter.reset();}), 
-                new CallMethodCommand(() -> {Limelight.setPipeline(4); Robot.medianFilter.reset();}), 
+                new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE); }), 
+                new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE); }), 
                 () -> !RobotMap.IS_NIGHT));
 
         // driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(

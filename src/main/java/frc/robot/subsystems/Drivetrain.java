@@ -322,9 +322,9 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("MP X kP", MP_X_KP);
         // SmartDashboard.putNumber("MP X kI", MP_X_KI);
         // SmartDashboard.putNumber("MP X kD", MP_X_KD);
-        // SmartDashboard.putNumber("MP Y kP", MP_Y_KP);
-        // SmartDashboard.putNumber("MP Y kI", MP_Y_KI);
-        // SmartDashboard.putNumber("MP Y kD", MP_Y_KD);
+        SmartDashboard.putNumber("MP Y kP", MP_Y_KP);
+        SmartDashboard.putNumber("MP Y kI", MP_Y_KI);
+        SmartDashboard.putNumber("MP Y kD", MP_Y_KD);
         // SmartDashboard.putNumber("MP THETA kP", MP_THETA_KP);
         // SmartDashboard.putNumber("MP THETA kI", MP_THETA_KI);
         // SmartDashboard.putNumber("MP THETA kD", MP_THETA_KD);
@@ -365,6 +365,9 @@ public class Drivetrain extends SubsystemBase {
         setupVelocityPID();
     }
 
+    /**
+     * Reads motion profile constants from SmartDashboard
+     */
     public void updateMPPID() {
         stopAllDrive();
 

@@ -8,9 +8,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.commands.shooter.SpinShooterLimelight;
+import frc.robot.util.Limelight;
 import harkerrobolib.util.Conversions;
 import harkerrobolib.util.Conversions.SpeedUnit;
 
@@ -90,10 +91,13 @@ public class Shooter implements Subsystem {
     public static TalonFXInvertType FOLLOWER_INVERT;
 
     public static final double GEAR_RATIO = 0.675;
-
     public static final double WHEEL_DIAMETER = 4;
-
     public static final int TICKS_PER_REV = 2048;
+
+    private static final double DAY_FAR_DISTANCE_THRESHOLD = 51.191;    
+    private static final double DAY_MEDIUM_DISTANCE_THRESHOLD = 17.643;
+    private static final double NIGHT_THRESHOLD = 18.4;  // choosing between far and close pipelines for night
+
     /**
      * Constructs a Shooter.
      */
@@ -108,11 +112,24 @@ public class Shooter implements Subsystem {
 
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("Shooter % error", flywheelMaster.getClosedLoopError() / (1flywheelMaster.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("Shooter error", flywheelMaster.getClosedLoopError());
-        SmartDashboard.putNumber("Shooter current", flywheelMaster.getStatorCurrent());
-        SmartDashboard.putNumber("Shooter % output", flywheelMaster.getMotorOutputPercent());   
+        double distance = getLimelightDistance();
+        if (distance != 0.0) {
+            if (RobotMap.IS_NIGHT) {
+                if (distance > NIGHT_THRESHOLD)
+                    Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR);
+                else
+                    Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE);
+            } else {
+                if (distance > DAY_FAR_DISTANCE_THRESHOLD) 
+                    Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR);
+                else if (distance > DAY_MEDIUM_DISTANCE_THRESHOLD) 
+                    Limelight.setPipeline(RobotMap.PIPELINES.DAY_MEDIUM);
+                else 
+                    Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE);
+            }
+        } 
     }
+    
     /**
      * Sets up the master and follower talons.
      */
@@ -157,15 +174,28 @@ public class Shooter implements Subsystem {
      * is currently at high angle then it switches it to low, if it is
      * at low it switches the position to high.
      */
-    public void toggleAngle() {
+    public void toggleHoodAngle() {
         solenoid.set(solenoid.get() == SHOOTER_HIGH_ANGLE ? SHOOTER_LOW_ANGLE : SHOOTER_HIGH_ANGLE);
     }
     
     /**
+     * Gets the distance from the limelight to the power port (or 0 if it is not visible)
+     */
+    public double getLimelightDistance() {
+        if(Limelight.isTargetVisible())
+            return (SpinShooterLimelight.TARGET_HEIGHT - SpinShooterLimelight.LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(Limelight.getTy() + SpinShooterLimelight.LIMELIGHT_ANGLE));
+        else
+            return 0.0;
+    }
+
+    /**
      * Spins the shooter flywheel at a certain percent output
      */
     public void spinShooterPercentOutput(double percentOutput) {
-        flywheelMaster.set(ControlMode.PercentOutput, percentOutput);
+        if(percentOutput == 0) 
+            flywheelMaster.set(ControlMode.Disabled, 0);
+        else
+            flywheelMaster.set(ControlMode.PercentOutput, percentOutput);
     }
 
     /**

@@ -93,19 +93,12 @@ public class SwerveManual extends CommandBase {
         translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
         turnMagnitude = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
 
-        SmartDashboard.putNumber("translate x", translateX);
-        SmartDashboard.putNumber("translate y", translateY);
-        SmartDashboard.putNumber("turn mag", turnMagnitude);
         //scale input from joysticks
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         turnMagnitude *= -1 * OUTPUT_MULTIPLIER * Drivetrain.MAX_ROTATION_VELOCITY;
 
         double currentPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
-
-        SmartDashboard.putNumber("Turn acceleration", turnAccel);
-        SmartDashboard.putNumber("Turn Vel", turnVel);
-        SmartDashboard.putNumber("dtetha", currentPigeonHeading - prevPigeonHeading);
 
         if(pigeonFlag && turnMagnitude == 0) { //If there was joystick input but now there is not
             double velocityHeadingMultiplier = Math.abs(turnVel) > TURN_VEL_THRESHOLD ? HIGH_VELOCITY_HEADING_MULTIPLIER : LOW_VELOCITY_HEADING_MULTIPLIER;
@@ -119,18 +112,12 @@ public class SwerveManual extends CommandBase {
         if(!pigeonFlag) { //If there is no joystick input currently
             // turnMagnitude = !RobotMap.IS_PRACTICE ? Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading) : turnMagnitude;
             turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
-            SmartDashboard.putNumber("Pigeon Error", pigeonAngle - currentPigeonHeading);
         }
 
-        SmartDashboard.putNumber("turn mag", turnMagnitude);
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
-
-        // SmartDashboard.putNumber("Speed x", speeds.vxMetersPerSecond);
-        // SmartDashboard.putNumber("Speed y", speeds.vyMetersPerSecond);
-        // SmartDashboard.putNumber("Speed rot", speeds.omegaRadiansPerSecond);
 
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);

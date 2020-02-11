@@ -32,23 +32,24 @@ public class SpinShooterVelocity extends IndefiniteCommand {
     private double velocity;
     private double speed;
     private MedianFilter medianFilter = new MedianFilter(400);
+
     public SpinShooterVelocity(double velocity) {
         addRequirements(Shooter.getInstance());
         this.velocity = velocity;
-        SmartDashboard.putNumber("Speed", 90);
-    }
 
-    @Override
-    public void initialize() {
+        SmartDashboard.putNumber("Set shooter speed", velocity);
     }
 
     public void execute() {
-        speed = SmartDashboard.getNumber("Speed", 90);
+        speed = SmartDashboard.getNumber("Set shooter speed", velocity);
+
         Shooter.getInstance().spinShooterVelocity(speed);
-        double distance = (SpinShooterLimelight.TARGET_HEIGHT - SpinShooterLimelight.LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(Limelight.getTy() + SpinShooterLimelight.LIMELIGHT_ANGLE));
+
+        double distance = Shooter.getInstance().getLimelightDistance();
         double averageDistance = medianFilter.calculate(distance);
-        SmartDashboard.putNumber("distance", averageDistance);
-        SmartDashboard.putNumber("Shooter velocity error", Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getClosedLoopError(),SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV));
+
+        SmartDashboard.putNumber("Shooter limelight distance", averageDistance);
+        SmartDashboard.putNumber("Shooter velocity error", Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getClosedLoopError(), SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV));
     }
 
     public void end(boolean interrupted) {

@@ -66,13 +66,7 @@ import harkerrobolib.commands.CallMethodCommand;
  * @since 01/06/20
  */
 public class Robot extends TimedRobot {
-
-    private Compressor c;
-    public static MedianFilter medianFilter = new MedianFilter(1);
-    private static final double FAR_DISTANCE_THRESHOLD = 51.191;
-    private static final double MEDIUM_DISTANCE_THRESHOLD = 17.643;
-    private static final double NO_DISTANCE = 18.535349102637966;
-    private static final double NIGHT_THRESHOLD = 18.4;
+    private Compressor compressor;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -89,7 +83,7 @@ public class Robot extends TimedRobot {
         // Climber.getInstance();
     
         OI.getInstance();
-        c = new Compressor();
+        compressor = new Compressor();
 
         Limelight.setLEDS(true);
     }
@@ -107,53 +101,11 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
-        SmartDashboard.putString("Robot Type", RobotMap.IS_PRACTICE ? "Practice Bot" : "Comp Bot");
+        SmartDashboard.putString("Robot Type", RobotMap.IS_PRACTICE ? "Practice" : "Comp");
 
         if (RobotMap.IS_PRACTICE)
-            c.stop();
-        double distance = (SpinShooterLimelight.TARGET_HEIGHT - SpinShooterLimelight.LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(Limelight.getTy() + SpinShooterLimelight.LIMELIGHT_ANGLE));
+            compressor.stop();
     
-        double averageDistance = medianFilter.calculate(distance);
-        SmartDashboard.putNumber("Distance", averageDistance);
-        if (averageDistance != NO_DISTANCE) {
-            if (RobotMap.IS_NIGHT)
-            {
-                if (averageDistance > NIGHT_THRESHOLD) {
-                    Limelight.setPipeline(3);
-                }
-                else {
-                    Limelight.setPipeline(4);
-                }
-            }
-            else
-            {
-                if (averageDistance > FAR_DISTANCE_THRESHOLD) {
-                    Limelight.setPipeline(2);
-                }
-                else if (averageDistance > MEDIUM_DISTANCE_THRESHOLD) {
-                    Limelight.setPipeline(1);
-                }
-                else {
-                    Limelight.setPipeline(0);
-                }
-            }
-        }
-       
-        // SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        // SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        // SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        // SmartDashboard.putNumber("BR Rise to Fall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-
-        // SmartDashboard.putNumber("TL Angle POS", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-        // SmartDashboard.putNumber("TR Angle POS", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-        // SmartDashboard.putNumber("BL Angle POS", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-        // SmartDashboard.putNumber("BR Angle POS", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-
-        // SmartDashboard.putNumber("TL Drive POS", Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-        // SmartDashboard.putNumber("TR Drive POS", Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-        // SmartDashboard.putNumber("BL Drive POS", Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-        // SmartDashboard.putNumber("BR Drive POS", Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-
         // SmartDashboard.putNumber("TL Angle Error", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopError());
         // SmartDashboard.putNumber("TR Angle Error", Drivetrain.getInstance().getTopRight().getAngleMotor().getClosedLoopError());
         // SmartDashboard.putNumber("BL Angle Error", Drivetrain.getInstance().getBackLeft().getAngleMotor().getClosedLoopError());
@@ -167,8 +119,6 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putNumber("TL Drive Current", Drivetrain.getInstance().getTopLeft().getDriveMotor().getStatorCurrent());
 
         // SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
-        // SmartDashboard.putNumber("Pigeon Yaw", Drivetrain.getInstance().getPigeon().getYaw());
-        // SmartDashboard.putNumber("Pigeon Compass", Drivetrain.getInstance().getPigeon().getAbsoluteCompassHeading());
     }
 
     /**

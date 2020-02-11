@@ -127,14 +127,7 @@ public class Spinner extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("red", detectedColor.red);
-        // SmartDashboard.putNumber("green", detectedColor.green);
-        // SmartDashboard.putNumber("blue", detectedColor.blue);
-        // SmartDashboard.putNumber("Confidence", match.confidence);
-        // SmartDashboard.putString("Detected Color", currentColorString);
-        // SmartDashboard.putNumber("Desired red", match.color.red);
-        // SmartDashboard.putNumber("Desired blue", match.color.blue);
-        // SmartDashboard.putNumber("Desired green", match.color.green);
+        
     }
 
     public HSTalon getSpinnerMotor() {

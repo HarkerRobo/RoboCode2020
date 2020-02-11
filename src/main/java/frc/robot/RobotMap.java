@@ -60,4 +60,12 @@ public class RobotMap {
 
 		public static final int CANCODER_ID = 0;//fix
 	}
+
+	public static class PIPELINES {
+		public static final int DAY_CLOSE = 0;
+		public static final int DAY_MEDIUM = 1;
+		public static final int DAY_FAR = 2;
+		public static final int NIGHT_FAR = 3;
+		public static final int NIGHT_CLOSE = 4;
+	}
 }
