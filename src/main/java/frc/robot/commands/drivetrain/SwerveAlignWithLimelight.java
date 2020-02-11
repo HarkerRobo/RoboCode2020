@@ -100,7 +100,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
-        Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], Drivetrain.LIMELIGHT_KS, false, false);
+        Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], false, false);
     }
 
     @Override

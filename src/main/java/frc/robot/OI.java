@@ -91,7 +91,7 @@ public class OI
 
         Trajectory initiationToBackTest = TrajectoryGenerator.generateTrajectory(List.of( 
          new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-         new Pose2d(3, 0, Rotation2d.fromDegrees(0))), config);
+         new Pose2d(2, 0, Rotation2d.fromDegrees(0))), config);
 
         Rotation2d heading = Rotation2d.fromDegrees(0);
         driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));

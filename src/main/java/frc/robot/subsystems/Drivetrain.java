@@ -420,7 +420,7 @@ public class Drivetrain extends SubsystemBase {
      * as false, and motion profile as true.
      */
     public void setDrivetrainModuleStates(SwerveModuleState[] states) {
-        setDrivetrainVelocity(states[0], states[1], states[2], states[3], 0, false, true);
+        setDrivetrainVelocity(states[0], states[1], states[2], states[3], false, true);
     }
 
     /**
@@ -428,12 +428,12 @@ public class Drivetrain extends SubsystemBase {
      * swerve module
      */
     public void setDrivetrainVelocity(SwerveModuleState tl, SwerveModuleState tr, SwerveModuleState bl,
-            SwerveModuleState br, double feedForward, boolean isPercentOutput, boolean isMotionProfile) {
+            SwerveModuleState br, boolean isPercentOutput, boolean isMotionProfile) {
         double tlOutput = tl.speedMetersPerSecond;
         double trOutput = tr.speedMetersPerSecond;
         double blOutput = bl.speedMetersPerSecond;
         double brOutput = br.speedMetersPerSecond;
-
+        
         setSwerveModuleVelocity(topLeft, tlOutput, convertAngle(topLeft, tl.angle.getDegrees()), isPercentOutput,
                 isMotionProfile);
         setSwerveModuleVelocity(topRight, trOutput, convertAngle(topRight, tr.angle.getDegrees()), isPercentOutput,

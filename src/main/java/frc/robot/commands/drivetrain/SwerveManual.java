@@ -122,7 +122,7 @@ public class SwerveManual extends CommandBase {
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
-        Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], 0, IS_PERCENT_OUTPUT, false);
+        Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, false);
 
         if(Timer.getFPGATimestamp() - lastPigeonUpdateTime > 0.01) {
             double currentTime = Timer.getFPGATimestamp();

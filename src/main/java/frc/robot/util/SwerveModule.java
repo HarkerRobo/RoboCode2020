@@ -173,7 +173,7 @@ public class SwerveModule {
         
         int targetPos = (int)((targetAngle / 360) * 4096);
 
-        if(output > EPSILON_OUTPUT) 
+        if(output > EPSILON_OUTPUT || isMotionProfile) 
             angleMotor.set(ControlMode.Position, targetPos);
     }
 
@@ -203,10 +203,24 @@ public class SwerveModule {
       */
     public SwerveModuleState getState() {
         return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND, Drivetrain.WHEEL_DIAMETER, DRIVE_TICKS_PER_REV) * Drivetrain.METERS_PER_FOOT, 
-            Rotation2d.fromDegrees(angleMotor.getSelectedSensorPosition() * 360 / 4096));
+            Rotation2d.fromDegrees(getAngleDegrees()));
     }
 
     public static double mod360(double degrees) {
         return (degrees % 360 + 360) % 360;
+    }
+
+    /**
+     * Gets the error of the angle motor given desired degrees of rotation.
+     */
+    public double getAngleErrorDegrees(double desiredDegrees) {
+        while (getAngleDegrees() - desiredDegrees > 180) {
+            desiredDegrees += 360;
+        }
+        while (getAngleDegrees() - desiredDegrees < -180) {
+            desiredDegrees -= 360;
+        }
+
+        return getAngleDegrees() - desiredDegrees;
     }
 }

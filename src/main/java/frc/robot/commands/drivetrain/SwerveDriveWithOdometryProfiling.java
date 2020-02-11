@@ -9,6 +9,7 @@ import frc.robot.util.SwerveModule;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Controls the drivetrain using WPILib's SwerveControllerCommand with 
@@ -24,7 +25,7 @@ public class SwerveDriveWithOdometryProfiling extends HSSwerveDriveOdometry {
     private Timer timer;
     private Trajectory trajectory;
 
-    private final int ALLOWABLE_ERROR = 2;
+    private final int ALLOWABLE_ERROR = 5;
     private final int TIMEOUT = 800;
         
     public SwerveDriveWithOdometryProfiling(Trajectory trajectory, Rotation2d heading) {
@@ -59,17 +60,18 @@ public class SwerveDriveWithOdometryProfiling extends HSSwerveDriveOdometry {
 
         long initialTime = System.currentTimeMillis();
         boolean isAtSepoint = false;
+        Rotation2d initialRotation = initialPose.getRotation();
         //Perhaps add some functionality to rotate robot to the heading as well
         while (System.currentTimeMillis() - initialTime < TIMEOUT && !isAtSepoint) {
-            isAtSepoint = Math.abs(SwerveModule.mod360(Drivetrain.getInstance().getTopLeft().getAngleDegrees())  - initialPose.getRotation().getDegrees()) < ALLOWABLE_ERROR
-                && Math.abs(SwerveModule.mod360(Drivetrain.getInstance().getTopRight().getAngleDegrees())  - initialPose.getRotation().getDegrees()) < ALLOWABLE_ERROR
-                && Math.abs(SwerveModule.mod360(Drivetrain.getInstance().getBackLeft().getAngleDegrees())  - initialPose.getRotation().getDegrees()) < ALLOWABLE_ERROR
-                && Math.abs(SwerveModule.mod360(Drivetrain.getInstance().getBackRight().getAngleDegrees())  - initialPose.getRotation().getDegrees()) < ALLOWABLE_ERROR;
+            isAtSepoint = Math.abs(Drivetrain.getInstance().getTopLeft().getAngleErrorDegrees(initialRotation.getDegrees())) < ALLOWABLE_ERROR
+                && Math.abs(Drivetrain.getInstance().getTopRight().getAngleErrorDegrees(initialRotation.getDegrees())) < ALLOWABLE_ERROR
+                && Math.abs(Drivetrain.getInstance().getBackLeft().getAngleErrorDegrees(initialRotation.getDegrees())) < ALLOWABLE_ERROR
+                && Math.abs(Drivetrain.getInstance().getBackRight().getAngleErrorDegrees(initialRotation.getDegrees())) < ALLOWABLE_ERROR;
 
-            Drivetrain.getInstance().setDrivetrainVelocity(new SwerveModuleState(0, initialPose.getRotation()), 
-                new SwerveModuleState(0, initialPose.getRotation()), 
-                new SwerveModuleState(0, initialPose.getRotation()), 
-                new SwerveModuleState(0, initialPose.getRotation()), 0, false, true);
+            Drivetrain.getInstance().setDrivetrainVelocity(new SwerveModuleState(0, initialRotation), 
+                new SwerveModuleState(0, initialRotation), 
+                new SwerveModuleState(0, initialRotation), 
+                new SwerveModuleState(0, initialRotation), false, true);
         }
         super.initialize();
         timer.start();

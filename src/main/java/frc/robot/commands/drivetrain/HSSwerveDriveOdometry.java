@@ -120,9 +120,9 @@ public class HSSwerveDriveOdometry extends CommandBase {
     }
 
     public void resetPID() {
-        m_xController.setPID(Drivetrain.getInstance().MP_X_KP, Drivetrain.getInstance().MP_X_KI, Drivetrain.getInstance().MP_X_KD);
-        m_yController.setPID(Drivetrain.getInstance().MP_Y_KP, Drivetrain.getInstance().MP_Y_KI, Drivetrain.getInstance().MP_Y_KD);
-        m_thetaController.setPID(Drivetrain.getInstance().MP_THETA_KP, Drivetrain.getInstance().MP_THETA_KI, Drivetrain.getInstance().MP_THETA_KD);
+        m_xController.setPID(Drivetrain.MP_X_KP, Drivetrain.MP_X_KI, Drivetrain.MP_X_KD);
+        m_yController.setPID(Drivetrain.MP_Y_KP, Drivetrain.MP_Y_KI, Drivetrain.MP_Y_KD);
+        m_thetaController.setPID(Drivetrain.MP_THETA_KP, Drivetrain.MP_THETA_KI, Drivetrain.MP_THETA_KD);
     }
 
     @Override
