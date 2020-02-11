@@ -16,6 +16,8 @@ import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.commands.shooter.SpinShooterVelocity;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
+import frc.robot.util.Limelight;
+import harkerrobolib.commands.CallMethodCommand;
 import harkerrobolib.wrappers.XboxGamepad;
 
 /**
@@ -95,6 +97,13 @@ public class OI
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
 
         driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(initiationToBackTest, heading));
+
+        driverGamepad.getDownDPadButton().whenPressed(new CallMethodCommand(() -> {Limelight.setPipeline(2);
+            Robot.medianFilter.reset();}));
+        getDriverGamepad().getRightDPadButton().whenPressed(new CallMethodCommand(() -> {Limelight.setPipeline(1);
+            Robot.medianFilter.reset();}));
+        getDriverGamepad().getUpDPadButton().whenPressed(new CallMethodCommand(() -> {Limelight.setPipeline(0);
+            Robot.medianFilter.reset();}));
 
         // driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
         //     () -> {

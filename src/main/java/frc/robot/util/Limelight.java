@@ -30,6 +30,7 @@ public class Limelight {
     public static final String CORNERX_KEY = "tcornx";
     public static final String CORNERY_KEY = "tcorny";
     public static final String CAMTRAN_KEY = "camtran";
+    public static final String PIPELINE_KEY = "pipeline";
     public static final String LED_MODE = "ledMode";
 
     public static final int LED_PIPELINE = 0;
@@ -291,5 +292,9 @@ public class Limelight {
 
     public static double getRightArea() {
         return getRawContourTx(0) > getRawContourTx(1) ? getRawContourTa(0) : getRawContourTa(1);
+    }
+
+    public static void setPipeline(int pipeline) {
+        table.getEntry(PIPELINE_KEY).setNumber(pipeline);
     }
 }

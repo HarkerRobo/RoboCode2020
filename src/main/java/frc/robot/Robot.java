@@ -8,14 +8,18 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
+import harkerrobolib.commands.CallMethodCommand;
     
 /**
  * Has anyone heard of the team that ran out of code? (This is a real story)
@@ -64,6 +68,10 @@ import frc.robot.util.Limelight;
 public class Robot extends TimedRobot {
 
     private Compressor c;
+    public static MedianFilter medianFilter = new MedianFilter(1);
+    private static final double FAR_DISTANCE_THRESHOLD = 51.191;
+    private static final double MEDIUM_DISTANCE_THRESHOLD = 17.643;
+    private static final double NO_DISTANCE = 34.155294758647656;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -81,6 +89,8 @@ public class Robot extends TimedRobot {
     
         OI.getInstance();
         c = new Compressor();
+
+        Limelight.setLEDS(true);
     }
 
     /**
@@ -100,7 +110,23 @@ public class Robot extends TimedRobot {
 
         if (RobotMap.IS_PRACTICE)
             c.stop();
+        double distance = (SpinShooterLimelight.TARGET_HEIGHT - SpinShooterLimelight.LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(Limelight.getTy() + SpinShooterLimelight.LIMELIGHT_ANGLE));
+    
+        double averageDistance = medianFilter.calculate(distance);
+        SmartDashboard.putNumber("Distance", averageDistance);
+        if (averageDistance != NO_DISTANCE) {
+            if (averageDistance > FAR_DISTANCE_THRESHOLD) {
+                Limelight.setPipeline(2);
+            }
+            else if (averageDistance > MEDIUM_DISTANCE_THRESHOLD) {
+                Limelight.setPipeline(1);
+            }
+            else {
+                Limelight.setPipeline(0);
+            }
+        }
 
+       
         // SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         // SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         // SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
@@ -164,6 +190,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        Limelight.setLEDS(false); //8ft 2.25 in
+        // Limelight.setLEDS(false); //8ft 2.25 in
     }
 }

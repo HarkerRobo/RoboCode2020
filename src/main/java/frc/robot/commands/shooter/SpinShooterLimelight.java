@@ -13,6 +13,9 @@ import harkerrobolib.util.Conversions;
 import harkerrobolib.util.Conversions.SpeedUnit;
 
 /**
+ * 64.111 distance is break point for far
+ * 17.643 distance is break point for middle
+ * 
  * Aligns the drivetrain to a target using limelight and revs up the shooter to be prepared to shoot.
  */
 public class SpinShooterLimelight extends IndefiniteCommand {
@@ -32,7 +35,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     private static final double BB_ABOVE_OUTPUT = 0;
 
     private static final int NUM_SAMPLES = 180;
-    private static final double DISTANCE_SCALE = 0.99; //Accounts for offset in limelight
+    private static final double DISTANCE_SCALE = 0.95; //Accounts for offset in limelight
     private LinearFilter averageFilter = LinearFilter.movingAverage(NUM_SAMPLES);
     private MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);
     public SpinShooterLimelight() {
@@ -63,7 +66,6 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         // Shooter.getInstance().spinShooter(initialVelocity + MULTIPLIER * distance);
        
         double averageDistance = medianFilter.calculate(distance);
-        SmartDashboard.putNumber("Distance", averageDistance);
         
         // linear scale
         // double desiredVel = averageDistance * SmartDashboard.getNumber("scale", SCALE);
