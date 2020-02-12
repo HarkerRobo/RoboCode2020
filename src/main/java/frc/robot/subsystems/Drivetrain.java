@@ -202,17 +202,17 @@ public class Drivetrain extends SubsystemBase {
             
             PIGEON_kP = 0.02;
 
-            MP_X_KP = 0;//2.6;
+            MP_X_KP = 6;//2.6;
             MP_X_KI = 0;
-            MP_X_KD = 0;//15;
+            MP_X_KD = 20;//15;
 
-            MP_Y_KP = 2;//0.7;
+            MP_Y_KP = 6;//22;//0.7;
             MP_Y_KI = 0;
             MP_Y_KD = 0;
 
-            MP_THETA_KP = 0;//3.1;
+            MP_THETA_KP = 7;//3.1;
             MP_THETA_KI = 0;
-            MP_THETA_KD = 0;
+            MP_THETA_KD = 3;
         }
     }
     
@@ -325,9 +325,9 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("MP Y kP", MP_Y_KP);
         SmartDashboard.putNumber("MP Y kI", MP_Y_KI);
         SmartDashboard.putNumber("MP Y kD", MP_Y_KD);
-        // SmartDashboard.putNumber("MP THETA kP", MP_THETA_KP);
-        // SmartDashboard.putNumber("MP THETA kI", MP_THETA_KI);
-        // SmartDashboard.putNumber("MP THETA kD", MP_THETA_KD);
+        SmartDashboard.putNumber("MP THETA kP", MP_THETA_KP);
+        SmartDashboard.putNumber("MP THETA kI", MP_THETA_KI);
+        SmartDashboard.putNumber("MP THETA kD", MP_THETA_KD);
     }
 
     /**
