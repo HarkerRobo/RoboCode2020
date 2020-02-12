@@ -8,18 +8,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveManual;
-import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
-import harkerrobolib.commands.CallMethodCommand;
     
 /**
  * Has anyone heard of the team that ran out of code? (This is a real story)

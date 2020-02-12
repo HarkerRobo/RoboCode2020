@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -52,7 +53,7 @@ public class Indexer implements Subsystem {
     private DigitalInput indexerSensor;  // The second sensor in the indexer
     private DigitalInput shooterSensor; // Determines if the indexer is full
     
-    private static final int INTAKE_SENSOR_ID = 0;
+    // private static final int INTAKE_SENSOR_ID = 0;
     private static final int INDEXER_SENSOR_ID = 0;
     private static final int SHOOTER_SENSOR_ID = 0;
 
@@ -105,22 +106,20 @@ public class Indexer implements Subsystem {
         spine.configPeakCurrentLimit(INTAKE_CURRENT_PEAK);
         spine.configPeakCurrentDuration(INTAKE_CURRENT_PEAK_DUR);
         spine.enableCurrentLimit(true);
-
-
     }
 
     @Override
     public void periodic() {
         boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
         boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
-        if(BottomIntake.getInstance().getTalon().getStatorCurrent() > 0) {
+
+        if(BottomIntake.getInstance().getTalon().getStatorCurrent() > 0)
             spinAgitator(AGITATOR_DEFAULT_OUTPUT);
-        }
+
         if(!indexerDetected && !shooterDetected) {
             spinSpine(SPINE_DEFAULT_OUTPUT);
             spinAgitator(AGITATOR_DEFAULT_OUTPUT);
         }
-        
     }
 
     public void spinSpine(double percentOutput) {
