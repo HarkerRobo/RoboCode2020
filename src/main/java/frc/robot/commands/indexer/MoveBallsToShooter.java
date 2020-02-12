@@ -29,12 +29,12 @@ public class MoveBallsToShooter extends IndefiniteCommand {
 
     @Override
     public void execute() {
-        Indexer.getInstance().spinIndexer(INDEX_PERCENT_OUTPUT);  
+        Indexer.getInstance().spinSpine(INDEX_PERCENT_OUTPUT);  
     }
     
     @Override
     public void end(boolean interrupted) {
-        Indexer.getInstance().spinIndexer(0);
+        Indexer.getInstance().spinSpine(0);
         Indexer.getInstance().getSolenoid().set(true);
     }
 }
