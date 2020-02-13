@@ -150,15 +150,15 @@ public class Drivetrain extends SubsystemBase {
             
             PIGEON_kP = 0.05;//creates angry robot if too high
 
-            MP_X_KP = 8.0;
+            MP_X_KP = 15;//8
             MP_X_KI = 0;
             MP_X_KD = 20;
 
-            MP_Y_KP = 6.0;
+            MP_Y_KP = 15;//6
             MP_Y_KI = 0;
-            MP_Y_KD = 0;
+            MP_Y_KD = 20;
 
-            MP_THETA_KP = 5.0;//0.61;
+            MP_THETA_KP = 7.0;//0.61;
             MP_THETA_KI = 0;
             MP_THETA_KD = 0;
         
@@ -202,7 +202,7 @@ public class Drivetrain extends SubsystemBase {
             
             PIGEON_kP = 0.02;
 
-            MP_X_KP = 6;//2.6;
+            MP_X_KP = 6;//6;//2.6;
             MP_X_KI = 0;
             MP_X_KD = 20;//15;
 
@@ -217,12 +217,12 @@ public class Drivetrain extends SubsystemBase {
     }
     
     public static final double MAX_DRIVE_VELOCITY = 4;
+    public static final double MAX_DRIVE_ACCELERATION = 5;
     public static final double MAX_ROTATION_VELOCITY = (2 * Math.PI);
     public static final double MAX_ROTATION_ACCELERATION = 2 * (2 * Math.PI);
-    public static final double MAX_DRIVE_ACCELERATION = 5;
     
-    public static final double MP_MAX_DRIVE_VELOCITY = 4;
-    public static final double MP_MAX_DRIVE_ACCELERATION = 4;
+    public static final double MP_MAX_DRIVE_VELOCITY = 3.5;
+    public static final double MP_MAX_DRIVE_ACCELERATION = 3;
 
     public static final double GEAR_RATIO = 6;
 

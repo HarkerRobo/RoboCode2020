@@ -49,7 +49,7 @@ public class BottomIntake extends SubsystemBase {
     private BottomIntake() {
         talon = new HSTalon(RobotMap.CAN_IDS.INTAKE_MOTOR_ID);
 
-        solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.INTAKE_SOLENOID_FORWARD, RobotMap.CAN_IDS.INTAKE_SOLENOID_REVERSE);
+        // solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.INTAKE_SOLENOID_FORWARD, RobotMap.CAN_IDS.INTAKE_SOLENOID_REVERSE);
 
         setupTalons();
     }

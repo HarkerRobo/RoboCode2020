@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.trajectory.constraint.SwerveDriveKinematicsConstrai
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.bottomintake.SpinBottomIntake;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
@@ -23,7 +24,7 @@ import frc.robot.commands.shooter.SpinShooterVelocity;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
-import frc.robot.Trajectories;
+import frc.robot.auto.Trajectories;
 import harkerrobolib.commands.CallMethodCommand;
 import harkerrobolib.wrappers.XboxGamepad;
 
@@ -46,8 +47,12 @@ public class OI {
     private StartingPositionEight startingPositionEight = StartingPositionEight.LEFT;
     private StartingPositionTen startingPositionTen = StartingPositionTen.LEFT;
 
+    public static Rotation2d forwardHeading = Rotation2d.fromDegrees(180);
+    public static Rotation2d pickupFiveHeading = Rotation2d.fromDegrees(120);
+
     private enum StartingPositionEight {
-        LEFT(Trajectories.Eight.leftStartingAutonEight), MIDDLE(Trajectories.Eight.middleStartingAutonEight), RIGHT(Trajectories.Eight.rightStartingAutonEight);
+        LEFT(Trajectories.Eight.leftStartingAutonEight), MIDDLE(Trajectories.Eight.middleStartingAutonEight),
+        RIGHT(Trajectories.Eight.rightStartingAutonEight);
 
         public Trajectory value;
 
@@ -57,7 +62,8 @@ public class OI {
     }
 
     private enum StartingPositionTen {
-        LEFT(Trajectories.Ten.leftStartingAutonTen), MIDDLE(Trajectories.Ten.middleStartingAutonTen), RIGHT(Trajectories.Ten.rightStartingAutonTen);
+        LEFT(Trajectories.Ten.leftStartingAutonTen), MIDDLE(Trajectories.Ten.middleStartingAutonTen),
+        RIGHT(Trajectories.Ten.rightStartingAutonTen);
 
         public Trajectory value;
 
@@ -140,20 +146,23 @@ public class OI {
         // eightBallAuton
         // );
 
-        driverGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(
-            new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR); }), 
-            new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR); }), 
-            () -> !RobotMap.IS_NIGHT));
+        driverGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
+            Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR);
+        }), new CallMethodCommand(() -> {
+            Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR);
+        }), () -> !RobotMap.IS_NIGHT));
 
-        driverGamepad.getRightDPadButton().whenPressed(new ConditionalCommand(
-            new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.DAY_MEDIUM); }), 
-            new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR); }), 
-            () -> !RobotMap.IS_NIGHT));
+        driverGamepad.getRightDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
+            Limelight.setPipeline(RobotMap.PIPELINES.DAY_MEDIUM);
+        }), new CallMethodCommand(() -> {
+            Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR);
+        }), () -> !RobotMap.IS_NIGHT));
 
-        driverGamepad.getUpDPadButton().whenPressed(new ConditionalCommand(
-            new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE); }), 
-            new CallMethodCommand(() -> { Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE); }), 
-            () -> !RobotMap.IS_NIGHT));
+        driverGamepad.getUpDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
+            Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE);
+        }), new CallMethodCommand(() -> {
+            Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE);
+        }), () -> !RobotMap.IS_NIGHT));
 
         // driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
         // () -> {
@@ -173,7 +182,8 @@ public class OI {
         // },
         // Drivetrain.getInstance()));
 
-        driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(90)));
+        driverGamepad.getButtonA().whenPressed(
+                new SwerveDriveWithOdometryProfiling(Trajectories.Test.heart, Rotation2d.fromDegrees(0)));
 
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
             Drivetrain.getInstance().getPigeon().setFusedHeading(0);

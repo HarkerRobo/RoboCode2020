@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.auto;
 
 import java.util.List;
 
@@ -26,6 +26,40 @@ public class Trajectories {
     // .addConstraint(constraint);
 
     /**
+     * Trajectories used in various three ball autonomous configurations
+     */
+    public static class Three {
+        public static Trajectory leftStartingAutonThree = TrajectoryGenerator.generateTrajectory(
+                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+                        new Pose2d(4, 1, Rotation2d.fromDegrees(0))),
+                config);
+
+        public static Trajectory centerStartingAutonThree = TrajectoryGenerator.generateTrajectory(
+                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+                        new Pose2d(0, 1, Rotation2d.fromDegrees(0))),
+                config);
+
+        public static Trajectory rightStartingAutonThree = TrajectoryGenerator.generateTrajectory(
+                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+                        new Pose2d(1, -5, Rotation2d.fromDegrees(0))),
+                config);
+    }
+
+    public static class Five {
+        public static Trajectory leftStarting = TrajectoryGenerator.generateTrajectory( 
+                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(180)),
+                        new Pose2d(-3, 0, Rotation2d.fromDegrees(180))),
+                config);
+        
+
+        public static Trajectory pickupToShoot = TrajectoryGenerator.generateTrajectory(
+                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                        new Pose2d(5, 3, Rotation2d.fromDegrees(0))),
+                config();
+                
+    }
+
+    /**
      * Trajectories used in various eight ball autonomous configurations
      */
     public static class Eight {
@@ -42,6 +76,21 @@ public class Trajectories {
         public static Trajectory rightStartingAutonEight = TrajectoryGenerator.generateTrajectory(
                 List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(270)), 
                         new Pose2d(1, -5, Rotation2d.fromDegrees(270))),
+                config);
+    }
+    
+    /**
+     * Trajectories used in our eight ball trench auton
+     */
+    public static class EightTrench {
+        public static Trajectory middleStart = TrajectoryGenerator.generateTrajectory(
+                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(180)), 
+                        new Pose2d(3, -2, Rotation2d.fromDegrees(0))),
+                config);
+
+        public static Trajectory rightStart = TrajectoryGenerator.generateTrajectory(
+                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(180)), 
+                        new Pose2d(-2, -2, Rotation2d.fromDegrees(0))),
                 config);
     }
 
@@ -75,13 +124,13 @@ public class Trajectories {
      */
     public static class Common {
         public static Trajectory pickupFive = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(180)), 
-                        new Pose2d(2, 0, Rotation2d.fromDegrees(0))),
+                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(270)), 
+                        new Pose2d(1, -2, Rotation2d.fromDegrees(270))),
                 config);
                     
         public static Trajectory fromPickupFiveToShootingPosition = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-                        new Pose2d(2, 0, Rotation2d.fromDegrees(180))),
+                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(153.43)), 
+                        new Pose2d(-1, 2, Rotation2d.fromDegrees(153.43))),
                 config);
     }
     
@@ -108,16 +157,17 @@ public class Trajectories {
                 List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
                         new Pose2d(2, 2, Rotation2d.fromDegrees(90)), 
                         new Pose2d(0, 4, Rotation2d.fromDegrees(180)),
-                        new Pose2d(-2, 2, Rotation2d.fromDegrees(270)), new Pose2d(0, 0, Rotation2d.fromDegrees(0))), 
+                        new Pose2d(-2, 2, Rotation2d.fromDegrees(270)), 
+                        new Pose2d(0, 0, Rotation2d.fromDegrees(0))), 
                 config);
 
         public static Trajectory heart = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
                     new Pose2d(2, 2.5, Rotation2d.fromDegrees(90)),
-                    new Pose2d(1, 4, Rotation2d.fromDegrees(180)),
+                    new Pose2d(1, 4, Rotation2d.fromDegrees(210)),
                     new Pose2d(0, 3, Rotation2d.fromDegrees(180)),
-                    new Pose2d(-1, 4, Rotation2d.fromDegrees(180)),
-                    new Pose2d(-2, 2.5, Rotation2d.fromDegrees(-90)),
+                    new Pose2d(-1, 4, Rotation2d.fromDegrees(150)),
+                    new Pose2d(-2, 2.5, Rotation2d.fromDegrees(270)),
                     new Pose2d(0, 0, Rotation2d.fromDegrees(0))),
             config);
     }

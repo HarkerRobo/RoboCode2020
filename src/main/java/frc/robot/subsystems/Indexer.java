@@ -72,7 +72,7 @@ public class Indexer implements Subsystem {
         initializeSensors();
         setupTalons();
         // numPowerCells = 0;
-        solenoid = new Solenoid(RobotMap.CAN_IDS.INDEXER_SOLENOID);
+        // solenoid = new Solenoid(RobotMap.CAN_IDS.INDEXER_SOLENOID);
     }
 
     public void initializeSensors() {

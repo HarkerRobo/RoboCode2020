@@ -23,7 +23,6 @@ public class SwerveAutonAlignWithLimelight extends CommandBase {
     private PIDController thorController;
     private final double ALLOWABLE_ERROR = 0.1;
 
-
     public SwerveAutonAlignWithLimelight() {
         addRequirements(Drivetrain.getInstance());
 
@@ -68,7 +67,7 @@ public class SwerveAutonAlignWithLimelight extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Limelight.getTx() < ALLOWABLE_ERROR;
+        return Math.abs(Limelight.getTx()) < ALLOWABLE_ERROR;
     }
 
     @Override

@@ -1,14 +1,11 @@
 package frc.robot.commands.shooter;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.LinearFilter;
 import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
-import harkerrobolib.util.Conversions;
-import harkerrobolib.util.Conversions.SpeedUnit;
 
 /**
  * 64.111 distance is break point for far
@@ -37,9 +34,11 @@ public class SpinShooterLimelightAuton extends IndefiniteCommand {
     private LinearFilter averageFilter = LinearFilter.movingAverage(NUM_SAMPLES);
     private MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);
     private static long startTime;
-    private static final long TIMEOUT = 2000;
-    public SpinShooterLimelightAuton() {
+    private static long timeout;
+
+    public SpinShooterLimelightAuton(long timeout) {
         addRequirements(Shooter.getInstance());
+        this.timeout = timeout;
     }
 
     @Override
@@ -101,6 +100,6 @@ public class SpinShooterLimelightAuton extends IndefiniteCommand {
     }
 
     public boolean isFinished() { //TODO: actually make this 
-        return System.currentTimeMillis() - startTime > TIMEOUT;
+        return System.currentTimeMillis() - startTime > timeout;
     }
 }
