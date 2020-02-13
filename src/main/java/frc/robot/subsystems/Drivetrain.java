@@ -150,7 +150,7 @@ public class Drivetrain extends SubsystemBase {
             
             PIGEON_kP = 0.05;//creates angry robot if too high
 
-            MP_X_KP = 6.0;
+            MP_X_KP = 8.0;
             MP_X_KI = 0;
             MP_X_KD = 20;
 
@@ -222,7 +222,7 @@ public class Drivetrain extends SubsystemBase {
     public static final double MAX_DRIVE_ACCELERATION = 5;
     
     public static final double MP_MAX_DRIVE_VELOCITY = 4;
-    public static final double MP_MAX_DRIVE_ACCELERATION = 8;
+    public static final double MP_MAX_DRIVE_ACCELERATION = 4;
 
     public static final double GEAR_RATIO = 6;
 
@@ -319,9 +319,9 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("Position kI", ANGLE_POSITION_KI);
         // SmartDashboard.putNumber("Position kD", ANGLE_POSITION_KD);
 
-        // SmartDashboard.putNumber("MP X kP", MP_X_KP);
-        // SmartDashboard.putNumber("MP X kI", MP_X_KI);
-        // SmartDashboard.putNumber("MP X kD", MP_X_KD);
+        SmartDashboard.putNumber("MP X kP", MP_X_KP);
+        SmartDashboard.putNumber("MP X kI", MP_X_KI);
+        SmartDashboard.putNumber("MP X kD", MP_X_KD);
         SmartDashboard.putNumber("MP Y kP", MP_Y_KP);
         SmartDashboard.putNumber("MP Y kI", MP_Y_KI);
         SmartDashboard.putNumber("MP Y kD", MP_Y_KD);

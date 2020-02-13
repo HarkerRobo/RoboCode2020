@@ -148,7 +148,6 @@ public class HSSwerveDriveOdometry extends CommandBase {
                 heading.getRadians());
 
         double vRef = desiredState.velocityMetersPerSecond;
-
         targetXVel += vRef * poseError.getRotation().getCos();
         targetYVel += vRef * poseError.getRotation().getSin();
 
@@ -156,16 +155,15 @@ public class HSSwerveDriveOdometry extends CommandBase {
 
         var targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
+        SmartDashboard.putNumber("Target X Vel", targetXVel);
+        SmartDashboard.putNumber("Target Y Vel", targetYVel);
+        // SmartDashboard.putNumber("Trajectory Angle", heading.getDegrees());
+
         SmartDashboard.putNumber("Trajectory X Error", m_xController.getPositionError());
         SmartDashboard.putNumber("Trajectory Y Error", m_yController.getPositionError());
         SmartDashboard.putNumber("Trajectory Angle Error", Math.toDegrees(m_thetaController.getPositionError()));
 
-        SmartDashboard.putNumber("Pose X Error", poseError.getTranslation().getX());
-        SmartDashboard.putNumber("Pose Y Error", poseError.getTranslation().getY());
-        SmartDashboard.putNumber("Pose Angle Error", poseError.getRotation().getDegrees());
-
         m_outputModuleStates.accept(targetModuleStates);
-
     }
 
     @Override

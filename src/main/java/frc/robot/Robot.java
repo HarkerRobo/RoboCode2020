@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
         
         // BottomIntake.getInstance();
-        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
+        // Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
         // Indexer.getInstance();
         // Climber.getInstance();
     

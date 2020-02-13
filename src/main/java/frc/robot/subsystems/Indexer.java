@@ -54,7 +54,7 @@ public class Indexer implements Subsystem {
     
     // private static final int INTAKE_SENSOR_ID = 0;
     private static final int INDEXER_SENSOR_ID = 0;
-    private static final int SHOOTER_SENSOR_ID = 0;
+    private static final int SHOOTER_SENSOR_ID = 1;
 
     private static final double SPINE_DEFAULT_OUTPUT = 0;
 

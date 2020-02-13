@@ -60,11 +60,14 @@ public class SwerveManual extends CommandBase {
     private static double lastPigeonUpdateTime; // seconds
     private static double turnVel;
     private static double turnAccel;
+
+    private static boolean joystickFlag;
     
     public SwerveManual() {
         addRequirements(Drivetrain.getInstance());
 
         pigeonFlag = false;
+
         // pigeonAngle = 90;
         // prevPigeonHeading = 90;
         prevTime = Timer.getFPGATimestamp();
@@ -85,6 +88,8 @@ public class SwerveManual extends CommandBase {
         pigeonFlag = true;
         prevPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
         pigeonAngle = prevPigeonHeading;
+
+        joystickFlag = true;
     }
 
     @Override
@@ -92,6 +97,10 @@ public class SwerveManual extends CommandBase {
         translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
         turnMagnitude = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
+        
+        if (Math.abs(translateX) > 0 || Math.abs(translateY) > 0 || Math.abs(turnMagnitude) > 0) {
+            joystickFlag = true;
+        }
 
         //scale input from joysticks
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
@@ -114,7 +123,6 @@ public class SwerveManual extends CommandBase {
             turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
         }
 
-
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
@@ -122,7 +130,8 @@ public class SwerveManual extends CommandBase {
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
-        Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, false);
+        if (joystickFlag)
+            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, false);
 
         if(Timer.getFPGATimestamp() - lastPigeonUpdateTime > 0.01) {
             double currentTime = Timer.getFPGATimestamp();
