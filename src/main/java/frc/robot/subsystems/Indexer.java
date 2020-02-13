@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -14,11 +13,11 @@ import harkerrobolib.wrappers.HSTalon;
  * The indexer stores and transfers power cells from the intake to the shooter. It consists
  * of a single motor that spins a belt. 
  * 
+ * @author Chirag Kaushik
  * @author Shahzeb Lakhani
  * @author Anirudh Kotamraju
- * @author Chirag Kaushik
- * @author Jatin Kohli
  * @author Angela Jia
+ * @author Jatin Kohli
  * @author Aimee Wang
  * @since January 23, 2020
  */
@@ -59,11 +58,13 @@ public class Indexer implements Subsystem {
 
     private static final double SPINE_DEFAULT_OUTPUT = 0;
 
-    private static final double AGITATOR_DEFAULT_OUTPUT = 0;
+    public static final double AGITATOR_DEFAULT_OUTPUT = 0.5;
+
+    public static final double AGITATOR_CYCLE_DUR = 600;//millis
+
+    public static final double AGITATOR_ON_DURATION = 500;//millis
 
     private Solenoid solenoid;
-
-    // public int numPowerCells = 0;
 
     private Indexer() {
         spine = new HSTalon(RobotMap.CAN_IDS.SPINE_TALON_ID);
@@ -110,16 +111,21 @@ public class Indexer implements Subsystem {
 
     @Override
     public void periodic() {
-        boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
-        boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
+        long currentTime = System.currentTimeMillis();
+        // boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
+        // boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
 
-        if(BottomIntake.getInstance().getTalon().getStatorCurrent() > 0)
-            spinAgitator(AGITATOR_DEFAULT_OUTPUT);
+        // if(BottomIntake.getInstance().getTalon().getMotorOutputPercent() > 0) {
+        //     if (currentTime % AGITATOR_CYCLE_DUR < AGITATOR_ON_DURATION) {
+        //         spinAgitator(AGITATOR_DEFAULT_OUTPUT);
+        //     }
+        //     spinAgitator(0);
+        // }
 
-        if(!indexerDetected && !shooterDetected) {
-            spinSpine(SPINE_DEFAULT_OUTPUT);
-            spinAgitator(AGITATOR_DEFAULT_OUTPUT);
-        }
+        // if(!indexerDetected && !shooterDetected) {
+        //     spinSpine(SPINE_DEFAULT_OUTPUT);
+        //     spinAgitator(AGITATOR_DEFAULT_OUTPUT);
+        // }
     }
 
     public void spinSpine(double percentOutput) {

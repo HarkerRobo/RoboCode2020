@@ -11,7 +11,7 @@ import harkerrobolib.commands.IndefiniteCommand;
  * @author Jatin Kohli
  * @author Shahzeb Lakhani
  * @author Arjun Dixit
- * @author Anirudh Kotamaraju
+ * @author Anirudh Kotamraju
  * 
  * @since January 23, 2020
  */
@@ -29,6 +29,13 @@ public class MoveBallsToShooter extends IndefiniteCommand {
 
     @Override
     public void execute() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime % Indexer.AGITATOR_CYCLE_DUR > Indexer.AGITATOR_ON_DURATION) {
+            Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);
+        }
+        else {
+            Indexer.getInstance().spinAgitator(0);
+        }
         Indexer.getInstance().spinSpine(INDEX_PERCENT_OUTPUT);  
     }
     

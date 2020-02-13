@@ -1,30 +1,25 @@
 package frc.robot.commands.bottomintake;
 
-import frc.robot.OI;
 import frc.robot.subsystems.BottomIntake;
 import harkerrobolib.commands.IndefiniteCommand;
 
 /**
- * Spins the Bottom Intake 
+ * Spins the bottom intake at a specific percent output.
+ * 
+ * @author Chirag Kaushik
+ * @since February 12, 2020
  */
 public class SpinBottomIntake extends IndefiniteCommand {
+    private double magnitude;
 
-    public SpinBottomIntake() {
+    public SpinBottomIntake(double magnitude) {
         addRequirements(BottomIntake.getInstance());
+        this.magnitude = magnitude;
     }
 
     @Override
     public void execute() {
-        // bottomIntakeMagnitude = 1;
-        if (OI.getInstance().getDriverGamepad().getButtonX().get()) {
-            BottomIntake.getInstance().spinIntake(1);
-        } 
-        else if (OI.getInstance().getDriverGamepad().getButtonA().get()) {
-            BottomIntake.getInstance().spinIntake(-1); 
-        } 
-        else {
-            BottomIntake.getInstance().spinIntake(0);
-        }
+        BottomIntake.getInstance().spinIntake(magnitude);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package frc.robot.commands.indexer;
 
+import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Indexer;
 import harkerrobolib.commands.IndefiniteCommand;
 
@@ -16,21 +17,29 @@ import harkerrobolib.commands.IndefiniteCommand;
 public class SpinIndexer extends IndefiniteCommand {
     private static final double INDEX_SPEED = 0.2;
 
-    private boolean intakeFlag; // If the intake sensor just detected a ball
+    // private boolean intakeFlag; // If the intake sensor just detected a ball
     private boolean indexerFlag; // If the ball in front of the indexer sensor has evacuated
 
     public SpinIndexer() {
         addRequirements(Indexer.getInstance());
-        intakeFlag = false;
+        // intakeFlag = false;
         indexerFlag = false;
     }
 
     @Override
     public void execute() {
-      //  boolean intakeDetected = !Indexer.getInstance().getIntakeSensor().get();
-        boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
-        boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
+        // boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
+        // boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
+        long currentTime = System.currentTimeMillis();
+
+        Indexer.getInstance().spinSpine(INDEX_SPEED);
+        if (currentTime % Indexer.AGITATOR_CYCLE_DUR < Indexer.AGITATOR_ON_DURATION)
+            Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);
+        else
+            Indexer.getInstance().spinAgitator(0);
+
         
+
         // // If the indexer is full, never move
         // if(!shooterDetected) {
         //     // If something is currently next to the intake sensor, say that a ball has passed through this sensor.

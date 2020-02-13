@@ -85,13 +85,16 @@ public class BottomIntake extends SubsystemBase {
         return solenoid;
     }
 
+    public void spinIntake(double magnitude) {
+        if(magnitude == 0) 
+            talon.set(ControlMode.Disabled, 0);
+        else
+            talon.set(ControlMode.PercentOutput, OUTPUT_MULTIPLIER * magnitude);
+    }
+
     public static BottomIntake getInstance() {
         if(instance == null)
             instance = new BottomIntake();
         return instance;
-    }
-
-    public void spinIntake(double magnitude) {
-        talon.set(ControlMode.PercentOutput, OUTPUT_MULTIPLIER * magnitude);
     }
 }
