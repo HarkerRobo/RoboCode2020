@@ -19,6 +19,7 @@ import frc.robot.commands.drivetrain.auton.SwerveAutonAlignWithLimelight;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.indexer.SpinIndexer;
 import frc.robot.commands.shooter.SpinShooterLimelight;
+import frc.robot.commands.shooter.SpinShooterLimelightAuton;
 import frc.robot.commands.shooter.SpinShooterVelocity;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
@@ -105,14 +106,14 @@ public class OI
     SequentialCommandGroup eightBallAuton = new SequentialCommandGroup(
         new SwerveDriveWithOdometryProfiling(startingPositionEight.getValue(), heading),
         new SwerveAutonAlignWithLimelight(),
-        new SpinShooterLimelight().raceWith(
+        new SpinShooterLimelightAuton().raceWith(
             new MoveBallsToShooter()),
         new SwerveDriveWithOdometryProfiling(autonPartTwo, heading).raceWith(
             new SpinBottomIntake(1), 
             new SpinIndexer()),
         new SwerveDriveWithOdometryProfiling(autonPartThree, heading),
         new SwerveAutonAlignWithLimelight(),
-        new SpinShooterLimelight().raceWith(
+        new SpinShooterLimelightAuton().raceWith(
             new MoveBallsToShooter())
     );
 
@@ -122,14 +123,14 @@ public class OI
             new SpinIndexer()),
         new SwerveDriveWithOdometryProfiling(autonToShootingPositionTenBall, heading),
         new SwerveAutonAlignWithLimelight(),
-        new SpinShooterLimelight().raceWith(
+        new SpinShooterLimelightAuton().raceWith(
             new MoveBallsToShooter()),
         new SwerveDriveWithOdometryProfiling(autonPartTwo, heading).raceWith(
             new SpinBottomIntake(1), 
             new SpinIndexer()),
         new SwerveDriveWithOdometryProfiling(autonPartThree, heading),
         new SwerveAutonAlignWithLimelight(),
-        new SpinShooterLimelight().raceWith(
+        new SpinShooterLimelightAuton().raceWith(
             new MoveBallsToShooter())
     );
     
@@ -186,20 +187,10 @@ public class OI
 
         driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterLimelight(), new MoveBallsToShooter()));
 
-        driverGamepad.getButtonSelect().whilePressed(
-            new SequentialCommandGroup(
-                new SwerveDriveWithOdometryProfiling(leftStartingAutonEight, heading),
-                new SwerveAutonAlignWithLimelight(),
-                new SpinShooterLimelight().raceWith(
-                    new MoveBallsToShooter()),
-                new SwerveDriveWithOdometryProfiling(autonPartTwo, heading).raceWith(
-                    new SpinBottomIntake(1), 
-                    new SpinIndexer()),
-                new SwerveDriveWithOdometryProfiling(autonPartThree, heading),
-                new SwerveAutonAlignWithLimelight(),
-                new SpinShooterLimelight().raceWith(
-                    new MoveBallsToShooter())
-            ));
+        driverGamepad.getButtonSelect().whenPressed(
+            eightBallAuton
+        );
+            
 
         driverGamepad.getDownDPadButton().whenPressed(
             new ConditionalCommand(
