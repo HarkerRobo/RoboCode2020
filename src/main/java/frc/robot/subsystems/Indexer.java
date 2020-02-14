@@ -67,8 +67,8 @@ public class Indexer implements Subsystem {
 
     public static final double AGITATOR_ON_DURATION = 500;//millis
 
-    public static final DoubleSolenoid.Value IN = Value.kForward;
-    public static final DoubleSolenoid.Value OUT = Value.kReverse;
+    public static final DoubleSolenoid.Value CLOSED = Value.kForward;
+    public static final DoubleSolenoid.Value OPEN = Value.kReverse;
 
     private DoubleSolenoid solenoid;
 
@@ -97,6 +97,7 @@ public class Indexer implements Subsystem {
         spine.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
         spine.configOpenloopRamp(RAMP_RATE);
         spine.enableVoltageCompensation(true);
+
         agitator.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
         agitator.configOpenloopRamp(RAMP_RATE);
         agitator.enableVoltageCompensation(true);
@@ -107,6 +108,7 @@ public class Indexer implements Subsystem {
         spine.configForwardSoftLimitEnable(false);
         spine.configReverseSoftLimitEnable(false);
         spine.overrideLimitSwitchesEnable(false);
+        
         agitator.configForwardSoftLimitEnable(false);
         agitator.configReverseSoftLimitEnable(false);
         agitator.overrideLimitSwitchesEnable(false);

@@ -47,68 +47,8 @@ public class OI {
 
     public static TrajectoryConfig TRAJ_CONFIG = Trajectories.config;
 
-    private StartingPositionEight startingPositionEight = StartingPositionEight.LEFT;
-    private StartingPositionTen startingPositionTen = StartingPositionTen.LEFT;
-
     public static Rotation2d forwardHeading = Rotation2d.fromDegrees(180);
     public static Rotation2d pickupFiveHeading = Rotation2d.fromDegrees(120);
-
-    private enum StartingPositionEight {
-        LEFT(Trajectories.Eight.leftStartingAutonEight), MIDDLE(Trajectories.Eight.middleStartingAutonEight),
-        RIGHT(Trajectories.Eight.rightStartingAutonEight);
-
-        public Trajectory value;
-
-        private StartingPositionEight(Trajectory value) {
-            this.value = value;
-        }
-    }
-
-    private enum StartingPositionTen {
-        LEFT(Trajectories.Ten.leftStartingAutonTen), MIDDLE(Trajectories.Ten.middleStartingAutonTen),
-        RIGHT(Trajectories.Ten.rightStartingAutonTen);
-
-        public Trajectory value;
-
-        private StartingPositionTen(Trajectory value) {
-            this.value = value;
-        }
-    }
-
-    // Change heading to what it needs to be
-    // SequentialCommandGroup eightBallAuton = new SequentialCommandGroup(
-    // new SwerveDriveWithOdometryProfiling(startingPositionEight.getValue(),
-    // heading),
-    // new SwerveAutonAlignWithLimelight(),
-    // new SpinShooterLimelightAuton().raceWith(
-    // new MoveBallsToShooter()),
-    // new SwerveDriveWithOdometryProfiling(autonPartTwo, heading).raceWith(
-    // new SpinBottomIntake(1),
-    // new SpinIndexer()),
-    // new SwerveDriveWithOdometryProfiling(autonPartThree, heading),
-    // new SwerveAutonAlignWithLimelight(),
-    // new SpinShooterLimelightAuton().raceWith(
-    // new MoveBallsToShooter())
-    // );
-
-    // SequentialCommandGroup tenBallAuton = new SequentialCommandGroup(
-    // new SwerveDriveWithOdometryProfiling(startingPositionTen.getValue(),
-    // heading).raceWith(
-    // new SpinBottomIntake(1),
-    // new SpinIndexer()),
-    // new SwerveDriveWithOdometryProfiling(autonToShootingPositionTenBall,
-    // heading),
-    // new SwerveAutonAlignWithLimelight(),
-    // new SpinShooterLimelightAuton().raceWith(
-    // new MoveBallsToShooter()),
-    // new SwerveDriveWithOdometryProfiling(autonPartTwo, heading).raceWith(
-    // new SpinBottomIntake(1),
-    // new SpinIndexer()),
-    // new SwerveDriveWithOdometryProfiling(autonPartThree, heading),
-    // new SwerveAutonAlignWithLimelight(),
-    // new SpinShooterLimelightAuton().raceWith(
-    // new MoveBallsToShooter())
-    // );
 
     private OI() {
         driverGamepad = new XboxGamepad(RobotMap.DRIVER_PORT);
@@ -122,19 +62,12 @@ public class OI {
      */
     private void initBindings() {
         // driverGamepad.getButtonBumperRight().whilePressed(new ParallelCommandGroup(
-        // new SwerveAlignWithLimelight(),
-        // new SpinShooterLimelight()));
-        // driverGamepad.getButtonBumperLeft().whilePressed(new MoveBallsToShooter());
-        // driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {
-        // Drivetrain.getInstance().updatePositionPID();
-        // }));
-        // driverGamepad.getButtonBumperLeft().whenPressed(new
-        // InstantCommand(Shooter.getInstance()::toggleHoodAngle,
-        // Shooter.getInstance()));
+        //         new SwerveAlignWithLimelight(),
+        //         new SpinShooterLimelight()));
+
+        // driverGamepad.getButtonBumperLeft().whilePressed(new MoveBallsToShooter(false));
+        // driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> Drivetrain.getInstance().updatePositionPID()));
         // driverGamepad.getButtonY().whilePressed(new SpinShooterLimelight());
-        // constraint = new
-        // SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(),
-        // Drivetrain.MAX_DRIVE_VELOCITY);
 
         // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
@@ -158,26 +91,20 @@ public class OI {
         // driverGamepad.getDownDPadButton().whilePressed(new SpinnerManual());
         // driverGamepad.getDownDPadButton().whilePressed(
         //     new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(true)));
-        
-        // driverGamepad.getUpDPadButton().whilePressed(
-        //      new SpinIndexer(true));
-        // driverGamepad.getButtonSelect().whenPressed(
-        // eightBallAuton
-        // );
 
-        driverGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
+        operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
             Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR);
         }), new CallMethodCommand(() -> {
             Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR);
         }), () -> !RobotMap.IS_NIGHT));
 
-        driverGamepad.getRightDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
+        operatorGamepad.getRightDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
             Limelight.setPipeline(RobotMap.PIPELINES.DAY_MEDIUM);
         }), new CallMethodCommand(() -> {
             Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR);
         }), () -> !RobotMap.IS_NIGHT));
 
-        driverGamepad.getUpDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
+        operatorGamepad.getUpDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
             Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE);
         }), new CallMethodCommand(() -> {
             Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE);

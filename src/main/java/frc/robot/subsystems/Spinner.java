@@ -51,16 +51,16 @@ public class Spinner extends SubsystemBase {
     private final Color redTarget = ColorMatch.makeColor(0.480, 0.350, 0.114);
     private final Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
-    private static final boolean SPINNER_INVERT = false; // Fix
-    private static final boolean SPINNER_SENSOR_PHASE = false; //Fix
+    private static final boolean SPINNER_INVERT = false; 
+    private static final boolean SPINNER_SENSOR_PHASE = false;
 
     public static final int ALLOWABLE_ERROR = 100;
 
-    public static final int PEAK_DURATION = 10; // Fix
-    public static final int PEAK_LIMIT = 20; // Fix
-    public static final int CONT_LIMIT = 15; // Fix
+    public static final int PEAK_DURATION = 50;
+    public static final int PEAK_LIMIT = 40;
+    public static final int CONT_LIMIT = 30;
     
-    public static final double VOLTAGE_COMPENSATION = 0; // Fix
+    public static final double VOLTAGE_COMPENSATION = 10;
 
     public static final DoubleSolenoid.Value DOWN = Value.kReverse;
     public static final DoubleSolenoid.Value UP = Value.kForward;

@@ -15,28 +15,28 @@ import harkerrobolib.commands.IndefiniteCommand;
  */
 public class SpinShooterLimelightAuton extends IndefiniteCommand {
     public static double LIMELIGHT_ANGLE = 18;
-    public static final double LIMELIGHT_HEIGHT = 1.54; // tune
-    public static final double TARGET_HEIGHT = 7.5625; // tune
+    public static final double LIMELIGHT_HEIGHT = 1.54;
+    public static final double TARGET_HEIGHT = 7.5625;
 
     public static final double SHOOTER_HIGH_ANGLE_DEGREES = 50;
     public static final double SHOOTER_LOW_ANGLE_DEGREES = 21;
     
-    private static final double SCALE = 1.6;//1.6
+    // private static final double SCALE = 1.6;
     private static final double SCALE_A = 0.00867972;//LIN_SCALE 2.32;
     private static final double SCALE_B = -0.207790;
     private static final double SCALE_C = 92.998;
 
-    private static final double BB_BELOW_OUTPUT = 0.9;
-    private static final double BB_ABOVE_OUTPUT = 0;
+    // private static final double BB_BELOW_OUTPUT = 0.9;
+    // private static final double BB_ABOVE_OUTPUT = 0;
 
     private static final int NUM_SAMPLES = 180;
-    private static double DISTANCE_SCALE; //Accounts for offset in limelight
+    // private static double DISTANCE_SCALE; //Accounts for offset in limelight
     private LinearFilter averageFilter = LinearFilter.movingAverage(NUM_SAMPLES);
     private MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);
     private static long startTime;
-    private static long timeout;
+    private static double timeout;
 
-    public SpinShooterLimelightAuton(long timeout) {
+    public SpinShooterLimelightAuton(double timeout) {
         addRequirements(Shooter.getInstance());
         this.timeout = timeout;
     }
@@ -51,7 +51,6 @@ public class SpinShooterLimelightAuton extends IndefiniteCommand {
     }
     
     public void execute() {
-        
         double distance = Shooter.getInstance().getLimelightDistance();
         
         // Shooter.getInstance().spinShooter(initialVelocity + MULTIPLIER * distance);
@@ -91,15 +90,16 @@ public class SpinShooterLimelightAuton extends IndefiniteCommand {
 
         SmartDashboard.putNumber("Shooter set velocity", desiredVel);
         SmartDashboard.putNumber("Shooter actual velocity", Shooter.getInstance().getMaster().getSelectedSensorVelocity());
-        SmartDashboard.putNumber("Shooter velocity error", Shooter.getInstance().getMaster().getClosedLoopError());
-            
-        }
+        SmartDashboard.putNumber("Shooter velocity error", Shooter.getInstance().getMaster().getClosedLoopError());  
+    }
+
+    @Override
+    public boolean isFinished() { 
+        return System.currentTimeMillis() - startTime > timeout;
+    }
+
     @Override
     public void end(boolean interrupted) {
         Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0);
-    }
-
-    public boolean isFinished() { //TODO: actually make this 
-        return System.currentTimeMillis() - startTime > timeout;
     }
 }

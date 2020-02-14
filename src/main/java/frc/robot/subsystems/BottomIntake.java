@@ -15,9 +15,13 @@ import harkerrobolib.wrappers.HSTalon;
  * @author Shahzeb Lakhani
  * @author Anirudh Kotamraju
  * @author Chirag Kaushik
+ * @author Angela Jia
  * @since January 6, 2020
  */
 public class BottomIntake extends SubsystemBase {
+
+    public static final Value IN = Value.kReverse;
+    public static final Value OUT = Value.kForward;
 
     static {
         if(RobotMap.IS_PRACTICE) {
@@ -25,7 +29,7 @@ public class BottomIntake extends SubsystemBase {
         } else {
             MOTOR_INVERT = true; //Change accordingly
         }
-    }  
+    }
 
     private static BottomIntake instance;
 
@@ -35,8 +39,6 @@ public class BottomIntake extends SubsystemBase {
 
     private static final double VOLTAGE_COMPENSATION = 10;
     
-    public static final double DEFAULT_ROLLER_MAGNITUDE_INTAKE = 0;
-
     private static final int INTAKE_CURRENT_CONTINUOUS = 40;
     private static final int INTAKE_CURRENT_PEAK = 50;
     private static final int INTAKE_CURRENT_PEAK_DUR = 100;
@@ -44,9 +46,6 @@ public class BottomIntake extends SubsystemBase {
     private static final double OUTPUT_MULTIPLIER = 0.7;
 
     private static final boolean SENSOR_PHASE = true;
-
-    public static final DoubleSolenoid.Value IN = Value.kReverse;
-    public static final DoubleSolenoid.Value OUT = Value.kForward;
 
     private DoubleSolenoid solenoid; 
 

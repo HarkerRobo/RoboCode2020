@@ -61,7 +61,7 @@ import frc.robot.util.Limelight;
  *  Intake (1 double solenoid)
  *  Indexer (1 single)
  *  Shooter Hood (1 single)
-
+ *
  * @since 01/06/20
  */
 public class Robot extends TimedRobot {
@@ -75,17 +75,18 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
-        
         BottomIntake.getInstance();
-        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
         Indexer.getInstance();
+        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
+        Spinner.getInstance();
         // Climber.getInstance();
-    
+
         OI.getInstance();
         compressor = new Compressor();
 
         Limelight.setLEDS(true);
-        Indexer.getInstance().getSolenoid().set(Indexer.OUT);
+
+        Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
         Spinner.getInstance().getSolenoid().set(Spinner.DOWN);
     }
 
@@ -106,14 +107,13 @@ public class Robot extends TimedRobot {
 
         if (RobotMap.IS_PRACTICE)
             compressor.stop();
-    
 
-        SmartDashboard.putNumber( "Indexer Current", Indexer.getInstance().getSpine().getStatorCurrent());
-        SmartDashboard.putNumber( "Spinner Current", Spinner.getInstance().getSpinnerMotor().getStatorCurrent());
-        SmartDashboard.putNumber( "Shooter Current", Shooter.getInstance().getMaster().getStatorCurrent());
-        SmartDashboard.putNumber( "Intake Current", BottomIntake.getInstance().getTalon().getStatorCurrent());
+        SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getStatorCurrent());
+        SmartDashboard.putNumber("Spinner Current", Spinner.getInstance().getSpinnerMotor().getStatorCurrent());
+        SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getStatorCurrent());
+        SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getStatorCurrent());
 
-        Indexer.getInstance().getSolenoid().set(Indexer.OUT);
+        Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
 
         // SmartDashboard.putNumber("TL Angle Error", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopError());
         // SmartDashboard.putNumber("TR Angle Error", Drivetrain.getInstance().getTopRight().getAngleMotor().getClosedLoopError());
@@ -126,8 +126,6 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putNumber("BR Drive Error", Drivetrain.getInstance().getBackRight().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
 
         // SmartDashboard.putNumber("TL Drive Current", Drivetrain.getInstance().getTopLeft().getDriveMotor().getStatorCurrent());
-
-        // SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
     }
 
     /**
@@ -155,12 +153,12 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledPeriodic() {
-        // Limelight.setLEDS(true);
+    public void disabledInit() {
+        Limelight.setLEDS(true);
     }
 
     @Override
-    public void disabledInit() {
-        Limelight.setLEDS(true); //8ft 2.25 in
+    public void disabledPeriodic() {
+        
     }
 }
