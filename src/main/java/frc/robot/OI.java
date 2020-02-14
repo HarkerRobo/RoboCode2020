@@ -153,7 +153,7 @@ public class OI {
         // driverGamepad.getButtonB().whilePressed(new SpinBottomIntake(1));
 
         driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(
-            new SpinShooterLimelight(),  new SequentialCommandGroup(new WaitCommand(2), new MoveBallsToShooter(false))));
+            new SpinShooterLimelight(),  new SequentialCommandGroup(new WaitCommand(4), new MoveBallsToShooter(false))));
 
         // driverGamepad.getDownDPadButton().whilePressed(new SpinnerManual());
         // driverGamepad.getDownDPadButton().whilePressed(

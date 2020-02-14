@@ -30,6 +30,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     private static final double SCALE_A = 0.00867972;//LIN_SCALE 2.32;
     private static final double SCALE_B = -0.207790;
     private static final double SCALE_C = 92.998;
+    
 
     private static final double BB_BELOW_OUTPUT = 0.9;
     private static final double BB_ABOVE_OUTPUT = 0;
