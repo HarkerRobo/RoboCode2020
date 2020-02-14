@@ -6,8 +6,8 @@ package frc.robot;
  * @since 01/06/20
  */
 public class RobotMap {
-	public static final boolean IS_PRACTICE = true; 
-	public static final boolean IS_NIGHT = false;
+	public static final boolean IS_PRACTICE = false; 
+	public static final boolean IS_NIGHT = true;
 
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;
@@ -23,23 +23,24 @@ public class RobotMap {
      * Stores CAN Id constants.
      */
 	public static class CAN_IDS {
-        public static final int INTAKE_MOTOR_ID = -1;
-        public static final int INTAKE_SOLENOID_FORWARD = -1;
-		public static final int INTAKE_SOLENOID_REVERSE = -1;
+        public static final int INTAKE_MOTOR_ID = 10;
+        public static final int INTAKE_SOLENOID_FORWARD = 3;
+		public static final int INTAKE_SOLENOID_REVERSE = 4;
         
-        public static final int SPINNER_ID = 0;
-		public static final int SPINNER_SOLENOID_FORWARD = 3;
-        public static final int SPINNER_SOLENOID_REVERSE = 4;
+        public static final int SPINNER_ID = 13;
+		public static final int SPINNER_SOLENOID_FORWARD = 7;
+        public static final int SPINNER_SOLENOID_REVERSE = 0;
         public static final int SPINNER_CANCODER = 0;
         		
-        public static final int SPINE_TALON_ID = -1;
-        public static final int AGITATOR_TALON_ID = -1; //For Color Spinner and one indexer motor
-        public static final int INDEXER_SOLENOID = -1;
+        public static final int SPINE_TALON_ID = 12;
+        public static final int AGITATOR_TALON_ID = 13; //For Color Spinner and one indexer motor
+		public static final int INDEXER_SOLENOID_FORWARD = 2;
+		public static final int INDEXER_SOLENOID_REVERSE = 5;
         
 		public static final int SHOOTER_MASTER_ID = 8;
 		public static final int SHOOTER_FOLLOWER_ID = 9;
-		public static final int SHOOTER_SOLENOID_FORWARD = 7;
-		public static final int SHOOTER_BACKWARD = 0;
+		public static final int SHOOTER_SOLENOID_FORWARD = 6;
+		public static final int SHOOTER_BACKWARD = 1;
 
 		public static final int CLIMBER_MASTER_ID = -1;
 		public static final int CLIMBER_FOLLOWER_ID = -1;

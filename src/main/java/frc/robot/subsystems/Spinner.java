@@ -8,6 +8,7 @@ import com.revrobotics.ColorMatchResult;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -60,6 +61,9 @@ public class Spinner extends SubsystemBase {
     public static final int CONT_LIMIT = 15; // Fix
     
     public static final double VOLTAGE_COMPENSATION = 0; // Fix
+
+    public static final DoubleSolenoid.Value DOWN = Value.kReverse;
+    public static final DoubleSolenoid.Value UP = Value.kForward;
 
     public enum ColorValue {
         RED(0), GREEN(1), BLUE(2), YELLOW(3); //Tune values for offset
@@ -170,5 +174,9 @@ public class Spinner extends SubsystemBase {
         if(instance == null)
             instance = new Spinner();
         return instance;
+    }
+
+    public void toggleSolenoid() {
+        solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
     }
 }

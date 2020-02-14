@@ -13,8 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.shooter.SpinShooterManual;
+import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 import frc.robot.util.Limelight;
     
 /**
@@ -73,15 +76,17 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
         
-        // BottomIntake.getInstance();
-        // Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
-        // Indexer.getInstance();
+        BottomIntake.getInstance();
+        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
+        Indexer.getInstance();
         // Climber.getInstance();
     
         OI.getInstance();
         compressor = new Compressor();
 
         Limelight.setLEDS(true);
+        Indexer.getInstance().getSolenoid().set(Indexer.OUT);
+        Spinner.getInstance().getSolenoid().set(Spinner.DOWN);
     }
 
     /**
@@ -102,6 +107,14 @@ public class Robot extends TimedRobot {
         if (RobotMap.IS_PRACTICE)
             compressor.stop();
     
+
+        SmartDashboard.putNumber( "Indexer Current", Indexer.getInstance().getSpine().getStatorCurrent());
+        SmartDashboard.putNumber( "Spinner Current", Spinner.getInstance().getSpinnerMotor().getStatorCurrent());
+        SmartDashboard.putNumber( "Shooter Current", Shooter.getInstance().getMaster().getStatorCurrent());
+        SmartDashboard.putNumber( "Intake Current", BottomIntake.getInstance().getTalon().getStatorCurrent());
+
+        Indexer.getInstance().getSolenoid().set(Indexer.OUT);
+
         // SmartDashboard.putNumber("TL Angle Error", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopError());
         // SmartDashboard.putNumber("TR Angle Error", Drivetrain.getInstance().getTopRight().getAngleMotor().getClosedLoopError());
         // SmartDashboard.putNumber("BL Angle Error", Drivetrain.getInstance().getBackLeft().getAngleMotor().getClosedLoopError());
@@ -148,6 +161,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        // Limelight.setLEDS(false); //8ft 2.25 in
+        Limelight.setLEDS(true); //8ft 2.25 in
     }
 }

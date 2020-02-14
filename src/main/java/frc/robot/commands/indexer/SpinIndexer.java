@@ -1,5 +1,6 @@
 package frc.robot.commands.indexer;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Indexer;
 import harkerrobolib.commands.IndefiniteCommand;
@@ -15,28 +16,35 @@ import harkerrobolib.commands.IndefiniteCommand;
  * @since January 23, 2020
  */
 public class SpinIndexer extends IndefiniteCommand {
-    private static final double INDEX_SPEED = 0.2;
-
+    private static final double INDEX_SPEED = 1;
+    private boolean backwards;
     // private boolean intakeFlag; // If the intake sensor just detected a ball
     private boolean indexerFlag; // If the ball in front of the indexer sensor has evacuated
 
-    public SpinIndexer() {
+    public SpinIndexer(boolean backwards) {
         addRequirements(Indexer.getInstance());
         // intakeFlag = false;
         indexerFlag = false;
+        this.backwards = backwards;
     }
 
     @Override
     public void execute() {
         // boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
-        // boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
+        boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
         long currentTime = System.currentTimeMillis();
 
-        Indexer.getInstance().spinSpine(INDEX_SPEED);
+        SmartDashboard.putBoolean("Shooter Detected", shooterDetected);
+
+        if(!shooterDetected || backwards)
+            Indexer.getInstance().spinSpine(backwards? -INDEX_SPEED : INDEX_SPEED);
+        else
+            Indexer.getInstance().spinSpine(0);
+
         if (currentTime % Indexer.AGITATOR_CYCLE_DUR < Indexer.AGITATOR_ON_DURATION)
             Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);
         else
-            Indexer.getInstance().spinAgitator(0);
+            Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);
 
         
 
@@ -69,6 +77,7 @@ public class SpinIndexer extends IndefiniteCommand {
 
     @Override
     public void end(boolean interrupted) {
-       // Indexer.getInstance().spinIndexer(INDEX_SPEED);
+        Indexer.getInstance().spinSpine(0);
+        Indexer.getInstance().spinAgitator(0);
     }
 }

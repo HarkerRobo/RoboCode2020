@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.bottomintake.SpinBottomIntake;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
@@ -21,7 +22,9 @@ import frc.robot.commands.indexer.SpinIndexer;
 import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.commands.shooter.SpinShooterLimelightAuton;
 import frc.robot.commands.shooter.SpinShooterVelocity;
+import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
 import frc.robot.auto.Trajectories;
@@ -133,15 +136,31 @@ public class OI {
         // SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(),
         // Drivetrain.MAX_DRIVE_VELOCITY);
 
-        driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
+        // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
+        
+        // driverGamepad.getButtonY().whenPressed(new SpinIndexer());
+        driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {
+            Indexer.getInstance().toggleSolenoid();
+        }));
 
-        // driverGamepad.getButtonB().whilePressed(new ParallelCommandGroup(new
-        // SpinBottomIntake(1), new SpinIndexer()));
+        driverGamepad.getButtonA().whenPressed(new InstantCommand(() -> {
+            BottomIntake.getInstance().toggleSolenoid();
+        }));
 
-        // driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new
-        // SpinShooterLimelight(), new MoveBallsToShooter()));
+        driverGamepad.getButtonB().whilePressed(
+            new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(false)));
+        // driverGamepad.getButtonB().whilePressed(new SpinBottomIntake(1));
 
+        driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(
+            new SpinShooterLimelight(),  new SequentialCommandGroup(new WaitCommand(2), new MoveBallsToShooter(false))));
+
+        // driverGamepad.getDownDPadButton().whilePressed(new SpinnerManual());
+        // driverGamepad.getDownDPadButton().whilePressed(
+        //     new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(true)));
+        
+        // driverGamepad.getUpDPadButton().whilePressed(
+        //      new SpinIndexer(true));
         // driverGamepad.getButtonSelect().whenPressed(
         // eightBallAuton
         // );
@@ -182,12 +201,12 @@ public class OI {
         // },
         // Drivetrain.getInstance()));
 
-        driverGamepad.getButtonA().whenPressed(
-                new SwerveDriveWithOdometryProfiling(Trajectories.Test.heart, Rotation2d.fromDegrees(0)));
+        // driverGamepad.getButtonA().whenPressed(
+        //         new SwerveDriveWithOdometryProfiling(Trajectories.Test.heart, Rotation2d.fromDegrees(0)));
 
-        driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
-            Drivetrain.getInstance().getPigeon().setFusedHeading(0);
-        }));
+        // driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> {
+        //     Drivetrain.getInstance().getPigeon().setFusedHeading(0);
+        // }));
     }
 
     /**

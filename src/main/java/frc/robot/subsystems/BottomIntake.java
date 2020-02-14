@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import harkerrobolib.wrappers.HSTalon;
@@ -22,7 +23,7 @@ public class BottomIntake extends SubsystemBase {
         if(RobotMap.IS_PRACTICE) {
             MOTOR_INVERT = false; //Change accordingly
         } else {
-            MOTOR_INVERT = false; //Change accordingly
+            MOTOR_INVERT = true; //Change accordingly
         }
     }  
 
@@ -37,19 +38,22 @@ public class BottomIntake extends SubsystemBase {
     public static final double DEFAULT_ROLLER_MAGNITUDE_INTAKE = 0;
 
     private static final int INTAKE_CURRENT_CONTINUOUS = 40;
-
     private static final int INTAKE_CURRENT_PEAK = 50;
-
     private static final int INTAKE_CURRENT_PEAK_DUR = 100;
 
-    private static final double OUTPUT_MULTIPLIER = 0.5;
+    private static final double OUTPUT_MULTIPLIER = 0.7;
+
+    private static final boolean SENSOR_PHASE = true;
+
+    public static final DoubleSolenoid.Value IN = Value.kReverse;
+    public static final DoubleSolenoid.Value OUT = Value.kForward;
 
     private DoubleSolenoid solenoid; 
 
     private BottomIntake() {
         talon = new HSTalon(RobotMap.CAN_IDS.INTAKE_MOTOR_ID);
 
-        // solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.INTAKE_SOLENOID_FORWARD, RobotMap.CAN_IDS.INTAKE_SOLENOID_REVERSE);
+        solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.INTAKE_SOLENOID_FORWARD, RobotMap.CAN_IDS.INTAKE_SOLENOID_REVERSE);
 
         setupTalons();
     }
@@ -75,6 +79,7 @@ public class BottomIntake extends SubsystemBase {
     
         talon.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
         talon.enableVoltageCompensation(true);
+        talon.setSensorPhase(SENSOR_PHASE);
     }
 
     public HSTalon getTalon() {
@@ -90,6 +95,10 @@ public class BottomIntake extends SubsystemBase {
             talon.set(ControlMode.Disabled, 0);
         else
             talon.set(ControlMode.PercentOutput, OUTPUT_MULTIPLIER * magnitude);
+    }
+
+    public void toggleSolenoid() {
+        solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
     }
 
     public static BottomIntake getInstance() {

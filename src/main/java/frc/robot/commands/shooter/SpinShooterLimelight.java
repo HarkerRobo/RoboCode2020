@@ -19,7 +19,7 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  * Aligns the drivetrain to a target using limelight and revs up the shooter to be prepared to shoot.
  */
 public class SpinShooterLimelight extends IndefiniteCommand {
-    public static double LIMELIGHT_ANGLE = 18;
+    public static double LIMELIGHT_ANGLE = 12;// 18;
     public static final double LIMELIGHT_HEIGHT = 1.54; // tune
     public static final double TARGET_HEIGHT = 7.5625; // tune
 

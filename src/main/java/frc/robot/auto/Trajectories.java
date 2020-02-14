@@ -52,10 +52,10 @@ public class Trajectories {
                 config);
         
 
-        public static Trajectory pickupToShoot = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                        new Pose2d(5, 3, Rotation2d.fromDegrees(0))),
-                config();
+        // public static Trajectory pickupToShoot = TrajectoryGenerator.generateTrajectory(
+        //         List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+        //                 new Pose2d(5, 3, Rotation2d.fromDegrees(0))),
+        //         config;
                 
     }
 

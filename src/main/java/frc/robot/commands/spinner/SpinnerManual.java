@@ -8,7 +8,7 @@ import harkerrobolib.commands.IndefiniteCommand;
 import harkerrobolib.util.MathUtil;
 
 public class SpinnerManual extends IndefiniteCommand {
-    private static final double OUTPUT_MULTIPLIER = 0.3;
+    private static final double OUTPUT_MULTIPLIER = 0.4;
 
     public SpinnerManual() {
         addRequirements(Spinner.getInstance());

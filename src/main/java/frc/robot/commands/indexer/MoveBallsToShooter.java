@@ -17,31 +17,33 @@ import harkerrobolib.commands.IndefiniteCommand;
  */
 public class MoveBallsToShooter extends IndefiniteCommand {
     private static final double INDEX_PERCENT_OUTPUT = 0.8; //0.89
+    private boolean backwards;
 
-    public MoveBallsToShooter() {
+    public MoveBallsToShooter(boolean backwards) {
         addRequirements(Indexer.getInstance()); 
+        this.backwards = backwards;
     }
 
     @Override
     public void initialize() {
-        Indexer.getInstance().getSolenoid().set(false);
+        // Indexer.getInstance().getSolenoid().set(Value.kReverse);
     }
 
     @Override
     public void execute() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime % Indexer.AGITATOR_CYCLE_DUR > Indexer.AGITATOR_ON_DURATION) {
+        if (currentTime % Indexer.AGITATOR_CYCLE_DUR < Indexer.AGITATOR_ON_DURATION)
             Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);
-        }
-        else {
-            Indexer.getInstance().spinAgitator(0);
-        }
+        else
+            Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);
+
         Indexer.getInstance().spinSpine(INDEX_PERCENT_OUTPUT);  
     }
     
     @Override
     public void end(boolean interrupted) {
         Indexer.getInstance().spinSpine(0);
-        Indexer.getInstance().getSolenoid().set(true);
+        Indexer.getInstance().spinAgitator(0);
+        // Indexer.getInstance().getSolenoid().set(Value.kForward);
     }
 }

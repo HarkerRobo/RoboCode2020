@@ -43,25 +43,23 @@ public class Autons {
     // move to the other side of rendevous, shoot, pickup those three and shoot
 
     private static final SequentialCommandGroup fiveBallAuton = new SequentialCommandGroup(
-            new SwerveDriveWithOdometryProfiling(fiveStartTrajectory, OI.forwardHeading),
-            new 
+            new SwerveDriveWithOdometryProfiling(fiveStartTrajectory, OI.forwardHeading)
     );
-
 
     private static final SequentialCommandGroup rendevousEightBallAuton = new SequentialCommandGroup(
             new SwerveDriveWithOdometryProfiling(firstTrajectory, rendevousTwoBallPickupHeading)
-                    .raceWith(new SpinBottomIntake(1), new SpinIndexer()),
-            new ParallelRaceGroup(new SpinBottomIntake(1), new SpinIndexer(), new WaitCommand(0.5)),
+                    .raceWith(new SpinBottomIntake(1), new SpinIndexer(false)),
+            new ParallelRaceGroup(new SpinBottomIntake(1), new SpinIndexer(false), new WaitCommand(0.5)),
             new SwerveDriveWithOdometryProfiling(secondTrajectory, OI.forwardHeading)
                     .raceWith(new SpinShooterVelocity(REV_SPEED)),
             new SwerveAutonAlignWithLimelight().raceWith(new SpinShooterVelocity(REV_SPEED)),
-            new SpinShooterLimelight().raceWith(new WaitCommand(2), new MoveBallsToShooter()),
+            new SpinShooterLimelight().raceWith(new WaitCommand(2), new MoveBallsToShooter(false)),
             new SwerveDriveWithOdometryProfiling(thirdTrajectory, OI.forwardHeading).raceWith(new SpinBottomIntake(1),
-                    new SpinIndexer()),
-            new ParallelRaceGroup(new SpinBottomIntake(1), new SpinIndexer(), new WaitCommand(0.5)),
+                    new SpinIndexer(false)),
+            new ParallelRaceGroup(new SpinBottomIntake(1), new SpinIndexer(false), new WaitCommand(0.5)),
             new SwerveAutonAlignWithLimelight().raceWith(new SpinShooterVelocity(REV_SPEED)),
             new SpinShooterVelocity(REV_SPEED).raceWith(new WaitCommand(1)),
-            new SpinShooterLimelight().raceWith(new WaitCommand(2), new MoveBallsToShooter())
+            new SpinShooterLimelight().raceWith(new WaitCommand(2), new MoveBallsToShooter(false))
     );
 
     // private static Trajectory trenchEightBallStart = Trajectories.
