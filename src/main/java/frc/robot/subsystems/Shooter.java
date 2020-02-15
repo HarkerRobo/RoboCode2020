@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.commands.shooter.SpinShooterLimelight;
@@ -108,7 +109,6 @@ public class Shooter implements Subsystem {
         
         setupFlywheel();
     }
-
 
     @Override
     public void periodic() {

@@ -1,13 +1,8 @@
 package frc.robot;
 
-import java.util.List;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -15,12 +10,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.bottomintake.SpinBottomIntake;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
-import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.commands.drivetrain.auton.SwerveAutonAlignWithLimelight;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.indexer.SpinIndexer;
 import frc.robot.commands.shooter.SpinShooterLimelight;
-import frc.robot.commands.shooter.SpinShooterLimelightAuton;
 import frc.robot.commands.shooter.SpinShooterVelocity;
 import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
@@ -86,7 +79,7 @@ public class OI {
         // driverGamepad.getButtonB().whilePressed(new SpinBottomIntake(1));
 
         driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(
-            new SpinShooterLimelight(),  new SequentialCommandGroup(new WaitCommand(4), new MoveBallsToShooter(false))));
+            new SpinShooterLimelight(),  new SequentialCommandGroup(new WaitCommand(2), new MoveBallsToShooter(false))));
 
         // driverGamepad.getDownDPadButton().whilePressed(new SpinnerManual());
         // driverGamepad.getDownDPadButton().whilePressed(

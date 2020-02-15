@@ -12,6 +12,7 @@ import harkerrobolib.commands.IndefiniteCommand;
  * @author Shahzeb Lakhani
  * @author Arjun Dixit
  * @author Anirudh Kotamraju
+ * @author Angela Jia
  * 
  * @since January 23, 2020
  */

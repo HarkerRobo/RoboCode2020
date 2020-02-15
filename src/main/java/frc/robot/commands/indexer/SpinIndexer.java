@@ -13,6 +13,7 @@ import harkerrobolib.commands.IndefiniteCommand;
  * @author Jatin Kohli
  * @author Anirudh Kotamraju
  * @author Arjun Dixit
+ * @author Angela Jia
  * @since January 23, 2020
  */
 public class SpinIndexer extends IndefiniteCommand {

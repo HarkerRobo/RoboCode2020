@@ -19,6 +19,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
 import frc.robot.util.Limelight;
+import frc.robot.auto.Autons;
     
 /**
  * Has anyone heard of the team that ran out of code? (This is a real story)
@@ -126,6 +127,13 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putNumber("BR Drive Error", Drivetrain.getInstance().getBackRight().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
 
         // SmartDashboard.putNumber("TL Drive Current", Drivetrain.getInstance().getTopLeft().getDriveMotor().getStatorCurrent());
+
+        // CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
+    }
+
+    @Override
+    public void autonomousInit() {
+        
     }
 
     /**
@@ -154,7 +162,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        Limelight.setLEDS(true);
+        Limelight.setLEDS(false);
     }
 
     @Override

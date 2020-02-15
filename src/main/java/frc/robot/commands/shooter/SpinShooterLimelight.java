@@ -1,7 +1,6 @@
 package frc.robot.commands.shooter;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.LinearFilter;
 import edu.wpi.first.wpilibj.MedianFilter;
@@ -9,8 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
-import harkerrobolib.util.Conversions;
-import harkerrobolib.util.Conversions.SpeedUnit;
 
 /**
  * 64.111 distance is break point for far
@@ -19,7 +16,7 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  * Aligns the drivetrain to a target using limelight and revs up the shooter to be prepared to shoot.
  */
 public class SpinShooterLimelight extends IndefiniteCommand {
-    public static double LIMELIGHT_ANGLE = 12;// 18;
+    public static double LIMELIGHT_ANGLE = 18;
     public static final double LIMELIGHT_HEIGHT = 1.54; // tune
     public static final double TARGET_HEIGHT = 7.5625; // tune
 
@@ -42,6 +39,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
 
     public SpinShooterLimelight() {
         addRequirements(Shooter.getInstance());
+        // SmartDashboard.putNumber("Limelight angle", LIMELIGHT_ANGLE);
     }
 
     @Override
@@ -55,11 +53,11 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     public void execute() {
         
         double distance = Shooter.getInstance().getLimelightDistance();
-        
+        LIMELIGHT_ANGLE = SmartDashboard.getNumber("Limelight angle", LIMELIGHT_ANGLE);
         // Shooter.getInstance().spinShooter(initialVelocity + MULTIPLIER * distance);
        
         double averageDistance = medianFilter.calculate(distance);
-        
+        SmartDashboard.putNumber("distance", averageDistance);
         // linear scale
         // double desiredVel = averageDistance * SmartDashboard.getNumber("scale", SCALE);
 
