@@ -1,7 +1,8 @@
 package frc.robot.commands.indexer;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Indexer;
 import harkerrobolib.commands.IndefiniteCommand;
 
@@ -30,6 +31,11 @@ public class SpinIndexer extends IndefiniteCommand {
     }
 
     @Override
+    public void initialize() {
+        Indexer.getInstance().getAgitator().setNeutralMode(NeutralMode.Coast);
+    }
+
+    @Override
     public void execute() {
         // boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
         boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
@@ -46,8 +52,6 @@ public class SpinIndexer extends IndefiniteCommand {
             Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);
         else
             Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);
-
-        
 
         // // If the indexer is full, never move
         // if(!shooterDetected) {

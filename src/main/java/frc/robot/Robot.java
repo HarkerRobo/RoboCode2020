@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.shooter.SpinShooterManual;
+import frc.robot.commands.spinner.SpinnerManual;
 import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
@@ -76,6 +77,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
+        Spinner.getInstance().setDefaultCommand(new SpinnerManual());
         BottomIntake.getInstance();
         Indexer.getInstance();
         Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
@@ -86,9 +88,7 @@ public class Robot extends TimedRobot {
         compressor = new Compressor();
 
         Limelight.setLEDS(true);
-
         Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
-        Spinner.getInstance().getSolenoid().set(Spinner.DOWN);
     }
 
     /**
@@ -110,7 +110,6 @@ public class Robot extends TimedRobot {
             compressor.stop();
 
         SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getStatorCurrent());
-        SmartDashboard.putNumber("Spinner Current", Spinner.getInstance().getSpinnerMotor().getStatorCurrent());
         SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getStatorCurrent());
         SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getStatorCurrent());
 
@@ -163,10 +162,5 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         Limelight.setLEDS(false);
-    }
-
-    @Override
-    public void disabledPeriodic() {
-        
     }
 }

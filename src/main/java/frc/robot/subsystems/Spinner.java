@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import harkerrobolib.wrappers.HSTalon;
-
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -9,10 +7,11 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
-import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 /**
  * The Spinner manipulates the control panel to obtain position and rotation control.
@@ -23,12 +22,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
  * @author Chirag Kaushik
  * @author Arjun Dixit
  * @author Aimee Wang
+ * 
  * @since January 22, 2020
  */
 public class Spinner extends SubsystemBase {
     private static Spinner instance;
 
-    private HSTalon spinnerMotor;
+    private VictorSPX spinnerMotor;
     private DoubleSolenoid solenoid;
     // private CANCoder cancoder; 
 
@@ -80,7 +80,7 @@ public class Spinner extends SubsystemBase {
 
     public Spinner() {
         //Same motor controller being used for spinner and indexer
-        spinnerMotor = new HSTalon(RobotMap.CAN_IDS.SPINNER_ID);
+        spinnerMotor = new VictorSPX(RobotMap.CAN_IDS.SPINNER_ID);
         colorSensor = new ColorSensorV3(i2cPort);
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SPINNER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SPINNER_SOLENOID_REVERSE);
         // cancoder = new CANCoder(RobotMap.CAN_IDS.CANCODER_ID);
@@ -88,12 +88,48 @@ public class Spinner extends SubsystemBase {
         colorMatcher.addColorMatch(blueTarget);
         colorMatcher.addColorMatch(greenTarget);
         colorMatcher.addColorMatch(redTarget);
-        colorMatcher.addColorMatch(yellowTarget); 
+        colorMatcher.addColorMatch(yellowTarget);
 
         spinnerMotor.setInverted(SPINNER_INVERT);
         spinnerMotor.setSensorPhase(SPINNER_SENSOR_PHASE);   
              
         setupTalons();
+    }
+
+    @Override
+    public void periodic() {
+        Color detectedColor = colorSensor.getColor();
+
+        /**
+         * Run the color match algorithm on our detected color
+         */
+        String colorString;
+        ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
+
+        if (match.color == blueTarget) {
+            colorString = "Blue";
+        } else if (match.color == redTarget) {
+            colorString = "Red";
+        } else if (match.color == greenTarget) {
+            colorString = "Green";
+        } else if (match.color == yellowTarget) {
+            colorString = "Yellow";
+        } else {
+            colorString = "Unknown";
+        }
+
+        /**
+         * Open Smart Dashboard or Shuffleboard to see the color detected by the 
+         * sensor.
+         */
+        SmartDashboard.putNumber("red", detectedColor.red);
+        SmartDashboard.putNumber("green", detectedColor.green);
+        SmartDashboard.putNumber("blue", detectedColor.blue);
+        SmartDashboard.putNumber("Confidence", match.confidence);
+        SmartDashboard.putString("Detected Color", colorString);
+        SmartDashboard.putNumber("Desired red", match.color.red);
+        SmartDashboard.putNumber("Desired blue", match.color.blue);
+        SmartDashboard.putNumber("Desired green", match.color.green);
     }
 
     private void setupTalons() {
@@ -111,10 +147,6 @@ public class Spinner extends SubsystemBase {
         spinnerMotor.configForwardSoftLimitEnable(false);
         spinnerMotor.configReverseSoftLimitEnable(false);
 
-        spinnerMotor.configContinuousCurrentLimit(CONT_LIMIT);
-        spinnerMotor.configPeakCurrentDuration(PEAK_DURATION);
-        spinnerMotor.configPeakCurrentLimit(PEAK_LIMIT);
-        spinnerMotor.enableCurrentLimit(true);
         // spinnerMotor.configRemoteFeedbackFilter(RobotMap.CAN_IDS.CANCODER_ID, RemoteSensorSource.CANCoder, RobotMap.SPINNER_REMOTE_ORDINAL);
         
         setupPositionPID();
@@ -126,7 +158,7 @@ public class Spinner extends SubsystemBase {
         spinnerMotor.config_kD(SPINNER_POSITION_SLOT, SPINNER_POSITION_KD);
     }
 
-    public HSTalon getSpinnerMotor() {
+    public VictorSPX getSpinnerMotor() {
         return spinnerMotor;
     }
 
@@ -159,15 +191,6 @@ public class Spinner extends SubsystemBase {
         }
 
         return curVal; 
-        /*
-        switch(colorMatcher.matchClosestColor(colorSensor.getColor())) {
-            case(blueTarget): return ColorValue.BLUE;
-            case(redTarget): return ColorValue.RED;
-            case(greenTarget): return ColorValue.GREEN;
-            case(yellowTarget): return ColorValue.YELLOW;
-            default: return null;   
-        }
-        */
     }
 
     public static Spinner getInstance() {

@@ -7,17 +7,23 @@ import frc.robot.subsystems.Spinner;
 import harkerrobolib.commands.IndefiniteCommand;
 import harkerrobolib.util.MathUtil;
 
+/**
+ * Spins the Spinner motor based on operator right joystick x input.
+ * 
+ * @author Jatin Kohli
+ * @author Chirag Kaushik
+ * @author Angela Jia
+ * @author Arjun Dixit
+ * @author Shahzeb Lakhani
+ * @author Anirudh Kotamraju
+ * 
+ * @since Februrary 14, 2020
+ */
 public class SpinnerManual extends IndefiniteCommand {
-    private static final double OUTPUT_MULTIPLIER = 0.4;
+    private static final double OUTPUT_MULTIPLIER = 0.7;
 
     public SpinnerManual() {
         addRequirements(Spinner.getInstance());
-    }
-
-    @Override
-    public void initialize() {
-        // TODO Auto-generated method stub
-        super.initialize();
     }
 
     @Override

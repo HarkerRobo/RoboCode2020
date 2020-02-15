@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -10,15 +9,17 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.bottomintake.SpinBottomIntake;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
-import frc.robot.commands.drivetrain.auton.SwerveAutonAlignWithLimelight;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.indexer.SpinIndexer;
 import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.commands.shooter.SpinShooterVelocity;
+import frc.robot.commands.spinner.RotationControlTimed;
+import frc.robot.commands.spinner.SpinnerPositionColorSensor;
 import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
 import frc.robot.util.Limelight;
 import frc.robot.auto.Trajectories;
 import harkerrobolib.commands.CallMethodCommand;
@@ -84,6 +85,13 @@ public class OI {
         // driverGamepad.getDownDPadButton().whilePressed(new SpinnerManual());
         // driverGamepad.getDownDPadButton().whilePressed(
         //     new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(true)));
+        
+        // driverGamepad.getUpDPadButton().whilePressed(
+        //      new SpinIndexer(true));
+        // driverGamepad.getButtonSelect().whenPressed(
+        // eightBallAuton
+        // );
+        driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
 
         operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
             Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR);
@@ -103,6 +111,8 @@ public class OI {
             Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE);
         }), () -> !RobotMap.IS_NIGHT));
 
+        driverGamepad.getLeftDPadButton().whenPressed(new SpinnerPositionColorSensor());
+        driverGamepad.getButtonStart().whenPressed(new RotationControlTimed());
         // driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
         // () -> {
         // Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition(0);
