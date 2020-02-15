@@ -21,40 +21,40 @@ public class Climber extends SubsystemBase {
     private static TalonFX master;
     private static TalonFX follower; 
 
-    private static final boolean LEFT_SENSOR_PHASE;
-    private static final boolean RIGHT_SENSOR_PHASE;
+    private static final boolean MASTER_SENSOR_PHASE;
+    private static final boolean FOLLOWER_SENSOR_PHASE;
 
-    private static final TalonFXInvertType LEFT_INVERTED;
-    private static final TalonFXInvertType RIGHT_INVERTED;
+    private static final TalonFXInvertType MASTER_INVERTED;
+    private static final TalonFXInvertType FOLLOWER_INVERTED;
 
     public static final int CLIMBER_POSITION_SLOT = 0;
     private static final double CLIMBER_POSITION_KP;
     private static final double CLIMBER_POSITION_KI;
     private static final double CLIMBER_POSITION_KD;
     private static final double CLIMBER_RAMP_RATE = 0.1;
-    private static final int CLIMBER_VOLTAGE_COMP = 10;
+    private static final int VOLTAGE_COMP = 10;
 
     private static final int CURRENT_CONTINUOUS = 50;
-    private static final int CURRENT_PEAK = 50;
+    private static final int CURRENT_PEAK = 60;
     private static final int CURRENT_PEAK_DURATION = 50;
 
     static {
         if (RobotMap.IS_PRACTICE) {
-            LEFT_SENSOR_PHASE = false;
-            RIGHT_SENSOR_PHASE = false;
+            MASTER_SENSOR_PHASE = false;
+            FOLLOWER_SENSOR_PHASE = false;
 
-            LEFT_INVERTED = TalonFXInvertType.Clockwise;
-            RIGHT_INVERTED = TalonFXInvertType.Clockwise;
+            MASTER_INVERTED = TalonFXInvertType.Clockwise;
+            FOLLOWER_INVERTED = TalonFXInvertType.Clockwise;
 
             CLIMBER_POSITION_KP = 0.0; // tune
             CLIMBER_POSITION_KI = 0.0; // tune
             CLIMBER_POSITION_KD = 0.0; // tune
         } else {
-            LEFT_SENSOR_PHASE = false;
-            RIGHT_SENSOR_PHASE = false;
+            MASTER_SENSOR_PHASE = false;
+            FOLLOWER_SENSOR_PHASE = false;
             
-            LEFT_INVERTED = TalonFXInvertType.Clockwise;
-            RIGHT_INVERTED = TalonFXInvertType.Clockwise;
+            MASTER_INVERTED = TalonFXInvertType.Clockwise;
+            FOLLOWER_INVERTED = TalonFXInvertType.Clockwise;
 
             CLIMBER_POSITION_KP = 0.0; // tune
             CLIMBER_POSITION_KI = 0.0; // tune
@@ -74,8 +74,8 @@ public class Climber extends SubsystemBase {
         master.configFactoryDefault();
         follower.configFactoryDefault();
 
-        master.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, 10);
-        follower.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, 10);
+        master.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, RobotMap.DEFAULT_TIMEOUT);
+        follower.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, RobotMap.DEFAULT_TIMEOUT);
 
         master.setNeutralMode(NeutralMode.Brake);
         follower.setNeutralMode(NeutralMode.Brake);
@@ -91,16 +91,16 @@ public class Climber extends SubsystemBase {
         master.setSelectedSensorPosition(0);
         follower.setSelectedSensorPosition(0);
 
-        master.follow(follower);
+        follower.follow(master);
 
-        master.setInverted(LEFT_INVERTED);
-        master.setSensorPhase(LEFT_SENSOR_PHASE);
+        master.setInverted(MASTER_INVERTED);
+        master.setSensorPhase(MASTER_SENSOR_PHASE);
         
-        follower.setInverted(RIGHT_INVERTED);
-        follower.setSensorPhase(RIGHT_SENSOR_PHASE);
+        follower.setInverted(FOLLOWER_INVERTED);
+        follower.setSensorPhase(FOLLOWER_SENSOR_PHASE);
 
-        master.configVoltageCompSaturation(CLIMBER_VOLTAGE_COMP);
-        follower.configVoltageCompSaturation(CLIMBER_VOLTAGE_COMP);
+        master.configVoltageCompSaturation(VOLTAGE_COMP);
+        follower.configVoltageCompSaturation(VOLTAGE_COMP);
         master.enableVoltageCompensation(true);
         follower.enableVoltageCompensation(true);
 

@@ -16,7 +16,6 @@ import harkerrobolib.util.MathUtil;
  * @author Arjun Dixit
  * @author Shahzeb Lakhani
  * @author Anirudh Kotamraju
- * 
  * @since Februrary 14, 2020
  */
 public class SpinnerManual extends IndefiniteCommand {

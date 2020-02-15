@@ -22,7 +22,6 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
  * @author Chirag Kaushik
  * @author Arjun Dixit
  * @author Aimee Wang
- * 
  * @since January 22, 2020
  */
 public class Spinner extends SubsystemBase {

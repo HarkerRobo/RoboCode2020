@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.OI;
 import frc.robot.commands.bottomintake.SpinBottomIntake;
-import frc.robot.commands.drivetrain.auton.SwerveAutonAlignWithLimelight;
+import frc.robot.commands.drivetrain.SwerveAutonAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.indexer.MoveBallsToShooter;

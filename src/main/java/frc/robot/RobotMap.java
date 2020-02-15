@@ -3,7 +3,7 @@ package frc.robot;
 /**
  * Stores all project-wide constants, such as CAN Ids
  * 
- * @since 01/06/20
+ * @since January 6, 2020
  */
 public class RobotMap {
 	public static final boolean IS_PRACTICE = false; 
@@ -16,8 +16,6 @@ public class RobotMap {
     public static final int AUXILIARY_INDEX = 1;
     
     public static final int DEFAULT_TIMEOUT = 10; //ms
-
-	public static final int SPINNER_REMOTE_ORDINAL = 0;
 
     /**
      * Stores CAN Id constants.
@@ -59,7 +57,7 @@ public class RobotMap {
 
 		public static final int PIGEON_ID = 0;
 
-		public static final int CANCODER_ID = 0;//fix
+		public static final int CANCODER_ID = 0;
 	}
 
 	public static class PIPELINES {

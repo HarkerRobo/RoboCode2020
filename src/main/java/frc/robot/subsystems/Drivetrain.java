@@ -247,17 +247,10 @@ public class Drivetrain extends SubsystemBase {
 	public static final double TX_kI = 0.01;//0.005
     public static final double TX_kD = 0.3;//0.3 //0.15//18
     public static final double LIMELIGHT_KS = 0;//0.03;//0.03;
-    
-	public static final double THOR_kP = 0;
-	public static final double THOR_kI = 0;
-    public static final double THOR_kD = 0;
 
 	public static final double TX_SETPOINT = 0.0;
-    public static final double THOR_SETPOINT = 0;
     public static final double TX_ALLOWABLE_ERROR = 0.4;
-    public static final double THOR_ALLOWABLE_ERROR = 0;
 
-    
     /**
      * Default constructor for Drivetrain
      * Initializes SwerveModules with inverts for drive and angle motors 
