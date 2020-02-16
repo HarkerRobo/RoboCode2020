@@ -81,6 +81,8 @@ public class OI {
         driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(
             new SpinShooterLimelight(), new SequentialCommandGroup(new WaitCommand(2), new MoveBallsToShooter(false))));
 
+        driverGamepad.getButtonY().whilePressed(new SpinShooterLimelight());
+        driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
         // driverGamepad.getDownDPadButton().whilePressed(new SpinnerManual());
         // driverGamepad.getDownDPadButton().whilePressed(
         //     new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(true)));
@@ -90,7 +92,7 @@ public class OI {
         // driverGamepad.getButtonSelect().whenPressed(
         // eightBallAuton
         // );
-        driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
+        // driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
 
         operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
             Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR);
@@ -110,8 +112,8 @@ public class OI {
             Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE);
         }), () -> !RobotMap.IS_NIGHT));
 
-        driverGamepad.getLeftDPadButton().whenPressed(new SpinnerPositionColorSensor());
-        driverGamepad.getButtonStart().whenPressed(new RotationControlTimed());
+        // driverGamepad.getLeftDPadButton().whenPressed(new SpinnerPositionColorSensor());
+        // driverGamepad.getButtonStart().whenPressed(new RotationControlTimed());
         // driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(
         // () -> {
         // Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition(0);

@@ -77,11 +77,11 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
-        Spinner.getInstance().setDefaultCommand(new SpinnerManual());
+        // Spinner.getInstance().setDefaultCommand(new SpinnerManual());
         BottomIntake.getInstance();
         Indexer.getInstance();
         Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
-        Spinner.getInstance();
+        // Spinner.getInstance();
         // Climber.getInstance();
 
         OI.getInstance();
@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getStatorCurrent());
         SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getStatorCurrent());
 
-        Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
+        // Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
 
         // SmartDashboard.putNumber("TL Angle Error", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopError());
         // SmartDashboard.putNumber("TR Angle Error", Drivetrain.getInstance().getTopRight().getAngleMotor().getClosedLoopError());
