@@ -42,8 +42,8 @@ public class Shooter implements Subsystem {
 
             SENSOR_PHASE = false;
         } else {
-            FLYWHEEL_KF = 0.053;//0.058;
-            FLYWHEEL_KP = 0.05;//0.2; //2
+            FLYWHEEL_KF = 0.064;//0.058;
+            FLYWHEEL_KP = 0.05; 
             FLYWHEEL_KI = 0.001;
             FLYWHEEL_KD = 0.7;
             FLYWHEEL_IZONE = 150;
@@ -66,7 +66,7 @@ public class Shooter implements Subsystem {
 
     private static boolean SENSOR_PHASE;
     
-    public static final double MAX_VELOCITY = 114.3; //127 //Other value : 148 // TODO: Ask Aditi for a better value
+    public static final double MAX_VELOCITY = 114.3; 
     public static final int FLYWHEEL_VELOCITY_SLOT = 0;
     
     public static double FLYWHEEL_KF;
@@ -80,13 +80,11 @@ public class Shooter implements Subsystem {
     public static DoubleSolenoid.Value SHOOTER_HIGH_ANGLE; 
     public static DoubleSolenoid.Value SHOOTER_LOW_ANGLE; 
     
-    public static final int FLYWHEEL_VOLTAGE_COMP = 10;
-    
     private static final int FLYWHEEL_CURRENT_CONTINUOUS = 50;
     private static final int FLYWHEEL_CURRENT_PEAK = 60;
-    private static final int FLYWHEEL_CURRENT_PEAK_DUR = 50;
+    private static final int FLYWHEEL_CURRENT_PEAK_DUR = 200;
 
-    private static final double VOLTAGE_COMPENSATION = 0;
+    private static final double VOLTAGE_COMPENSATION = 9.5;
 
     public static TalonFXInvertType MASTER_INVERT;
     public static TalonFXInvertType FOLLOWER_INVERT;
@@ -108,6 +106,8 @@ public class Shooter implements Subsystem {
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_BACKWARD);
         
         setupFlywheel();
+        SmartDashboard.putNumber("flywheel kp", FLYWHEEL_KP);
+        SmartDashboard.putNumber("flywheel kd", FLYWHEEL_KD);
     }
 
     @Override
@@ -128,6 +128,9 @@ public class Shooter implements Subsystem {
                     Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE);
             }
         } 
+        FLYWHEEL_KP = SmartDashboard.getNumber("flywheel kp", FLYWHEEL_KP);
+        FLYWHEEL_KD = SmartDashboard.getNumber("flywheel kd", FLYWHEEL_KD);
+        setupVelocityPID();
     }
     
     /**
@@ -203,7 +206,8 @@ public class Shooter implements Subsystem {
      */
     public void spinShooterVelocity(double velocity) {
         double velocityInTicks = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, velocity * GEAR_RATIO, SpeedUnit.ENCODER_UNITS, WHEEL_DIAMETER, TICKS_PER_REV);
-        flywheelMaster.set(ControlMode.Velocity, velocityInTicks);
+        if(0.95 * velocityInTicks > flywheelMaster.getSelectedSensorVelocity()) flywheelMaster.set(ControlMode.PercentOutput, 1);
+        else flywheelMaster.set(ControlMode.Velocity, velocityInTicks);
     }
 
     /**

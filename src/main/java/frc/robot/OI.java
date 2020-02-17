@@ -63,7 +63,7 @@ public class OI {
         // driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> Drivetrain.getInstance().updatePositionPID()));
         // driverGamepad.getButtonY().whilePressed(new SpinShooterLimelight());
 
-        // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
+        driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
         
         // driverGamepad.getButtonY().whenPressed(new SpinIndexer());
@@ -76,13 +76,23 @@ public class OI {
         }));
 
         driverGamepad.getButtonB().whilePressed(
-            new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(false)));
+            new ParallelCommandGroup(new SpinBottomIntake(0.5), new SpinIndexer(false)));
 
-        driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(
-            new SpinShooterLimelight(), new SequentialCommandGroup(new WaitCommand(2), new MoveBallsToShooter(false))));
+        // driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(
+        //     new SpinShooterLimelight(), new SequentialCommandGroup(new WaitCommand(2), new MoveBallsToShooter(false))));
+        driverGamepad.getLeftDPadButton().whilePressed(
+            new ParallelCommandGroup(
+                new SpinShooterLimelight(), 
+                new SequentialCommandGroup(
+                    new WaitCommand(1), 
+                    new InstantCommand(() -> Indexer.getInstance().getSolenoid().set(Indexer.OPEN)), 
+                    new MoveBallsToShooter(false)))
+            );
 
-        driverGamepad.getButtonY().whilePressed(new SpinShooterLimelight());
+        driverGamepad.getButtonY().whilePressed(new SpinShooterVelocity(90));
+
         driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
+        driverGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(new SpinIndexer(true), new SpinBottomIntake(-0.3)));
         // driverGamepad.getDownDPadButton().whilePressed(new SpinnerManual());
         // driverGamepad.getDownDPadButton().whilePressed(
         //     new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(true)));

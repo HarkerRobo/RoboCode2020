@@ -21,13 +21,15 @@ public class SpinIndexer extends IndefiniteCommand {
     private static final double INDEX_SPEED = 1;
     private boolean backwards;
     // private boolean intakeFlag; // If the intake sensor just detected a ball
-    private boolean indexerFlag; // If the ball in front of the indexer sensor has evacuated
+    public static boolean indexerFlag; // If the ball in front of the indexer sensor has evacuated
+    private boolean prevDetection;
 
     public SpinIndexer(boolean backwards) {
         addRequirements(Indexer.getInstance());
         // intakeFlag = false;
         indexerFlag = false;
         this.backwards = backwards;
+        prevDetection = false;
     }
 
     @Override
@@ -37,13 +39,19 @@ public class SpinIndexer extends IndefiniteCommand {
 
     @Override
     public void execute() {
-        // boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
-        boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
+        boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
+        boolean hopperDetected = !Indexer.getInstance().getShooterSensor().get();
+
         long currentTime = System.currentTimeMillis();
 
-        SmartDashboard.putBoolean("Shooter Detected", shooterDetected);
+        SmartDashboard.putBoolean("Shooter Detected", hopperDetected);
+        SmartDashboard.putBoolean("Indexer detected", indexerDetected);
+        // if (prevDetection == true && hopperDetected == false && !backwards) {
+        //     indexerFlag = true;
+        // }
 
-        if(!shooterDetected || backwards)
+        // if(!(indexerFlag && hopperDetected) || backwards)
+        if(!(hopperDetected && indexerDetected) || backwards)
             Indexer.getInstance().spinSpine(backwards? -INDEX_SPEED : INDEX_SPEED);
         else
             Indexer.getInstance().spinSpine(0);
@@ -53,6 +61,7 @@ public class SpinIndexer extends IndefiniteCommand {
         else
             Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);
 
+        prevDetection = hopperDetected;
         // // If the indexer is full, never move
         // if(!shooterDetected) {
         //     // If something is currently next to the intake sensor, say that a ball has passed through this sensor.

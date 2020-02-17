@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.commands.spinner.SpinnerManual;
 import frc.robot.subsystems.BottomIntake;
@@ -88,7 +89,7 @@ public class Robot extends TimedRobot {
         compressor = new Compressor();
 
         Limelight.setLEDS(true);
-        Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
+        Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
     }
 
     /**
@@ -112,6 +113,12 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getStatorCurrent());
         SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getStatorCurrent());
         SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getStatorCurrent());
+
+        SmartDashboard.putNumber("distance", SpinShooterLimelight.medianFilter.calculate(Shooter.getInstance().getLimelightDistance()));
+
+        SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
+
+        SmartDashboard.putNumber("Shooter output percent", Shooter.getInstance().getMaster().getMotorOutputPercent());
 
         // Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
 

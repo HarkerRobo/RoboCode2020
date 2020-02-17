@@ -49,16 +49,16 @@ public class Indexer implements Subsystem {
     public static final int VOLTAGE_COMPENSATION = 10;
     public static final double RAMP_RATE = 0.04;
 
-    private static final int INTAKE_CURRENT_PEAK_DUR = 100;
-    private static final int INTAKE_CURRENT_CONTINUOUS = 40;
-    private static final int INTAKE_CURRENT_PEAK = 50;
+    private static final int INDEXER_CURRENT_PEAK_DUR = 50;
+    private static final int INDEXER_CURRENT_CONTINUOUS = 20;
+    private static final int INDEXER_CURRENT_PEAK = 30;
 
     //private DigitalInput intakeSensor;  // The first sensor when a ball is intaked
-    // private DigitalInput indexerSensor;  // The second sensor in the indexer
+    private DigitalInput indexerSensor;  // The second sensor in the indexer
     private DigitalInput shooterSensor; // Determines if the indexer is full
     
     // private static final int INTAKE_SENSOR_ID = 0;
-    private static final int INDEXER_SENSOR_ID = 0;
+    private static final int INDEXER_SENSOR_ID = 6;
     private static final int SHOOTER_SENSOR_ID = 7;
 
     public static final double AGITATOR_DEFAULT_OUTPUT = 1;
@@ -83,7 +83,7 @@ public class Indexer implements Subsystem {
 
     public void initializeSensors() {
         //intakeSensor = new DigitalInput(INTAKE_SENSOR_ID);
-        // indexerSensor = new DigitalInput(INDEXER_SENSOR_ID);
+        indexerSensor = new DigitalInput(INDEXER_SENSOR_ID);
         shooterSensor = new DigitalInput(SHOOTER_SENSOR_ID);
     }
     
@@ -113,9 +113,9 @@ public class Indexer implements Subsystem {
         agitator.configReverseSoftLimitEnable(false);
         agitator.overrideLimitSwitchesEnable(false);
 
-        spine.configContinuousCurrentLimit(INTAKE_CURRENT_CONTINUOUS);
-        spine.configPeakCurrentLimit(INTAKE_CURRENT_PEAK);
-        spine.configPeakCurrentDuration(INTAKE_CURRENT_PEAK_DUR);
+        spine.configContinuousCurrentLimit(INDEXER_CURRENT_CONTINUOUS);
+        spine.configPeakCurrentLimit(INDEXER_CURRENT_PEAK);
+        spine.configPeakCurrentDuration(INDEXER_CURRENT_PEAK_DUR);
         spine.enableCurrentLimit(true);
     }
 
@@ -164,9 +164,9 @@ public class Indexer implements Subsystem {
     //     return intakeSensor;
     // }
 
-    // public DigitalInput getIndexerSensor() {
-    //     return indexerSensor;
-    // }
+    public DigitalInput getIndexerSensor() {
+        return indexerSensor;
+    }
 
     public HSTalon getSpine() {
         return spine;

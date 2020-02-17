@@ -19,7 +19,7 @@ import harkerrobolib.commands.IndefiniteCommand;
  * @since January 23, 2020
  */
 public class MoveBallsToShooter extends IndefiniteCommand {
-    private static final double INDEX_PERCENT_OUTPUT = 0.8; //0.89
+    private static final double INDEX_PERCENT_OUTPUT = 0.7; //0.89
     private boolean backwards;
 
     public MoveBallsToShooter(boolean backwards) {
@@ -48,5 +48,7 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     public void end(boolean interrupted) {
         Indexer.getInstance().spinSpine(0);
         Indexer.getInstance().spinAgitator(0);
+        SpinIndexer.indexerFlag = false;
+        Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
     }
 }
