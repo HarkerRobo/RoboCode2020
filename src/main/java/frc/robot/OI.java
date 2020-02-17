@@ -44,6 +44,7 @@ public class OI {
     public static Rotation2d forwardHeading = Rotation2d.fromDegrees(180);
     public static Rotation2d pickupFiveHeading = Rotation2d.fromDegrees(120);
 
+    private static final double SHOOTER_REV_TIME = 2;
     private OI() {
         driverGamepad = new XboxGamepad(RobotMap.DRIVER_PORT);
         operatorGamepad = new XboxGamepad(RobotMap.OPERATOR_PORT);
@@ -64,36 +65,59 @@ public class OI {
         // driverGamepad.getButtonY().whilePressed(new SpinShooterLimelight());
 
         // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
+        // driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
+        
+        // // driverGamepad.getButtonY().whenPressed(new SpinIndexer());
+        // driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {
+        //     Indexer.getInstance().toggleSolenoid();
+        // }));
+
+        // driverGamepad.getButtonA().whenPressed(new InstantCommand(() -> {
+        //     BottomIntake.getInstance().toggleSolenoid();
+        // }));
+
+        // driverGamepad.getButtonB().whilePressed(
+        //     new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(false)));
+
+        // driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(
+        //     new SpinShooterLimelight(), new SequentialCommandGroup(new WaitCommand(2), new MoveBallsToShooter(false))));
+
+        // driverGamepad.getButtonY().whilePressed(new SpinShooterLimelight());
+        // driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
+        // // driverGamepad.getDownDPadButton().whilePressed(new SpinnerManual());
+        // // driverGamepad.getDownDPadButton().whilePressed(
+        // //     new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(true)));
+        
+        // // driverGamepad.getUpDPadButton().whilePressed(
+        // //      new SpinIndexer(true));
+        // // driverGamepad.getButtonSelect().whenPressed(
+        // // eightBallAuton
+        // // );
+        // // driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
-        
-        // driverGamepad.getButtonY().whenPressed(new SpinIndexer());
-        driverGamepad.getButtonX().whenPressed(new InstantCommand(() -> {
-            Indexer.getInstance().toggleSolenoid();
-        }));
-
-        driverGamepad.getButtonA().whenPressed(new InstantCommand(() -> {
-            BottomIntake.getInstance().toggleSolenoid();
-        }));
-
-        driverGamepad.getButtonB().whilePressed(
-            new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(false)));
-
         driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(
-            new SpinShooterLimelight(), new SequentialCommandGroup(new WaitCommand(2), new MoveBallsToShooter(false))));
-
-        driverGamepad.getButtonY().whilePressed(new SpinShooterLimelight());
-        driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
-        // driverGamepad.getDownDPadButton().whilePressed(new SpinnerManual());
-        // driverGamepad.getDownDPadButton().whilePressed(
-        //     new ParallelCommandGroup(new SpinBottomIntake(0.3), new SpinIndexer(true)));
+            new SpinShooterLimelight(), 
+            new SequentialCommandGroup(
+                new WaitCommand(SHOOTER_REV_TIME),
+                new MoveBallsToShooter(false)
+            )
+        ));
+        driverGamepad.getButtonX().whilePressed(new ParallelCommandGroup(
+            new SpinBottomIntake(0.7), 
+            new SpinIndexer(false)));
+        driverGamepad.getButtonA().whilePressed(new ParallelCommandGroup(
+            new SpinBottomIntake(-0.7), 
+            new SpinIndexer(true)));
+        driverGamepad.getUpDPadButton().whilePressed(new ParallelCommandGroup(
+            new SpinBottomIntake(0.7), 
+            new SpinIndexer(true)));
         
-        // driverGamepad.getUpDPadButton().whilePressed(
-        //      new SpinIndexer(true));
-        // driverGamepad.getButtonSelect().whenPressed(
-        // eightBallAuton
-        // );
-        // driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
-
+        driverGamepad.getButtonB().whenPressed(new InstantCommand(() -> BottomIntake.getInstance().toggleSolenoid()));
+        driverGamepad.getButtonBumperLeft().whenPressed(new InstantCommand(() -> Shooter.getInstance().toggleHoodAngle()));
+        //Add a move balls to shooter manual button
+        driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
+            
+        operatorGamepad.getButtonX().whenPressed(new InstantCommand(() -> Indexer.getInstance().toggleSolenoid()));
         operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(new CallMethodCommand(() -> {
             Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR);
         }), new CallMethodCommand(() -> {

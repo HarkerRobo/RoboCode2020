@@ -35,10 +35,10 @@ public class SpinShooterManual extends IndefiniteCommand {
     }
 
     public void execute() {
-        double rightTrigger = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightTrigger(), OI.XBOX_TRIGGER_DEADBAND);
-        double leftTrigger = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftTrigger(), OI.XBOX_TRIGGER_DEADBAND);
+        double rightTrigger = MathUtil.mapJoystickOutput(OI.getInstance().getOperatorGamepad().getRightTrigger(), OI.XBOX_TRIGGER_DEADBAND);
+        double leftTrigger = MathUtil.mapJoystickOutput(OI.getInstance().getOperatorGamepad().getLeftTrigger(), OI.XBOX_TRIGGER_DEADBAND);
 
-        if (Math.abs(leftTrigger) > 0 || Math.abs(rightTrigger) > 0)
+        if (leftTrigger > 0 || rightTrigger > 0)
             joystickFlag = true;
         
         //Checks which trigger has more output and picks between them.

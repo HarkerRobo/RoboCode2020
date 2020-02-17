@@ -251,6 +251,12 @@ public class Drivetrain extends SubsystemBase {
 	public static final double TX_SETPOINT = 0.0;
     public static final double TX_ALLOWABLE_ERROR = 0.4;
 
+	public static final double HEADING_KP = 0;
+
+	public static final double HEADING_KI = 0;
+
+	public static final double HEADING_KD = 0;
+
     /**
      * Default constructor for Drivetrain
      * Initializes SwerveModules with inverts for drive and angle motors 

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.drivetrain.SwerveManualHeadingControl;
 import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.commands.spinner.SpinnerManual;
 import frc.robot.subsystems.BottomIntake;
@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
+        Drivetrain.getInstance().setDefaultCommand(new SwerveManualHeadingControl());
         // Spinner.getInstance().setDefaultCommand(new SpinnerManual());
         BottomIntake.getInstance();
         Indexer.getInstance();
