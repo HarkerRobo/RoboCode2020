@@ -109,7 +109,7 @@ public class SwerveManualHeadingControl extends CommandBase {
                 headingAngle -= 360;
             }
         }
-        turnMagnitude = headingController.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), headingAngle) * Drivetrain.MAX_ROTATION_VELOCITY;
+        turnMagnitude = headingController.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), headingAngle);
 
         if (Math.abs(translateX) > 0 || Math.abs(translateY) > 0 || Math.abs(turnMagnitude) > 0) {
             joystickFlag = true;
