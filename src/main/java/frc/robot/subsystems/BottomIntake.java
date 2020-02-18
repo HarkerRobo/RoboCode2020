@@ -95,33 +95,35 @@ public class BottomIntake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
-        if (talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY) {
-            CommandScheduler.getInstance().schedule(new ParallelRaceGroup(new SpinIntakeVelocity(-0.3), new WaitCommand(0.1)));
-        }
-
         if(OI.getInstance().getDriverGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
             CommandScheduler.getInstance().schedule(new ParallelCommandGroup(
                 new SpinIntakeVelocity(0.5), 
-                new SpinIndexer(1, false)));
-
+                new SpinIndexer(0.7, false)));
+                
             jamFlag = false;
         } else if(OI.getInstance().getDriverGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
             CommandScheduler.getInstance().schedule(new ParallelCommandGroup( //Outaking while reversing spine 
                 new SpinIntakeVelocity(-0.5), 
-                new SpinIndexer(1, true)));
-
+                new SpinIndexer(0.7, true)));
+            
             jamFlag = false;
         } else if (!jamFlag) {
             CommandScheduler.getInstance().schedule(new ParallelCommandGroup(
                 new SpinIntakeVelocity(0),
                 new SpinIndexer(0, false)));
-
+                
             jamFlag = true;
-        }
-        // SmartDashboard.putNumber("intake velocity encoder units", talon.getSelectedSensorVelocity());
-    }
+        }   
 
+        if (talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY) {
+            CommandScheduler.getInstance().schedule(new ParallelRaceGroup(new SpinIntakeVelocity(-0.3), new WaitCommand(0.2)));
+            SmartDashboard.putBoolean("yonk", true);
+        }
+        else {
+            SmartDashboard.putBoolean("yonk",false);
+        }
+    }
+            
     public HSTalon getTalon() {
         return talon;
     }

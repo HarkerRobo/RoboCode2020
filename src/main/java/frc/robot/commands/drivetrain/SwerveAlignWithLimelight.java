@@ -85,7 +85,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
         prevXPos = xPosition;
 
         turn -= xVel * TX_VELOCITY_MULTIPLIER;
-        // turn -= OFFSET * averageDistance;
+        // turn -= OFFSET;
         
         if (Math.abs(Limelight.getTx()) < Drivetrain.TX_ALLOWABLE_ERROR)
             turn = 0;
