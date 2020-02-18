@@ -81,15 +81,15 @@ public class Robot extends TimedRobot {
         // Spinner.getInstance().setDefaultCommand(new SpinnerManual());
         BottomIntake.getInstance();
         Indexer.getInstance();
-        Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
-        // Spinner.getInstance();
+        Shooter.getInstance();
         // Climber.getInstance();
 
         OI.getInstance();
-        compressor = new Compressor();
+        compressor = new Compressor();  
 
         Limelight.setLEDS(true);
         Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
+        // Spinner.getInstance().getSolenoid().set(Spinner.DOWN);
     }
 
     /**
@@ -110,15 +110,15 @@ public class Robot extends TimedRobot {
         if (RobotMap.IS_PRACTICE)
             compressor.stop();
 
-        SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getStatorCurrent());
-        SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getStatorCurrent());
-        SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getStatorCurrent());
+        SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getOutputCurrent());
+        SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getOutputCurrent());
+        SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getOutputCurrent());
 
         SmartDashboard.putNumber("distance", SpinShooterLimelight.medianFilter.calculate(Shooter.getInstance().getLimelightDistance()));
 
         SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
 
-        SmartDashboard.putNumber("Shooter output percent", Shooter.getInstance().getMaster().getMotorOutputPercent());
+        // SmartDashboard.putString("Shooter Command", Shooter.getInstance().getCurrentCommand().getName() == null);
 
         // Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
 
@@ -164,6 +164,8 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {
         CommandScheduler.getInstance().run();
+
+        Limelight.setLEDS(true);
     }
 
     @Override

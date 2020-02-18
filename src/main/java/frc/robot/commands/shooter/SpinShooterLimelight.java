@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.LinearFilter;
 import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
@@ -28,7 +27,6 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     private static final double SCALE_A = 0.0296;//LIN_SCALE 2.32;
     private static final double SCALE_B = -0.53;
     private static final double SCALE_C = 94.5;
-    
 
     private static final double BB_BELOW_OUTPUT = 0.9;
     private static final double BB_ABOVE_OUTPUT = 0;
@@ -52,7 +50,6 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     }
     
     public void execute() {
-        
         double distance = Shooter.getInstance().getLimelightDistance();
         LIMELIGHT_ANGLE = SmartDashboard.getNumber("Limelight angle", LIMELIGHT_ANGLE);
         // Shooter.getInstance().spinShooter(initialVelocity + MULTIPLIER * distance);

@@ -93,8 +93,8 @@ public class Shooter implements Subsystem {
     public static final double WHEEL_DIAMETER = 4;
     public static final int TICKS_PER_REV = 2048;
 
-    private static final double DAY_FAR_DISTANCE_THRESHOLD = 51.191;    
-    private static final double DAY_MEDIUM_DISTANCE_THRESHOLD = 17.643;
+    private static final double DAY_FAR_DISTANCE_THRESHOLD = 26.706;    
+    private static final double DAY_MEDIUM_DISTANCE_THRESHOLD = 11.753;
     private static final double NIGHT_THRESHOLD = 18.4;  // choosing between far and close pipelines for night
 
     /**

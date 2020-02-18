@@ -50,8 +50,8 @@ public class Indexer implements Subsystem {
     public static final double RAMP_RATE = 0.04;
 
     private static final int INDEXER_CURRENT_PEAK_DUR = 50;
-    private static final int INDEXER_CURRENT_CONTINUOUS = 20;
-    private static final int INDEXER_CURRENT_PEAK = 30;
+    private static final int INDEXER_CURRENT_CONTINUOUS = 30;
+    private static final int INDEXER_CURRENT_PEAK = 40;
 
     //private DigitalInput intakeSensor;  // The first sensor when a ball is intaked
     private DigitalInput indexerSensor;  // The second sensor in the indexer

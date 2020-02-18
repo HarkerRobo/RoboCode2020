@@ -23,18 +23,21 @@ public class SpinIndexer extends IndefiniteCommand {
     // private boolean intakeFlag; // If the intake sensor just detected a ball
     public static boolean indexerFlag; // If the ball in front of the indexer sensor has evacuated
     private boolean prevDetection;
+    private double output;
 
-    public SpinIndexer(boolean backwards) {
+    public SpinIndexer(double output, boolean backwards) {
         addRequirements(Indexer.getInstance());
         // intakeFlag = false;
         indexerFlag = false;
         this.backwards = backwards;
         prevDetection = false;
+        this.output = output;
     }
 
     @Override
     public void initialize() {
         Indexer.getInstance().getAgitator().setNeutralMode(NeutralMode.Coast);
+        Indexer.getInstance().getSolenoid().set(backwards ? Indexer.OPEN : Indexer.CLOSED);
     }
 
     @Override
@@ -52,14 +55,14 @@ public class SpinIndexer extends IndefiniteCommand {
 
         // if(!(indexerFlag && hopperDetected) || backwards)
         if(!(hopperDetected && indexerDetected) || backwards)
-            Indexer.getInstance().spinSpine(backwards? -INDEX_SPEED : INDEX_SPEED);
+            Indexer.getInstance().spinSpine(output * (backwards ? -INDEX_SPEED : INDEX_SPEED));
         else
             Indexer.getInstance().spinSpine(0);
 
         if (currentTime % Indexer.AGITATOR_CYCLE_DUR < Indexer.AGITATOR_ON_DURATION)
-            Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);
+            Indexer.getInstance().spinAgitator(output * Indexer.AGITATOR_DEFAULT_OUTPUT);
         else
-            Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);
+            Indexer.getInstance().spinAgitator(output * (backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0));
 
         prevDetection = hopperDetected;
         // // If the indexer is full, never move

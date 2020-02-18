@@ -30,6 +30,8 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     @Override
     public void initialize() {
         Indexer.getInstance().getAgitator().setNeutralMode(NeutralMode.Coast);
+
+        Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
     }
 
     @Override
@@ -48,7 +50,9 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     public void end(boolean interrupted) {
         Indexer.getInstance().spinSpine(0);
         Indexer.getInstance().spinAgitator(0);
+
         SpinIndexer.indexerFlag = false;
+
         Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
     }
 }

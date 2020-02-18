@@ -30,7 +30,6 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  */
 public class SpinShooterVelocity extends IndefiniteCommand {
     private double velocity;
-    private MedianFilter medianFilter = new MedianFilter(400);
 
     public SpinShooterVelocity(double velocity) {
         addRequirements(Shooter.getInstance());
@@ -44,15 +43,10 @@ public class SpinShooterVelocity extends IndefiniteCommand {
 
         Shooter.getInstance().spinShooterVelocity(velocity);
 
-        double distance = Shooter.getInstance().getLimelightDistance();
-        double averageDistance = medianFilter.calculate(distance);
-
-        SmartDashboard.putNumber("Shooter limelight distance", averageDistance);
         SmartDashboard.putNumber("Shooter velocity error", Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getClosedLoopError(), SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV));
     }
 
     public void end(boolean interrupted) {
         Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0);
     }
-
 }

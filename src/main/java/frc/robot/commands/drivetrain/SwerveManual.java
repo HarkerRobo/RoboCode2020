@@ -31,7 +31,6 @@ import harkerrobolib.util.MathUtil;
  * @since 11/4/19
  */
 public class SwerveManual extends CommandBase {
-
     static {
         if (RobotMap.IS_PRACTICE) {
             HIGH_VELOCITY_HEADING_MULTIPLIER = 0.16;
