@@ -3,6 +3,7 @@ package frc.robot.commands.indexer;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
 import harkerrobolib.commands.IndefiniteCommand;
 
 /**
@@ -20,7 +21,11 @@ import harkerrobolib.commands.IndefiniteCommand;
  */
 public class MoveBallsToShooter extends IndefiniteCommand {
     private static final double INDEX_PERCENT_OUTPUT = 0.7; //0.89
+    private static final double MIN_TIME = 250;
+
     private boolean backwards;
+
+    private double startTime;
 
     public MoveBallsToShooter(boolean backwards) {
         addRequirements(Indexer.getInstance()); 
@@ -32,18 +37,22 @@ public class MoveBallsToShooter extends IndefiniteCommand {
         Indexer.getInstance().getAgitator().setNeutralMode(NeutralMode.Coast);
 
         Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
+
+        startTime = System.currentTimeMillis();
     }
 
     @Override
     public void execute() {
         long currentTime = System.currentTimeMillis();
 
-        if (currentTime % Indexer.AGITATOR_CYCLE_DUR < Indexer.AGITATOR_ON_DURATION)
-            Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);
-        else
-            Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);
+        if (!Shooter.isPercentOutput && currentTime - startTime > MIN_TIME) {
+            if (currentTime % Indexer.AGITATOR_CYCLE_DUR < Indexer.AGITATOR_ON_DURATION)
+                Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);
+            else
+                Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);//maybe make negative in actual match play
 
-        Indexer.getInstance().spinSpine(INDEX_PERCENT_OUTPUT);  
+            Indexer.getInstance().spinSpine(INDEX_PERCENT_OUTPUT);  
+        }
     }
     
     @Override
@@ -54,5 +63,6 @@ public class MoveBallsToShooter extends IndefiniteCommand {
         SpinIndexer.indexerFlag = false;
 
         Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
+        Shooter.isPercentOutput = true;
     }
 }

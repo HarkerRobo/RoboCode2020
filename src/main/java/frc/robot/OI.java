@@ -87,32 +87,26 @@ public class OI {
         
         driverGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
             new SpinShooterLimelight(), 
-            new SequentialCommandGroup(
-                new WaitCommand(SHOOTER_REV_TIME),
-                new MoveBallsToShooter(false))));
+            new MoveBallsToShooter(false)));
 
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
         
         driverGamepad.getButtonSelect().whilePressed(new ParallelCommandGroup(
             new SpinShooterVelocity(90), 
-            new SequentialCommandGroup(
-                new WaitCommand(SHOOTER_REV_TIME),
-                new MoveBallsToShooter(false))));
+            new MoveBallsToShooter(false)));
 
         driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
 
         operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
             new SpinShooterLimelight(), 
-            new SequentialCommandGroup(
-                new WaitCommand(SHOOTER_REV_TIME),
-                new MoveBallsToShooter(false))));
+            new MoveBallsToShooter(false)));
 
         operatorGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
 
         operatorGamepad.getButtonB().whenPressed(new InstantCommand(() -> BottomIntake.getInstance().toggleSolenoid()));
         operatorGamepad.getButtonA().whilePressed(new MoveBallsToShooter(false));
         operatorGamepad.getButtonX().whenPressed(new InstantCommand(() -> Indexer.getInstance().toggleSolenoid()));
-
+        operatorGamepad.getButtonSelect().whilePressed(new SpinIntakeVelocity(0.3));
         operatorGamepad.getLeftDPadButton().whilePressed(jumble);
         
         operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(

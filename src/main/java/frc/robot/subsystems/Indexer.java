@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import harkerrobolib.wrappers.HSTalon;
 
@@ -24,7 +25,7 @@ import harkerrobolib.wrappers.HSTalon;
  * @author Aimee Wang
  * @since January 23, 2020
  */
-public class Indexer implements Subsystem {
+public class Indexer extends SubsystemBase {
     static {
         if(RobotMap.IS_PRACTICE) {
             SPINE_INVERT = false; //Change accordingly

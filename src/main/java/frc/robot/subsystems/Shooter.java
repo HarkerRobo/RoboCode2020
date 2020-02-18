@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.util.Limelight;
@@ -21,14 +22,14 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  * 
  * @author Jatin Kohli
  * @author Shahzeb Lakhani 
- * @author Chirag Kaushik
  * @author Arjun Dixit
  * @author Anirudh Kotamraju
  * @author Aimee Wang
  * @author Rohan Bhowmik
- * @since 1/22/20
+ * @author Chirag Kaushik
+ * @since January 22, 2020
  */
-public class Shooter implements Subsystem {
+public class Shooter extends SubsystemBase {
     static {
         if(RobotMap.IS_PRACTICE) {
             FLYWHEEL_KF = 0.003; // tune;
@@ -97,6 +98,7 @@ public class Shooter implements Subsystem {
     private static final double DAY_MEDIUM_DISTANCE_THRESHOLD = 11.753;
     private static final double NIGHT_THRESHOLD = 18.4;  // choosing between far and close pipelines for night
 
+    public static boolean isPercentOutput = true;
     /**
      * Constructs a Shooter.
      */
@@ -113,6 +115,8 @@ public class Shooter implements Subsystem {
     @Override
     public void periodic() {
         double distance = getLimelightDistance();
+        SmartDashboard.putBoolean("isPercentOutput", isPercentOutput);
+        
         if (distance != 0.0) {
             if (RobotMap.IS_NIGHT) {
                 if (distance > NIGHT_THRESHOLD)
@@ -128,9 +132,6 @@ public class Shooter implements Subsystem {
                     Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE);
             }
         } 
-        FLYWHEEL_KP = SmartDashboard.getNumber("flywheel kp", FLYWHEEL_KP);
-        FLYWHEEL_KD = SmartDashboard.getNumber("flywheel kd", FLYWHEEL_KD);
-        setupVelocityPID();
     }
     
     /**
@@ -206,8 +207,14 @@ public class Shooter implements Subsystem {
      */
     public void spinShooterVelocity(double velocity) {
         double velocityInTicks = Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, velocity * GEAR_RATIO, SpeedUnit.ENCODER_UNITS, WHEEL_DIAMETER, TICKS_PER_REV);
-        if(0.95 * velocityInTicks > flywheelMaster.getSelectedSensorVelocity()) flywheelMaster.set(ControlMode.PercentOutput, 1);
-        else flywheelMaster.set(ControlMode.Velocity, velocityInTicks);
+        if(0.95 * velocityInTicks > flywheelMaster.getSelectedSensorVelocity()) {
+            flywheelMaster.set(ControlMode.PercentOutput, 1);
+            isPercentOutput = true;
+        }
+        else {
+            flywheelMaster.set(ControlMode.Velocity, velocityInTicks);
+            isPercentOutput = false;
+        }
     }
 
     /**
