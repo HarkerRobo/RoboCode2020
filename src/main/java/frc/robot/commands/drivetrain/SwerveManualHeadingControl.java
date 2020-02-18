@@ -62,8 +62,9 @@ public class SwerveManualHeadingControl extends CommandBase {
     private static double turnVel;
     private static double turnAccel;
     
-    private static boolean joystickFlag;
     private PIDController headingController;
+    private static boolean joystickFlag;
+    private static boolean headingFlag;
     
     public SwerveManualHeadingControl() {
         addRequirements(Drivetrain.getInstance());
@@ -92,6 +93,7 @@ public class SwerveManualHeadingControl extends CommandBase {
         pigeonAngle = prevPigeonHeading;
 
         joystickFlag = false;
+        headingFlag = false;
     }
 
     @Override
@@ -101,7 +103,7 @@ public class SwerveManualHeadingControl extends CommandBase {
         headingX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
         headingY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightY(), OI.XBOX_JOYSTICK_DEADBAND);
         if (headingY != 0 && headingX != 0) {
-            headingAngle = Math.atan2(headingY, headingX);
+            headingAngle = Math.toDegrees(Math.atan2(headingY, headingX));
             headingAngle += 90;
             while (Drivetrain.getInstance().getPigeon().getFusedHeading() - headingAngle > 180) {
                 headingAngle += 360;
@@ -109,7 +111,10 @@ public class SwerveManualHeadingControl extends CommandBase {
             while (Drivetrain.getInstance().getPigeon().getFusedHeading() - headingAngle <- 180) {
                 headingAngle -= 360;
             }
+            headingFlag = true;
         }
+        SmartDashboard.putNumber("heading angle", headingAngle);
+
         turnMagnitude = headingController.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), headingAngle);
 
         if (Math.abs(translateX) > 0 || Math.abs(translateY) > 0 || Math.abs(headingX) > 0 || Math.abs(headingY) > 0) {
@@ -138,7 +143,7 @@ public class SwerveManualHeadingControl extends CommandBase {
         // }
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
+            translateX, translateY, headingFlag ? turnMagnitude : 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
 
         // Now use this in our kinematics
