@@ -102,16 +102,17 @@ public class SwerveManualHeadingControl extends CommandBase {
         headingY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightY(), OI.XBOX_JOYSTICK_DEADBAND);
         if (headingY != 0 && headingX != 0) {
             headingAngle = Math.atan2(headingY, headingX);
+            headingAngle += 90;
             while (Drivetrain.getInstance().getPigeon().getFusedHeading() - headingAngle > 180) {
                 headingAngle += 360;
             }
-            while (Drivetrain.getInstance().getPigeon().getFusedHeading() - headingAngle < 180) {
+            while (Drivetrain.getInstance().getPigeon().getFusedHeading() - headingAngle <- 180) {
                 headingAngle -= 360;
             }
         }
         turnMagnitude = headingController.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), headingAngle);
 
-        if (Math.abs(translateX) > 0 || Math.abs(translateY) > 0 || Math.abs(turnMagnitude) > 0) {
+        if (Math.abs(translateX) > 0 || Math.abs(translateY) > 0 || Math.abs(headingX) > 0 || Math.abs(headingY) > 0) {
             joystickFlag = true;
         }
 
