@@ -98,13 +98,13 @@ public class BottomIntake extends SubsystemBase {
         if(OI.getInstance().getDriverGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
             CommandScheduler.getInstance().schedule(new ParallelCommandGroup(
                 new SpinIntakeVelocity(0.5), 
-                new SpinIndexer(0.7, false)));
+                new SpinIndexer(0.6, false)));
                 
             jamFlag = false;
         } else if(OI.getInstance().getDriverGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
             CommandScheduler.getInstance().schedule(new ParallelCommandGroup( //Outaking while reversing spine 
                 new SpinIntakeVelocity(-0.5), 
-                new SpinIndexer(0.7, true)));
+                new SpinIndexer(0.6, true)));
             
             jamFlag = false;
         } else if (!jamFlag) {

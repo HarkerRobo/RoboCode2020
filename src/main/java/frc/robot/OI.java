@@ -100,13 +100,16 @@ public class OI {
         operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
             new SpinShooterLimelight(), 
             new MoveBallsToShooter(false)));
-
+ 
         operatorGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
 
         operatorGamepad.getButtonB().whenPressed(new InstantCommand(() -> BottomIntake.getInstance().toggleSolenoid()));
         operatorGamepad.getButtonA().whilePressed(new MoveBallsToShooter(false));
         operatorGamepad.getButtonX().whenPressed(new InstantCommand(() -> Indexer.getInstance().toggleSolenoid()));
+        operatorGamepad.getButtonY().whilePressed(new SpinIndexer(0.8, false));
+
         operatorGamepad.getButtonSelect().whilePressed(new SpinIntakeVelocity(0.3));
+        operatorGamepad.getButtonStart().whenPressed(new InstantCommand(() -> Shooter.getInstance().toggleHoodAngle()));
         operatorGamepad.getLeftDPadButton().whilePressed(jumble);
         
         operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(
