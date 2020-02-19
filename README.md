@@ -1,6 +1,6 @@
 # RoboCode2020
 
-Use the master branch only pull requests from the test branch for code/changes that work.
+Use the master branch only for pull requests from the test branch for code/changes that work.
 
 Use the test branch to commit any untested or non-working changes.
 
