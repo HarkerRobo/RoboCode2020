@@ -1,33 +1,53 @@
 package frc.robot;
 
-import java.util.List;
-
-import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.constraint.SwerveDriveKinematicsConstraint;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.commands.bottomintake.SpinIntakeVelocity;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
-import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
+import frc.robot.commands.indexer.MoveBallsToShooter;
+import frc.robot.commands.indexer.SpinIndexer;
+import frc.robot.commands.shooter.SpinShooterLimelight;
+import frc.robot.commands.shooter.SpinShooterVelocity;
+import frc.robot.commands.spinner.RotationControlTimed;
+import frc.robot.commands.spinner.SpinnerPositionColorSensor;
+import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
+import frc.robot.util.Limelight;
+import frc.robot.auto.Trajectories;
+import harkerrobolib.commands.CallMethodCommand;
 import harkerrobolib.wrappers.XboxGamepad;
 
 /**
  * The OI class reads inputs from the joysticks and binds them to commands.
  * 
- * @since 01/06/20
+ * @since January 6, 2020
  */
-public class OI
-{
-    public static final double XBOX_JOYSTICK_DEADBAND = 0.1;
-    // private static final double SHOOTER_SPEED = 2;
-    private static SwerveDriveKinematicsConstraint constraint;
+public class OI {
     private static OI instance;
+
+    public static final double XBOX_JOYSTICK_DEADBAND = 0.1;
+    public static final double XBOX_TRIGGER_DEADBAND = 0.1;
+
+    private static final double SHOOTER_REV_TIME = 2;
 
     private XboxGamepad driverGamepad;
     private XboxGamepad operatorGamepad;
-    
+
+    public static TrajectoryConfig TRAJ_CONFIG = Trajectories.config;
+
+    public static Rotation2d forwardHeading = Rotation2d.fromDegrees(180);
+    public static Rotation2d pickupFiveHeading = Rotation2d.fromDegrees(120);
+
     private OI() {
         driverGamepad = new XboxGamepad(RobotMap.DRIVER_PORT);
         operatorGamepad = new XboxGamepad(RobotMap.OPERATOR_PORT);
@@ -39,25 +59,74 @@ public class OI
      * Sets up button bindings on the driver and operator controllers
      */
     private void initBindings() {
-        // operatorGamepad.getButtonB().whilePressed(new ToggleShooterAngle());
-        // operatorGamepad.getButtonA().whilePressed(new SpinBottomIntakeManual(1));
-        // operatorGamepad.getButtonX().whilePressed(new SpinIndexerManual(1));
-        // driverGamepad.getButtonY().whenPressed(new InstantCommand(Shooter::toggleAngle, Shooter.getInstance()));
-        // driverGamepad.getButtonA().whilePressed(() -> Shooter.spinShooter(SHOOTER_SPEED));
-        constraint = new SwerveDriveKinematicsConstraint(Drivetrain.getInstance().getKinematics(), Drivetrain.MAX_DRIVE_VELOCITY);
+        // ParallelCommandGroup shootLimelight = ;
 
-        TrajectoryConfig config = new TrajectoryConfig(Drivetrain.MAX_DRIVE_VELOCITY, Drivetrain.MAX_DRIVE_ACCELERATION)
-                .setKinematics(Drivetrain.getInstance().getKinematics())
-                .addConstraint(constraint);
+        // ParallelCommandGroup shootManual = ;
 
-        Trajectory linearTrajectory = TrajectoryGenerator.generateTrajectory(List.of( 
-            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            new Pose2d(1, 0, Rotation2d.fromDegrees(0))), config);
+        // ParallelCommandGroup intakeAgitate = new ParallelCommandGroup( //Intaking while spinning spine forward
+        //     new SpinIntakeVelocity(0.5), 
+        //     new SpinIndexer(1, false));
+
+        // ParallelCommandGroup outtakeAgitate = new ParallelCommandGroup( //Outaking while reversing spine 
+        //     new SpinIntakeVelocity(-0.5), 
+        //     new SpinIndexer(1, true));
+
+        ParallelCommandGroup jumble = new ParallelCommandGroup( //Intaking while reversing spine
+            new SpinIntakeVelocity(0.5), 
+            new SpinIndexer(1, true));
+            
+        /*
+            https://docs.google.com/drawings/d/1EcjV5vskFA2VKJZLO42NMxbFo7ZGpU-gMVATEqj9jZ0/edit
+
+            Default Command Controls:
+            Driver left joystick x and y: Translation
+            Driver right joystick x: Rotation
+            Driver/Operator left trigger: outtake
+            Driver/Operator right trigger: intake
+        */
+        
+        driverGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
+            new SpinShooterLimelight(), 
+            new MoveBallsToShooter(false)));
 
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
+        
+        driverGamepad.getButtonSelect().whilePressed(new ParallelCommandGroup(
+            new SpinShooterVelocity(90), 
+            new MoveBallsToShooter(false)));
 
-        driverGamepad.getButtonA().whenPressed(new SwerveDriveWithOdometryProfiling(linearTrajectory));
-    }
+        driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
+
+        operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
+            new SpinShooterLimelight(), 
+            new MoveBallsToShooter(false)));
+ 
+        operatorGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
+
+        operatorGamepad.getButtonB().whenPressed(new InstantCommand(() -> BottomIntake.getInstance().toggleSolenoid()));
+        operatorGamepad.getButtonA().whilePressed(new MoveBallsToShooter(false));
+        operatorGamepad.getButtonX().whenPressed(new InstantCommand(() -> Indexer.getInstance().toggleSolenoid()));
+        operatorGamepad.getButtonY().whilePressed(new SpinIndexer(0.8, false));
+
+        operatorGamepad.getButtonSelect().whilePressed(new SpinIntakeVelocity(0.3));
+        operatorGamepad.getButtonStart().whenPressed(new InstantCommand(() -> Shooter.getInstance().toggleHoodAngle()));
+        operatorGamepad.getLeftDPadButton().whilePressed(jumble);
+        
+        operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(
+            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR)), 
+            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR)), 
+            () -> !RobotMap.IS_NIGHT));
+
+        operatorGamepad.getRightDPadButton().whenPressed(new ConditionalCommand(
+            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_MEDIUM)), 
+            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR)), 
+            () -> !RobotMap.IS_NIGHT));
+
+        operatorGamepad.getUpDPadButton().whenPressed(new ConditionalCommand(
+            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE)), 
+            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE)), 
+            () -> !RobotMap.IS_NIGHT));
+        }
 
     /**
      * Returns the driver Xbox controller
@@ -77,7 +146,7 @@ public class OI
      * Returns the global instance of OI
      */
     public static OI getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new OI();
         return instance;
     }

@@ -1,5 +1,6 @@
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
@@ -8,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.util.Limelight;
 import harkerrobolib.util.MathUtil;
 
 /**
@@ -29,25 +31,48 @@ import harkerrobolib.util.MathUtil;
  * @since 11/4/19
  */
 public class SwerveManual extends CommandBase {
-    private static final double OUTPUT_MULTIPLIER = 0.7;
-    private static final double VELOCITY_HEADING_MULTIPLIER = -100;
+    static {
+        if (RobotMap.IS_PRACTICE) {
+            HIGH_VELOCITY_HEADING_MULTIPLIER = 0.16;
+            LOW_VELOCITY_HEADING_MULTIPLIER = 0.09;
+        } else {
+            HIGH_VELOCITY_HEADING_MULTIPLIER = 0.17;
+            LOW_VELOCITY_HEADING_MULTIPLIER = 0.17;
+        }
+    }
+
+    private static final double OUTPUT_MULTIPLIER = 1;
     private static final boolean IS_PERCENT_OUTPUT = false;
+    private static double HIGH_VELOCITY_HEADING_MULTIPLIER;
+    private static double LOW_VELOCITY_HEADING_MULTIPLIER;
+    private static final double ACCELERATION_HEADING_MULTIPLIER = 0;
+    private static final double TURN_VEL_THRESHOLD = 160;
 
     private double translateX, translateY, turnMagnitude;
     
     private static double prevPigeonHeading;
-    private static long prevTime;
-    
+    private static double prevTime;
+    private static double prevVel;
     private static boolean pigeonFlag; //True if the Driver Right X input is non-zero
     private static double pigeonAngle;
+
+    private static double lastPigeonUpdateTime; // seconds
+    private static double turnVel;
+    private static double turnAccel;
+
+    private static boolean joystickFlag;
     
     public SwerveManual() {
         addRequirements(Drivetrain.getInstance());
 
         pigeonFlag = false;
+
         // pigeonAngle = 90;
         // prevPigeonHeading = 90;
-        prevTime = System.currentTimeMillis();
+        prevTime = Timer.getFPGATimestamp();
+        lastPigeonUpdateTime = Timer.getFPGATimestamp();
+        prevPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
+        prevVel = 0;
     }
 
     @Override
@@ -62,6 +87,8 @@ public class SwerveManual extends CommandBase {
         pigeonFlag = true;
         prevPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
         pigeonAngle = prevPigeonHeading;
+
+        joystickFlag = true;
     }
 
     @Override
@@ -69,10 +96,11 @@ public class SwerveManual extends CommandBase {
         translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
         turnMagnitude = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
+        
+        if (Math.abs(translateX) > 0 || Math.abs(translateY) > 0 || Math.abs(turnMagnitude) > 0) {
+            joystickFlag = true;
+        }
 
-        SmartDashboard.putNumber("translate x", translateX);
-        SmartDashboard.putNumber("translate y", translateY);
-        SmartDashboard.putNumber("turn mag", turnMagnitude);
         //scale input from joysticks
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
@@ -81,13 +109,10 @@ public class SwerveManual extends CommandBase {
         double currentPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
 
         if(pigeonFlag && turnMagnitude == 0) { //If there was joystick input but now there is not
-            long currentTime = System.currentTimeMillis();
-            double deltaTime = (double)(currentTime - prevTime);
-            double turnVel = (currentPigeonHeading - prevPigeonHeading) / deltaTime;
+            double velocityHeadingMultiplier = Math.abs(turnVel) > TURN_VEL_THRESHOLD ? HIGH_VELOCITY_HEADING_MULTIPLIER : LOW_VELOCITY_HEADING_MULTIPLIER;
 
-            SmartDashboard.putNumber("Turn Vel", turnVel);
-
-            pigeonAngle = currentPigeonHeading - turnVel * VELOCITY_HEADING_MULTIPLIER; // account for momentum when turning
+            // account for momentum when turning
+            pigeonAngle = currentPigeonHeading + turnVel * velocityHeadingMultiplier + turnAccel * ACCELERATION_HEADING_MULTIPLIER;
         }
 
         pigeonFlag = Math.abs(turnMagnitude) > 0; //Update pigeon flag
@@ -95,26 +120,31 @@ public class SwerveManual extends CommandBase {
         if(!pigeonFlag) { //If there is no joystick input currently
             // turnMagnitude = !RobotMap.IS_PRACTICE ? Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading) : turnMagnitude;
             turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
-            SmartDashboard.putNumber("Pigeon Error", pigeonAngle - currentPigeonHeading);
         }
-
-        SmartDashboard.putNumber("turn mag", turnMagnitude);
-
-        prevPigeonHeading = currentPigeonHeading;
-        prevTime = System.currentTimeMillis();
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
 
-        SmartDashboard.putNumber("Speed x", speeds.vxMetersPerSecond);
-        SmartDashboard.putNumber("Speed y", speeds.vyMetersPerSecond);
-        SmartDashboard.putNumber("Speed rot", speeds.omegaRadiansPerSecond);
-
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
-        Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], 0, IS_PERCENT_OUTPUT, false);
+        if (joystickFlag)
+            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, false);
+
+        if(Timer.getFPGATimestamp() - lastPigeonUpdateTime > 0.01) {
+            double currentTime = Timer.getFPGATimestamp();
+            double deltaTime = (double)(currentTime - prevTime);
+
+            turnVel = (currentPigeonHeading - prevPigeonHeading) / deltaTime;
+            
+            turnAccel = (turnVel - prevVel) / deltaTime;
+
+            prevPigeonHeading = currentPigeonHeading;
+            prevVel = turnVel;
+            prevTime = currentTime;
+            lastPigeonUpdateTime = Timer.getFPGATimestamp();
+        }
     }
 
     @Override

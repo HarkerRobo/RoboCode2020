@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
 import harkerrobolib.util.Conversions;
@@ -41,8 +40,12 @@ public class SwerveModule {
     private static final int DRIVE_CURRENT_CONTINUOUS = 40;
     private static final int DRIVE_CURRENT_PEAK = 60;
     private static final int ANGLE_CURRENT_CONTINUOUS = 15;
-    private static final int ANGLE_CURRENT_PEAK = 15;
+    private static final int ANGLE_CURRENT_PEAK = 20;
     private static final int CURRENT_PEAK_DUR = 20;
+
+    private static final int DRIVE_TICKS_PER_REV = 2048;
+
+    private static final double EPSILON_OUTPUT = 1e-4;
 
     // Motor inversions
     private final TalonFXInvertType DRIVE_INVERTED;
@@ -141,7 +144,7 @@ public class SwerveModule {
         if(isPercentOutput) {
             driveMotor.set(TalonFXControlMode.PercentOutput, output);
         } else {
-            driveMotor.set(TalonFXControlMode.Velocity, Conversions.convert(SpeedUnit.FEET_PER_SECOND, output * Drivetrain.FEET_PER_METER, SpeedUnit.ENCODER_UNITS) * Drivetrain.GEAR_RATIO);
+            driveMotor.set(TalonFXControlMode.Velocity, Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, output * Drivetrain.FEET_PER_METER, SpeedUnit.ENCODER_UNITS, Drivetrain.WHEEL_DIAMETER, DRIVE_TICKS_PER_REV) * Drivetrain.GEAR_RATIO);
         }
     }
     
@@ -170,7 +173,8 @@ public class SwerveModule {
         
         int targetPos = (int)((targetAngle / 360) * 4096);
 
-        angleMotor.set(ControlMode.Position, targetPos);
+        if(output > EPSILON_OUTPUT || isMotionProfile) 
+            angleMotor.set(ControlMode.Position, targetPos);
     }
 
     /**
@@ -198,7 +202,25 @@ public class SwerveModule {
       * Returns the current SwerveModuleState of the module, which contains the angle (Rotation2d) and speed (m/s) of the module.
       */
     public SwerveModuleState getState() {
-        return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND) * Drivetrain.METERS_PER_FOOT, 
-            Rotation2d.fromDegrees(angleMotor.getSelectedSensorPosition() * 360 / 4096));
+        return new SwerveModuleState(Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, driveMotor.getSelectedSensorVelocity() / Drivetrain.GEAR_RATIO, SpeedUnit.FEET_PER_SECOND, Drivetrain.WHEEL_DIAMETER, DRIVE_TICKS_PER_REV) * Drivetrain.METERS_PER_FOOT, 
+            Rotation2d.fromDegrees(getAngleDegrees()));
+    }
+
+    public static double mod360(double degrees) {
+        return (degrees % 360 + 360) % 360;
+    }
+
+    /**
+     * Gets the error of the angle motor given desired degrees of rotation.
+     */
+    public double getAngleErrorDegrees(double desiredDegrees) {
+        while (getAngleDegrees() - desiredDegrees > 180) {
+            desiredDegrees += 360;
+        }
+        while (getAngleDegrees() - desiredDegrees < -180) {
+            desiredDegrees -= 360;
+        }
+
+        return getAngleDegrees() - desiredDegrees;
     }
 }

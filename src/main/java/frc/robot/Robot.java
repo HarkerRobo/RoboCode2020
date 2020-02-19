@@ -7,11 +7,21 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
+import frc.robot.commands.shooter.SpinShooterLimelight;
+import frc.robot.commands.shooter.SpinShooterManual;
+import frc.robot.commands.spinner.SpinnerManual;
+import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spinner;
+import frc.robot.util.Limelight;
+import frc.robot.auto.Autons;
     
 /**
  * Has anyone heard of the team that ran out of code? (This is a real story)
@@ -45,12 +55,20 @@ import frc.robot.subsystems.Drivetrain;
  *  climb (2)
  *  shooter (2)
  *  intake (1)
- *  hopper/indexer (1)
+ *  indexer/indexer (2)
  *  control panel spinner (1)
  * 
+ * Solenoids:
+ *  Spinner (1 double solenoid)
+ *  Climber (1 double solenoid)
+ *  Intake (1 double solenoid)
+ *  Indexer (1 single)
+ *  Shooter Hood (1 single)
+ *
  * @since 01/06/20
  */
 public class Robot extends TimedRobot {
+    private Compressor compressor;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -60,12 +78,18 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
-        // BottomIntake.getInstance();
-        // Shooter.getInstance().setDefaultCommand(new SpinShooterManual());
-        // Indexer.getInstance();
+        // Spinner.getInstance().setDefaultCommand(new SpinnerManual());
+        BottomIntake.getInstance();
+        Indexer.getInstance();
+        Shooter.getInstance();
         // Climber.getInstance();
 
         OI.getInstance();
+        compressor = new Compressor();  
+
+        Limelight.setLEDS(true);
+        Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
+        // Spinner.getInstance().getSolenoid().set(Spinner.DOWN);
     }
 
     /**
@@ -81,22 +105,22 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
-        SmartDashboard.putString("Robot Type", RobotMap.IS_PRACTICE ? "Practice Bot" : "Comp Bot");
+        SmartDashboard.putString("Robot Type", RobotMap.IS_PRACTICE ? "Practice" : "Comp");
 
-        // SmartDashboard.putNumber("TL Rise to Fall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        // SmartDashboard.putNumber("TR Rise to Fall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        // SmartDashboard.putNumber("BL Rise to Fall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        // SmartDashboard.putNumber("BR Rise to Fall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        if (RobotMap.IS_PRACTICE)
+            compressor.stop();
 
-        SmartDashboard.putNumber("TL Angle POS", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-        SmartDashboard.putNumber("TR Angle POS", Drivetrain.getInstance().getTopRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-        SmartDashboard.putNumber("BL Angle POS", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
-        SmartDashboard.putNumber("BR Angle POS", Drivetrain.getInstance().getBackRight().getAngleMotor().getSelectedSensorPosition() * 360.0 / 4096);
+        SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getOutputCurrent());
+        SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getOutputCurrent());
+        SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getOutputCurrent());
 
-        SmartDashboard.putNumber("TL Drive POS", Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-        SmartDashboard.putNumber("TR Drive POS", Drivetrain.getInstance().getTopRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-        SmartDashboard.putNumber("BL Drive POS", Drivetrain.getInstance().getBackLeft().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
-        SmartDashboard.putNumber("BR Drive POS", Drivetrain.getInstance().getBackRight().getDriveMotor().getSelectedSensorPosition() / Drivetrain.GEAR_RATIO);
+        SmartDashboard.putNumber("distance", SpinShooterLimelight.medianFilter.calculate(Shooter.getInstance().getLimelightDistance()));
+
+        SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
+
+        // SmartDashboard.putString("Shooter Command", Shooter.getInstance().getCurrentCommand().getName() == null);
+
+        // Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
 
         // SmartDashboard.putNumber("TL Angle Error", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopError());
         // SmartDashboard.putNumber("TR Angle Error", Drivetrain.getInstance().getTopRight().getAngleMotor().getClosedLoopError());
@@ -108,9 +132,14 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putNumber("BL Drive Error", Drivetrain.getInstance().getBackLeft().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
         // SmartDashboard.putNumber("BR Drive Error", Drivetrain.getInstance().getBackRight().getDriveMotor().getClosedLoopError() / Drivetrain.GEAR_RATIO);
 
-        SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
-        SmartDashboard.putNumber("Pigeon Yaw", Drivetrain.getInstance().getPigeon().getYaw());
-        SmartDashboard.putNumber("Pigeon Compass", Drivetrain.getInstance().getPigeon().getAbsoluteCompassHeading());
+        // SmartDashboard.putNumber("TL Drive Current", Drivetrain.getInstance().getTopLeft().getDriveMotor().getStatorCurrent());
+
+        // CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
+    }
+
+    @Override
+    public void autonomousInit() {
+        
     }
 
     /**
@@ -135,5 +164,12 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {
         CommandScheduler.getInstance().run();
+
+        Limelight.setLEDS(true);
+    }
+
+    @Override
+    public void disabledInit() {
+        Limelight.setLEDS(false);
     }
 }
