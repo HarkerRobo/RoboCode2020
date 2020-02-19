@@ -102,6 +102,10 @@ public class SwerveManual extends CommandBase {
             joystickFlag = true;
         }
 
+        SmartDashboard.putNumber("X joystick output", translateX);
+        SmartDashboard.putNumber("Y joystick output", translateY);
+
+
         //scale input from joysticks
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;

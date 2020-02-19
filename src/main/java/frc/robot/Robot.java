@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getStatorCurrent());
         SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getStatorCurrent());
         SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getStatorCurrent());
-
+        SmartDashboard.putNumber("pigeon heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
         // Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
 
         // SmartDashboard.putNumber("TL Angle Error", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopError());
