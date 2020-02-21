@@ -10,6 +10,7 @@ import frc.robot.util.Limelight;
 
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import harkerrobolib.util.MathUtil;
@@ -39,27 +40,31 @@ public class SwerveAlignWithLimelight extends CommandBase {
         addRequirements(Drivetrain.getInstance());
 
         txController = new PIDController(Drivetrain.TX_kP, Drivetrain.TX_kI, Drivetrain.TX_kD);
-        txController.setSetpoint(Drivetrain.TX_SETPOINT);
+
+        SmartDashboard.putNumber("TX", Drivetrain.TX_SETPOINT);
     }
     
     @Override
     public void initialize() {
         Drivetrain.getInstance().applyToAllDrive((falcon) -> falcon.selectProfileSlot(Drivetrain.DRIVE_VELOCITY_SLOT, RobotMap.PRIMARY_INDEX));
         Drivetrain.getInstance().applyToAllDrive((falcon) -> falcon.configClosedloopRamp(Drivetrain.DRIVE_RAMP_RATE));
-
+        
         Drivetrain.getInstance().applyToAllAngle((talon) -> talon.selectProfileSlot(Drivetrain.ANGLE_POSITION_SLOT, RobotMap.PRIMARY_INDEX));
         Drivetrain.getInstance().applyToAllAngle((talon) -> talon.configClosedloopRamp(Drivetrain.ANGLE_RAMP_RATE));
-
+        
         Limelight.setCamModeVision();
         Limelight.setLEDS(true);
 
         prevXPos = Drivetrain.getInstance().getOdometry().getPoseMeters().getTranslation().getX();
         prevTime = System.currentTimeMillis();
     }
-
+    
     @Override
     public void execute() {
         //double speed = -thorController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_DRIVE_VELOCITY;
+        txController.setSetpoint(SmartDashboard.getNumber("TX", Drivetrain.TX_SETPOINT));
+        SmartDashboard.putNumber("TX setpoint", txController.getSetpoint());
+
         double distance = (SpinShooterLimelight.TARGET_HEIGHT - SpinShooterLimelight.LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(Limelight.getTy() + SpinShooterLimelight.LIMELIGHT_ANGLE));
         double averageDistance = medianFilter.calculate(distance);
 
@@ -67,7 +72,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
         double translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         double translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
-        double turnManual = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
+        double turnManual = -1 * MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
         
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
