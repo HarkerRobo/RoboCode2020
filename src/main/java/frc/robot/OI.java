@@ -93,7 +93,7 @@ public class OI {
             new MoveBallsToShooter(false)));
 
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
-        
+        driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
         driverGamepad.getButtonSelect().whilePressed(new ParallelCommandGroup(
             new SpinShooterVelocity(90), 
             new MoveBallsToShooter(false)));
