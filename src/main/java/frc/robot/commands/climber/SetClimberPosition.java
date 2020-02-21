@@ -3,7 +3,6 @@ package frc.robot.commands.climber;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Climber;
 import harkerrobolib.commands.IndefiniteCommand;
@@ -23,6 +22,7 @@ public class SetClimberPosition extends IndefiniteCommand {
 
     public SetClimberPosition(int position, double feedForward) {
         addRequirements(Climber.getInstance());
+        
         this.position = position;
         this.feedForward = feedForward;
     }
@@ -39,6 +39,6 @@ public class SetClimberPosition extends IndefiniteCommand {
 
     @Override
     public void end(boolean interrupted) {
-        Climber.getInstance().getMaster().set(ControlMode.Disabled, 0);
+        Climber.getInstance().getMaster().set(ControlMode.Disabled, 0, DemandType.ArbitraryFeedForward, Climber.FEED_FORWARD);
     }
 }

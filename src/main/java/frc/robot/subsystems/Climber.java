@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * 
  * @author Chirag Kaushik
  * @author Shahzeb Lakhani
+ * @author Jatin Kohli
  * @since January 18, 2020
  */
 public class Climber extends SubsystemBase {
@@ -34,9 +35,16 @@ public class Climber extends SubsystemBase {
     private static final double CLIMBER_RAMP_RATE = 0.1;
     private static final int VOLTAGE_COMP = 10;
 
-    private static final int CURRENT_CONTINUOUS = 50;
-    private static final int CURRENT_PEAK = 60;
-    private static final int CURRENT_PEAK_DURATION = 50;
+    private static final int CURRENT_CONTINUOUS = 60;
+    private static final int CURRENT_PEAK = 70;
+    private static final int CURRENT_PEAK_DURATION = 100;
+    
+    public static final int MAX_POSITION = 15800;
+    public static final int MIN_POSITION = 200;
+    private static final int FORWARD_SOFT_LIMIT = 16000;
+    private static final int REVERSE_SOFT_LIMIT = 0;
+
+    public static final double FEED_FORWARD = 0.1;
 
     static {
         if (RobotMap.IS_PRACTICE) {
@@ -75,13 +83,15 @@ public class Climber extends SubsystemBase {
         follower.configFactoryDefault();
 
         master.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, RobotMap.DEFAULT_TIMEOUT);
-        follower.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, RobotMap.DEFAULT_TIMEOUT);
 
         master.setNeutralMode(NeutralMode.Brake);
         follower.setNeutralMode(NeutralMode.Brake);
 
-        master.configForwardSoftLimitEnable(false);
-        master.configReverseSoftLimitEnable(false);
+        master.configForwardSoftLimitThreshold(FORWARD_SOFT_LIMIT);
+        master.configReverseSoftLimitThreshold(REVERSE_SOFT_LIMIT);
+
+        master.configForwardSoftLimitEnable(true);
+        master.configReverseSoftLimitEnable(true);
         master.overrideLimitSwitchesEnable(false);
         
         follower.configForwardSoftLimitEnable(false);
@@ -89,7 +99,6 @@ public class Climber extends SubsystemBase {
         follower.overrideLimitSwitchesEnable(false);
 
         master.setSelectedSensorPosition(0);
-        follower.setSelectedSensorPosition(0);
 
         follower.follow(master);
 
@@ -101,6 +110,7 @@ public class Climber extends SubsystemBase {
 
         master.configVoltageCompSaturation(VOLTAGE_COMP);
         follower.configVoltageCompSaturation(VOLTAGE_COMP);
+
         master.enableVoltageCompensation(true);
         follower.enableVoltageCompensation(true);
 

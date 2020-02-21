@@ -3,9 +3,7 @@ package frc.robot.commands.climber;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
-import frc.robot.RobotMap;
 import frc.robot.subsystems.Climber;
 import harkerrobolib.commands.IndefiniteCommand;
 
@@ -27,12 +25,12 @@ public class MoveClimberManual extends IndefiniteCommand {
 
     @Override
     public void execute() {
-        double output = OUTPUT_MULTIPLIER * ((OI.getInstance().getOperatorGamepad().getUpDPadButton().get() ? 1 : 0) - (OI.getInstance().getOperatorGamepad().getDownDPadButton().get() ? 1 : 0));
-        Climber.getInstance().getMaster().set(ControlMode.PercentOutput, output);
+        double output = OUTPUT_MULTIPLIER * ((OI.getInstance().getDriverGamepad().getUpDPadButton().get() ? 1 : 0) - (OI.getInstance().getDriverGamepad().getDownDPadButton().get() ? 1 : 0));
+        Climber.getInstance().getMaster().set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, Climber.FEED_FORWARD);
     }
 
     @Override
     public void end(boolean interrupted) {
-        Climber.getInstance().getMaster().set(ControlMode.Disabled, 0);
+        Climber.getInstance().getMaster().set(ControlMode.Disabled, 0, DemandType.ArbitraryFeedForward, Climber.FEED_FORWARD);
     }
 }

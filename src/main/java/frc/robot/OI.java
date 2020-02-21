@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.bottomintake.SpinIntakeVelocity;
+import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.indexer.MoveBallsToShooter;
 import frc.robot.commands.indexer.SpinIndexer;
@@ -18,6 +19,7 @@ import frc.robot.commands.shooter.SpinShooterVelocity;
 import frc.robot.commands.spinner.RotationControlTimed;
 import frc.robot.commands.spinner.SpinnerPositionColorSensor;
 import frc.robot.subsystems.BottomIntake;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
@@ -81,6 +83,7 @@ public class OI {
             Default Command Controls:
             Driver left joystick x and y: Translation
             Driver right joystick x: Rotation
+            Driver up/down dpad: Climber Manual
             Driver/Operator left trigger: outtake
             Driver/Operator right trigger: intake
         */
@@ -96,6 +99,9 @@ public class OI {
             new MoveBallsToShooter(false)));
 
         driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
+
+        // driverGamepad.getLeftDPadButton().whenPressed(new SetClimberPosition(Climber.MIN_POSITION, Climber.FEED_FORWARD));
+        // driverGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.MAX_POSITION, Climber.FEED_FORWARD));
 
         operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
             new SpinShooterLimelight(), 
