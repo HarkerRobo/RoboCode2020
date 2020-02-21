@@ -107,7 +107,7 @@ public class Trajectories {
     public static class FiveRendezvous extends AutonTrajectory {
         public static Trajectory leftStarting = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
-                    new Pose2d(5, 1, Rotation2d.fromDegrees(0)),
+                    new Pose2d(2.826766, 1, Rotation2d.fromDegrees(0)),
                     new Pose2d(5, -3, Rotation2d.fromDegrees(270)),
                     new Pose2d(4.5, -3.5, Rotation2d.fromDegrees(252))),
             config);
@@ -121,7 +121,7 @@ public class Trajectories {
             
         public static Trajectory rightStarting = TrajectoryGenerator.generateTrajectory( 
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)),
-                    new Pose2d(-5, 1.5, Rotation2d.fromDegrees(0)),
+                    new Pose2d(-2.6573392608, -2.4557866048, Rotation2d.fromDegrees(0)),
                     new Pose2d(-10, -3, Rotation2d.fromDegrees(270))),
                 config);
         
