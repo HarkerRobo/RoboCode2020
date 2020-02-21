@@ -40,8 +40,8 @@ public class RobotMap {
 		public static final int SHOOTER_SOLENOID_FORWARD = 6;
 		public static final int SHOOTER_BACKWARD = 1;
 
-		public static final int CLIMBER_MASTER_ID = -1;
-		public static final int CLIMBER_FOLLOWER_ID = -1;
+		public static final int CLIMBER_MASTER_ID = 14;
+		public static final int CLIMBER_FOLLOWER_ID = 15;
 		
 		public static final int TL_DRIVE_ID = 0;
 		public static final int TL_ANGLE_ID = 1;
