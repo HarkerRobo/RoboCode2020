@@ -19,14 +19,28 @@ import harkerrobolib.commands.IndefiniteCommand;
 public class MoveClimberManual extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 0.3;
 
+    private boolean inputFlag;
+
     public MoveClimberManual() {
         addRequirements(Climber.getInstance());
     }
 
     @Override
+    public void initialize() {
+        inputFlag = false;
+    }
+
+    @Override
     public void execute() {
-        double output = OUTPUT_MULTIPLIER * ((OI.getInstance().getDriverGamepad().getUpDPadButton().get() ? 1 : 0) - (OI.getInstance().getDriverGamepad().getDownDPadButton().get() ? 1 : 0));
-        Climber.getInstance().getMaster().set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, Climber.FEED_FORWARD);
+        boolean upDpad = OI.getInstance().getDriverGamepad().getUpDPadButton().get();
+        boolean downDpad = OI.getInstance().getDriverGamepad().getDownDPadButton().get();
+        double output = OUTPUT_MULTIPLIER * ((upDpad ? 1 : 0) - (downDpad ? 1 : 0));
+
+        if (upDpad || downDpad)
+            inputFlag = true;
+
+        if (inputFlag)
+            Climber.getInstance().getMaster().set(ControlMode.PercentOutput, output, DemandType.ArbitraryFeedForward, Climber.FEED_FORWARD);
     }
 
     @Override

@@ -36,9 +36,4 @@ public class SetClimberPosition extends IndefiniteCommand {
     public void execute() {
         Climber.getInstance().getMaster().set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
     }
-
-    @Override
-    public void end(boolean interrupted) {
-        Climber.getInstance().getMaster().set(ControlMode.Disabled, 0, DemandType.ArbitraryFeedForward, Climber.FEED_FORWARD);
-    }
 }
