@@ -135,7 +135,7 @@ public class Climber extends SubsystemBase {
 
     public static Climber getInstance() {
         if (instance == null) 
-            return new Climber();
+            instance = new Climber();
         return instance;
     }
 }

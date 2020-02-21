@@ -192,13 +192,13 @@ public class Spinner extends SubsystemBase {
         return curVal; 
     }
 
+    public void toggleSolenoid() {
+        solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
+    }
+
     public static Spinner getInstance() {
         if(instance == null)
             instance = new Spinner();
         return instance;
-    }
-
-    public void toggleSolenoid() {
-        solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
     }
 }
