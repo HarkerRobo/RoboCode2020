@@ -21,7 +21,7 @@ import harkerrobolib.commands.IndefiniteCommand;
  */
 public class MoveBallsToShooter extends IndefiniteCommand {
     private static final double INDEX_PERCENT_OUTPUT = 0.9; //0.89
-    private static final long MIN_TIME = 1000;
+    private static final long MIN_TIME = 100;
 
     private boolean backwards;
 

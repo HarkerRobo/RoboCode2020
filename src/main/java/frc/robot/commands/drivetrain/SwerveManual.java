@@ -145,6 +145,8 @@ public class SwerveManual extends CommandBase {
             prevTime = currentTime;
             lastPigeonUpdateTime = Timer.getFPGATimestamp();
         }
+
+        SmartDashboard.putNumber("Current velocity", Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorVelocity());
     }
 
     @Override

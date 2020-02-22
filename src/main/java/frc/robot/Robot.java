@@ -135,6 +135,16 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putNumber("TL Drive Current", Drivetrain.getInstance().getTopLeft().getDriveMotor().getStatorCurrent());
 
         // CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
+        // double pigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading()%360;
+        // SmartDashboard.putNumber("PIGEON HEADING", pigeonHeading);
+
+        // if(pigeonHeading < 90 || pigeonHeading > 270) {
+        
+        //     Limelight.setLEDS(false);
+        // }
+        // else {
+        //     Limelight.setLEDS(true);
+        // }
     }
 
     @Override

@@ -50,6 +50,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     }
     
     public void execute() {
+        Limelight.setLEDS(true);
         double distance = Shooter.getInstance().getLimelightDistance();
         LIMELIGHT_ANGLE = SmartDashboard.getNumber("Limelight angle", LIMELIGHT_ANGLE);
         // Shooter.getInstance().spinShooter(initialVelocity + MULTIPLIER * distance);
@@ -95,5 +96,6 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     @Override
     public void end(boolean interrupted) {
         Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0);
+        Limelight.setLEDS(false);
     }
 }

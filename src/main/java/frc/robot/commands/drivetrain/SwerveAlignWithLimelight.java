@@ -61,6 +61,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
     
     @Override
     public void execute() {
+        Limelight.setLEDS(true);
         //double speed = -thorController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_DRIVE_VELOCITY;
         txController.setSetpoint(SmartDashboard.getNumber("TX", Drivetrain.TX_SETPOINT));
         SmartDashboard.putNumber("TX setpoint", txController.getSetpoint());
@@ -111,6 +112,6 @@ public class SwerveAlignWithLimelight extends CommandBase {
     public void end(boolean interrupted) {
         txController.reset();
         Drivetrain.getInstance().stopAllDrive();
-        Limelight.setLEDS(true);
+        Limelight.setLEDS(false);
     }
 }
