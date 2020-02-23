@@ -65,6 +65,9 @@ public class SwerveManualHeadingControl extends CommandBase {
     private PIDController headingController;
     private static boolean joystickFlag;
     private static boolean headingFlag;
+
+    private static boolean xPressed;
+    private static boolean xFlag;
     
     public SwerveManualHeadingControl() {
         addRequirements(Drivetrain.getInstance());
@@ -77,6 +80,8 @@ public class SwerveManualHeadingControl extends CommandBase {
         lastPigeonUpdateTime = Timer.getFPGATimestamp();
         prevPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
         prevVel = 0;
+        xPressed = false;
+        xFlag = false;
     }
 
     @Override
@@ -115,22 +120,25 @@ public class SwerveManualHeadingControl extends CommandBase {
             headingFlag = true;
         }
         
-
         turnMagnitude = -1 * headingController.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), headingAngle);
-        SmartDashboard.putNumber("turn mag", turnMagnitude);
+            SmartDashboard.putNumber("turn mag", turnMagnitude);
         if (Math.abs(translateX) > 0 || Math.abs(translateY) > 0 || Math.abs(headingX) > 0 || Math.abs(headingY) > 0) {
             joystickFlag = true;
         }
-
+        
         //scale input from joysticks
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         turnMagnitude *= -1 * OUTPUT_MULTIPLIER * Drivetrain.MAX_ROTATION_VELOCITY;
-
+        
         // double currentPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
-
+        xFlag = xPressed  == true && OI.getInstance().getDriverGamepad().getButtonX().get() == false;
+        xPressed = OI.getInstance().getDriverGamepad().getButtonX().get();
+        if (xFlag) {
+            headingAngle = Drivetrain.getInstance().getPigeon().getFusedHeading() - 170;
+        }
         // if(pigeonFlag && turnMagnitude == 0) { //If there was joystick input but now there is not
-        //     double velocityHeadingMultiplier = Math.abs(turnVel) > TURN_VEL_THRESHOLD ? HIGH_VELOCITY_HEADING_MULTIPLIER : LOW_VELOCITY_HEADING_MULTIPLIER;
+            //     double velocityHeadingMultiplier = Math.abs(turnVel) > TURN_VEL_THRESHOLD ? HIGH_VELOCITY_HEADING_MULTIPLIER : LOW_VELOCITY_HEADING_MULTIPLIER;
 
         //     // account for momentum when turning
         //     pigeonAngle = currentPigeonHeading + turnVel * velocityHeadingMultiplier + turnAccel * ACCELERATION_HEADING_MULTIPLIER;
@@ -142,9 +150,8 @@ public class SwerveManualHeadingControl extends CommandBase {
         //     // turnMagnitude = !RobotMap.IS_PRACTICE ? Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading) : turnMagnitude;
         //     turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
         // }
-
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
+            translateX, translateY, xPressed == true ? -1 * OUTPUT_MULTIPLIER * Drivetrain.MAX_ROTATION_VELOCITY : turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
 
         // Now use this in our kinematics

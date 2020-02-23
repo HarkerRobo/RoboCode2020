@@ -121,7 +121,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
 
         // SmartDashboard.putString("Shooter Command", Shooter.getInstance().getCurrentCommand().getName() == null);
-
         // Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
 
         // SmartDashboard.putNumber("TL Angle Error", Drivetrain.getInstance().getTopLeft().getAngleMotor().getClosedLoopError());
@@ -183,5 +182,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         Limelight.setLEDS(false);
+
+        CommandScheduler.getInstance().cancelAll();
     }
 }

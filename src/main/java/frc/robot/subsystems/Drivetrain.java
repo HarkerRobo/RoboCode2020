@@ -184,7 +184,7 @@ public class Drivetrain extends SubsystemBase {
             BR_ANGLE_SENSOR_PHASE = true;
 
             TL_OFFSET = 11484;//11575;//15561;
-            TR_OFFSET = 14079;//14161;//2492;
+            TR_OFFSET = 7771;
             BL_OFFSET = 11444;//11400;//15351;
             BR_OFFSET = 6291;//6447;//10413;
             
@@ -202,15 +202,15 @@ public class Drivetrain extends SubsystemBase {
             
             PIGEON_kP = 0.02;
 
-            MP_X_KP = 6;//6;//2.6;
+            MP_X_KP = 14;//6;//2.6;
             MP_X_KI = 0;
-            MP_X_KD = 20;//15;
+            MP_X_KD = 0;//15;
 
-            MP_Y_KP = 6;//22;//0.7;
+            MP_Y_KP = 12;//22;//0.7;
             MP_Y_KI = 0;
             MP_Y_KD = 0;
 
-            MP_THETA_KP = 7;//3.1;
+            MP_THETA_KP = 6;//3.1;
             MP_THETA_KI = 0;
             MP_THETA_KD = 3;
         }
