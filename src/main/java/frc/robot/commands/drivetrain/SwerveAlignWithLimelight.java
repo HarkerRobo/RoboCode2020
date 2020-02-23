@@ -65,7 +65,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
         //double speed = -thorController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_DRIVE_VELOCITY;
         txController.setSetpoint(SmartDashboard.getNumber("TX", Drivetrain.TX_SETPOINT));
         SmartDashboard.putNumber("TX setpoint", txController.getSetpoint());
-
+        SmartDashboard.putNumber("TX error", Limelight.getTx());
         double distance = (SpinShooterLimelight.TARGET_HEIGHT - SpinShooterLimelight.LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(Limelight.getTy() + SpinShooterLimelight.LIMELIGHT_ANGLE));
         double averageDistance = medianFilter.calculate(distance);
 
@@ -73,7 +73,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
         double translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         double translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
-        double turnManual = -1 * MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
+        double turnManual = -3 * MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
         
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
         translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
