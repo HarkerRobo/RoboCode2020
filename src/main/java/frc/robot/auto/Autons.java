@@ -33,16 +33,16 @@ public class Autons {
     }
     
     //Change this before the match.
-    public static StartingPosition startingPosition = StartingPosition.LEFT;
-    private static AutonCommands curAuton = AutonCommands.THREE; 
+    public static StartingPosition startingPosition = StartingPosition.RIGHT;
+    public static AutonCommands curAuton = AutonCommands.THREE; 
 
     //Brings the intake out, required at the start of every autonomous configuration
-    private static InstantCommand intakeOut = new InstantCommand(
-            () -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance());
+    // private static InstantCommand intakeOut = new InstantCommand(
+    //         () -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance());
 
     private static Rotation2d rendezvousTwoBallPickupHeading = Rotation2d.fromDegrees(120);
     private static final double REV_SPEED = 90;
-    private static final double SHOOTER_REV_TIME = 2; // how long it takes to shoot all the balls
+    private static final double SHOOTER_REV_TIME = 0.7;
     private static final double SHOOTER_SHOOT_TIME = 4.0; // how long it takes to shoot all the balls
 
     private static final SequentialCommandGroup baselineAuto = new SequentialCommandGroup(
@@ -58,7 +58,8 @@ public class Autons {
    
     //pick up two balls from opponents trench and shoot all five
     private static final SequentialCommandGroup trenchFiveAuton = new SequentialCommandGroup(
-        intakeOut,
+        new InstantCommand(
+            () -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance()),
         new SwerveDriveWithOdometryProfiling(Trajectories.FiveTrench.getStart(), OI.forwardHeading).raceWith(new SpinIntakeVelocity(1), new SpinIndexer(1, false)),
         new SwerveDriveWithOdometryProfiling(Trajectories.FiveTrench.pickupToShoot, OI.forwardHeading).raceWith(new SpinShooterVelocity(REV_SPEED)),
         new SpinShooterLimelight().raceWith(new WaitCommand(SHOOTER_REV_TIME), new SwerveAlignWithLimelight()),
@@ -66,7 +67,8 @@ public class Autons {
 
     //pick up two balls from rendezvous point and shoot all five
     private static final SequentialCommandGroup rendezvousFiveAuton = new SequentialCommandGroup(
-        intakeOut,
+        new InstantCommand(
+            () -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance()),
         new SwerveDriveWithOdometryProfiling(Trajectories.FiveRendezvous.getStart(), OI.forwardHeading).raceWith(new SpinIntakeVelocity(1), new SpinIndexer(1, false)),
         new SpinIntakeVelocity(1).raceWith(new WaitCommand(0.5), new SpinIndexer(1, false)),
         new SwerveDriveWithOdometryProfiling(Trajectories.FiveRendezvous.pickupToShoot, OI.forwardHeading).raceWith(new SpinShooterVelocity(REV_SPEED)),
@@ -75,7 +77,8 @@ public class Autons {
     
     //shoot all three pre-loaded balls, pick up five from the rendevous point, and shoot those five
     private static final SequentialCommandGroup rendezvousEightAuton = new SequentialCommandGroup(
-        intakeOut,
+        new InstantCommand(
+            () -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance()),
         new SwerveDriveWithOdometryProfiling(Trajectories.EightRendezvous.getStart(), rendezvousTwoBallPickupHeading)
              .raceWith(new SpinIntakeVelocity(1), new SpinIndexer(1, false)),
         new ParallelRaceGroup(new SpinIntakeVelocity(1), new SpinIndexer(1, false), new WaitCommand(0.5)),
@@ -92,7 +95,8 @@ public class Autons {
 
     //shoot all three pre-loaded balls, pick up five from the alliance trench, and shoot those five
     private static final SequentialCommandGroup trenchEightAuton = new SequentialCommandGroup(
-        intakeOut, 
+        new InstantCommand(
+            () -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance()), 
         new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.getStart(), OI.forwardHeading)  // move to shooting location
             .raceWith(new SpinShooterVelocity(REV_SPEED)),
         new SpinShooterLimelight().raceWith(new WaitCommand(SHOOTER_REV_TIME), new SwerveAlignWithLimelight()),
@@ -106,7 +110,8 @@ public class Autons {
 
     private static final SequentialCommandGroup trenchToRendevousTenBallAuton = new SequentialCommandGroup(
       //Move out the intake
-      intakeOut,
+      new InstantCommand(
+        () -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance()),
       
       //Move to the opponent's trench and intake two balls
       new SwerveDriveWithOdometryProfiling(Trajectories.TenTwoTrenchRendezvous.getStart(), OI.forwardHeading
@@ -138,7 +143,8 @@ public class Autons {
 
     private static final SequentialCommandGroup speedRendezvousToTrenchTen = new SequentialCommandGroup(
       //Move out the intake
-      intakeOut,
+      new InstantCommand(
+        () -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance()),
       
       //Move to the opponent's trench and intake two balls
       new SwerveDriveWithOdometryProfiling(Trajectories.SpeedTenBallAuton.getStart(), OI.forwardHeading
@@ -164,10 +170,10 @@ public class Autons {
     );
 
     public static CommandBase getAutonCommand() {
-        return curAuton.value;
+        return AutonCommands.THREE.value/*curAuton.value*/;
     }
 
-    public enum AutonCommands {
+    public static enum AutonCommands {
         BASELINE(baselineAuto),
         THREE(three), 
         FIVE_TRENCH(trenchFiveAuton), 
@@ -179,8 +185,9 @@ public class Autons {
         
         public SequentialCommandGroup value;
 
-        private AutonCommands(SequentialCommandGroup value) {
-            this.value = value;
+        private AutonCommands(SequentialCommandGroup val) {
+            System.out.println(val);
+            this.value = val;
         }
     }
 }
