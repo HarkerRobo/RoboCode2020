@@ -31,7 +31,6 @@ public class SwerveAlignWithLimelight extends CommandBase {
     // private static final double OFFSET = 0;
 
     private PIDController txController;
-    private MedianFilter medianFilter = new MedianFilter(180);
 
     private double prevXPos;
     private double prevTime;
@@ -66,8 +65,6 @@ public class SwerveAlignWithLimelight extends CommandBase {
         txController.setSetpoint(SmartDashboard.getNumber("TX", Drivetrain.TX_SETPOINT));
         SmartDashboard.putNumber("TX setpoint", txController.getSetpoint());
         SmartDashboard.putNumber("TX error", Limelight.getTx());
-        double distance = (SpinShooterLimelight.TARGET_HEIGHT - SpinShooterLimelight.LIMELIGHT_HEIGHT) / Math.tan(Math.toRadians(Limelight.getTy() + SpinShooterLimelight.LIMELIGHT_ANGLE));
-        double averageDistance = medianFilter.calculate(distance);
 
         double turn = txController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_ROTATION_VELOCITY;
 

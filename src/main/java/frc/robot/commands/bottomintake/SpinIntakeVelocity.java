@@ -1,6 +1,5 @@
 package frc.robot.commands.bottomintake;
 
-import frc.robot.OI;
 import frc.robot.subsystems.BottomIntake;
 import harkerrobolib.commands.IndefiniteCommand;
 
@@ -15,6 +14,7 @@ public class SpinIntakeVelocity extends IndefiniteCommand {
 
     public SpinIntakeVelocity(double magnitude) {
         addRequirements(BottomIntake.getInstance());
+        
         this.magnitude = magnitude;
     }
 

@@ -20,17 +20,12 @@ import harkerrobolib.commands.IndefiniteCommand;
 public class SpinIndexer extends IndefiniteCommand {
     private static final double INDEX_SPEED = 1;
     private boolean backwards;
-    // private boolean intakeFlag; // If the intake sensor just detected a ball
-    public static boolean indexerFlag; // If the ball in front of the indexer sensor has evacuated
-    private boolean prevDetection;
     private double output;
 
     public SpinIndexer(double output, boolean backwards) {
         addRequirements(Indexer.getInstance());
-        // intakeFlag = false;
-        indexerFlag = false;
+
         this.backwards = backwards;
-        prevDetection = false;
         this.output = output;
     }
 
@@ -53,7 +48,6 @@ public class SpinIndexer extends IndefiniteCommand {
         //     indexerFlag = true;
         // }
 
-        // if(!(indexerFlag && hopperDetected) || backwards)
         if(!(hopperDetected && indexerDetected) || backwards)
             Indexer.getInstance().spinSpine(output * (backwards ? -INDEX_SPEED : INDEX_SPEED));
         else
@@ -63,33 +57,6 @@ public class SpinIndexer extends IndefiniteCommand {
             Indexer.getInstance().spinAgitator(output * Indexer.AGITATOR_DEFAULT_OUTPUT);
         else
             Indexer.getInstance().spinAgitator(output * (backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0));
-
-        prevDetection = hopperDetected;
-        // // If the indexer is full, never move
-        // if(!shooterDetected) {
-        //     // If something is currently next to the intake sensor, say that a ball has passed through this sensor.
-        //     if(intakeDetected && !intakeFlag) {
-        //         intakeFlag = true;
-        //         // Indexer.getInstance().numPowerCells++;
-        //     }
-        //     // Once the ball in front of the indexer has left, wait for the intake ball to reach the indexer
-        //     if(intakeFlag && !indexerDetected) {
-        //         indexerFlag = true;
-        //         // Indexer.getInstance().numPowerCells++;
-        //     }
-        //     //If there is a ball that needs to be indexed - i.e one that has passed through the intake.
-        //     if(intakeFlag) {
-        //         Indexer.getInstance().spinIndexer(INDEX_SPEED);
-        //     }
-        //     //If there is a ball that needed to be indexed and there is something new in front of the indexer,
-        //     //then we know that the ball that needed to be index reached its place and can reset our flags.
-        //     if(intakeFlag && indexerFlag && indexerDetected) {
-        //         Indexer.getInstance().spinIndexer(0); 
-        //         intakeFlag = false;
-        //         indexerFlag = false;
-        //         // Indexer.getInstance().numPowerCells--;
-        //     }
-        // }
     }
 
     @Override

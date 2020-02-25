@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.commands.shooter.SpinShooterLimelight;
@@ -31,9 +30,12 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  */
 public class Shooter extends SubsystemBase {
     static {
-        if(RobotMap.IS_PRACTICE) {
-            FLYWHEEL_KF = 0.003; // tune;
-            FLYWHEEL_KP = 0.01; // tune;
+        if(RobotMap.IS_COMP) {
+            FLYWHEEL_KF = 0.064; // tune;
+            FLYWHEEL_KP = 0.05; // tune;
+            FLYWHEEL_KI = 0.001;
+            FLYWHEEL_KD = 0.7;
+            FLYWHEEL_IZONE = 150;
 
             SHOOTER_HIGH_ANGLE = Value.kForward;
             SHOOTER_LOW_ANGLE = Value.kReverse;
@@ -52,8 +54,8 @@ public class Shooter extends SubsystemBase {
             SHOOTER_HIGH_ANGLE = Value.kForward;
             SHOOTER_LOW_ANGLE = Value.kReverse;
 
-            MASTER_INVERT = TalonFXInvertType.CounterClockwise;
-            FOLLOWER_INVERT = TalonFXInvertType.Clockwise;
+            MASTER_INVERT = TalonFXInvertType.Clockwise;
+            FOLLOWER_INVERT = TalonFXInvertType.CounterClockwise;
 
             SENSOR_PHASE = false;
         }
@@ -99,6 +101,7 @@ public class Shooter extends SubsystemBase {
     private static final double NIGHT_THRESHOLD = 18.4;  // choosing between far and close pipelines for night
 
     public static boolean isPercentOutput = true;
+    
     /**
      * Constructs a Shooter.
      */

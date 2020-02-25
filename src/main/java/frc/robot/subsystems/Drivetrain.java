@@ -90,19 +90,19 @@ public class Drivetrain extends SubsystemBase {
     private static double DRIVE_VELOCITY_KP;
     private static double DRIVE_VELOCITY_KI;
     private static double DRIVE_VELOCITY_KD;
-    private static double DRIVE_VELOCITY_KF; // theoretical: 0.034;
+    private static double DRIVE_VELOCITY_KF;
 
     public static final double PIGEON_kP;
 
-    public static double MP_X_KP;//2.6;
+    public static double MP_X_KP;
     public static double MP_X_KI;
-    public static double MP_X_KD;//15;
+    public static double MP_X_KD;
 
-    public static double MP_Y_KP;//0.7;
+    public static double MP_Y_KP;
     public static double MP_Y_KI;
     public static double MP_Y_KD;
 
-    public static double MP_THETA_KP;//3.1;
+    public static double MP_THETA_KP;
     public static double MP_THETA_KI;
     public static double MP_THETA_KD;
 
@@ -110,7 +110,7 @@ public class Drivetrain extends SubsystemBase {
     public static final double ANGLE_RAMP_RATE;
 
     static {
-        if (RobotMap.IS_PRACTICE) { //Practice constants
+        if (RobotMap.IS_COMP) { //Practice constants
             TL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             TR_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             BL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
@@ -132,7 +132,7 @@ public class Drivetrain extends SubsystemBase {
             BR_ANGLE_SENSOR_PHASE = false;
 
             TL_OFFSET = 9084; //9154;
-            TR_OFFSET = 5951; //5915;
+            TR_OFFSET = 5951;
             BL_OFFSET = 1582; //1604;
             BR_OFFSET = 5891; //5724;
             
@@ -140,15 +140,15 @@ public class Drivetrain extends SubsystemBase {
             ANGLE_POSITION_KI = 0.0;
             ANGLE_POSITION_KD = 11;
             
+            DRIVE_VELOCITY_KF = 0.06; //theoretical: 0.034;
             DRIVE_VELOCITY_KP = 0.7;
             DRIVE_VELOCITY_KI = 0.0;
             DRIVE_VELOCITY_KD = 20;
-            DRIVE_VELOCITY_KF = 0.06; // theoretical: 0.034;
 
             DRIVE_RAMP_RATE = 0.1;
             ANGLE_RAMP_RATE = 0.2;
             
-            PIGEON_kP = 0.05;//creates angry robot if too high
+            PIGEON_kP = 0.05;
 
             MP_X_KP = 15;//8
             MP_X_KI = 0;
@@ -158,7 +158,7 @@ public class Drivetrain extends SubsystemBase {
             MP_Y_KI = 0;
             MP_Y_KD = 20;
 
-            MP_THETA_KP = 7.0;//0.61;
+            MP_THETA_KP = 7.0;
             MP_THETA_KI = 0;
             MP_THETA_KD = 0;
         
@@ -183,10 +183,10 @@ public class Drivetrain extends SubsystemBase {
             BL_ANGLE_SENSOR_PHASE = false;
             BR_ANGLE_SENSOR_PHASE = true;
 
-            TL_OFFSET = 11484;//11575;//15561;
-            TR_OFFSET = 7771;
-            BL_OFFSET = 11444;//11400;//15351;
-            BR_OFFSET = 6291;//6447;//10413;
+            TL_OFFSET = 11358;//11484;//11575;
+            TR_OFFSET = 3567;//14079;//14161;
+            BL_OFFSET = 11192;//11444;//11400;  
+            BR_OFFSET = 6344;//6291;//6447;
             
             ANGLE_POSITION_KP = 1.1;
             ANGLE_POSITION_KI = 0.0;
@@ -246,17 +246,18 @@ public class Drivetrain extends SubsystemBase {
     public static final double TX_kP = 0.027;
 	public static final double TX_kI = 0.00;
     public static final double TX_kD = 0.0007;//0.3;
-    public static final double LIMELIGHT_KS = 0;//0.03;//0.03;
+    public static final double LIMELIGHT_KS = 0;
 
 	public static final double TX_SETPOINT = -1.7;
     public static final double TX_ALLOWABLE_ERROR = 0.4;
 
 	public static final double HEADING_KP = 0.01;
 	public static final double HEADING_KI = 0.0;
-	public static final double HEADING_KD = 0;
+	public static final double HEADING_KD = 0.0;
 
     /**
      * Default constructor for Drivetrain
+     * 
      * Initializes SwerveModules with inverts for drive and angle motors 
      * and sensor phases, resets the encoders to the offset position and 
      * zeroes the angle motors so that all modules are facing forward at
@@ -272,11 +273,6 @@ public class Drivetrain extends SubsystemBase {
                 RobotMap.CAN_IDS.BL_ANGLE_ID, BL_ANGLE_INVERTED, BL_ANGLE_SENSOR_PHASE);
         backRight = new SwerveModule(RobotMap.CAN_IDS.BR_DRIVE_ID, BR_DRIVE_INVERTED, BR_DRIVE_SENSOR_PHASE,
                 RobotMap.CAN_IDS.BR_ANGLE_ID, BR_ANGLE_INVERTED, BR_ANGLE_SENSOR_PHASE);
-
-        // topLeft.getCANCoder().setPosition(topLeft.getCANCoder().getAbsolutePosition() - TL_ABSOLUTE_OFFSET);
-        // topRight.getCANCoder().setPosition(topRight.getCANCoder().getAbsolutePosition() - TR_ABSOLUTE_OFFSET);
-        // backLeft.getCANCoder().setPosition(backLeft.getCANCoder().getAbsolutePosition() - BL_ABSOLUTE_OFFSET);
-        // backRight.getCANCoder().setPosition(backRight.getCANCoder().getAbsolutePosition() - BR_ABSOLUTE_OFFSET);
 
         topLeft.getAngleMotor().setSelectedSensorPosition((topLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - TL_OFFSET) / 4);
         topRight.getAngleMotor().setSelectedSensorPosition((topRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - TR_OFFSET) / 4);
@@ -337,6 +333,7 @@ public class Drivetrain extends SubsystemBase {
         odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading()),
                 topLeft.getState(), topRight.getState(),
                 backLeft.getState(), backRight.getState());
+
         SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
         SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
         SmartDashboard.putNumber("Current Rot", odometry.getPoseMeters().getRotation().getDegrees());
@@ -385,9 +382,6 @@ public class Drivetrain extends SubsystemBase {
      */
     public Pose2d getPose() {
         return odometry.getPoseMeters();
-
-        // return new Pose2d(new Translation2d(-rawPose.getTranslation().getY(), rawPose.getTranslation().getX()), 
-        //         rawPose.getRotation());
     }
 
     /**

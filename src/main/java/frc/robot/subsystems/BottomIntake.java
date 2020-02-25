@@ -32,10 +32,10 @@ public class BottomIntake extends SubsystemBase {
     public static final Value OUT = Value.kForward;
 
     static {
-        if(RobotMap.IS_PRACTICE) {
-            MOTOR_INVERT = false; //Change accordingly
+        if(RobotMap.IS_COMP) {
+            MOTOR_INVERT = false;
         } else {
-            MOTOR_INVERT = true; //Change accordingly
+            MOTOR_INVERT = true;
         }
     }
 
@@ -63,7 +63,6 @@ public class BottomIntake extends SubsystemBase {
 
     private BottomIntake() {
         talon = new HSTalon(RobotMap.CAN_IDS.INTAKE_MOTOR_ID);
-
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.INTAKE_SOLENOID_FORWARD, RobotMap.CAN_IDS.INTAKE_SOLENOID_REVERSE);
 
         setupTalons();
@@ -115,21 +114,8 @@ public class BottomIntake extends SubsystemBase {
             jamFlag = true;
         }   
 
-        if (talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY) {
+        if (talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY)
             CommandScheduler.getInstance().schedule(new ParallelRaceGroup(new SpinIntakeVelocity(-0.3), new WaitCommand(0.2)));
-            SmartDashboard.putBoolean("yonk", true);
-        }
-        else {
-            SmartDashboard.putBoolean("yonk",false);
-        }
-    }
-            
-    public HSTalon getTalon() {
-        return talon;
-    }
-
-    public DoubleSolenoid getSolenoid() {
-        return solenoid;
     }
 
     public void spinIntake(double magnitude) {
@@ -141,6 +127,14 @@ public class BottomIntake extends SubsystemBase {
 
     public void toggleSolenoid() {
         solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
+    }
+            
+    public HSTalon getTalon() {
+        return talon;
+    }
+
+    public DoubleSolenoid getSolenoid() {
+        return solenoid;
     }
 
     public static BottomIntake getInstance() {

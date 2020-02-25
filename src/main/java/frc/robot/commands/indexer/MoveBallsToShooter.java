@@ -20,7 +20,7 @@ import harkerrobolib.commands.IndefiniteCommand;
  * @since January 23, 2020
  */
 public class MoveBallsToShooter extends IndefiniteCommand {
-    private static final double INDEX_PERCENT_OUTPUT = 0.9; //0.89
+    private static final double INDEX_PERCENT_OUTPUT = 0.9; 
     private static final long MIN_TIME = 100;
 
     private boolean backwards;
@@ -49,9 +49,9 @@ public class MoveBallsToShooter extends IndefiniteCommand {
             if (currentTime % Indexer.AGITATOR_CYCLE_DUR < Indexer.AGITATOR_ON_DURATION)
                 Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);
             else
-                Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);//maybe make negative in actual match play
+                Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);
 
-            Indexer.getInstance().spinSpine(INDEX_PERCENT_OUTPUT);  
+            Indexer.getInstance().spinSpine(INDEX_PERCENT_OUTPUT);
         }
     }
     
@@ -59,8 +59,6 @@ public class MoveBallsToShooter extends IndefiniteCommand {
     public void end(boolean interrupted) {
         Indexer.getInstance().spinSpine(0);
         Indexer.getInstance().spinAgitator(0);
-
-        SpinIndexer.indexerFlag = false;
 
         Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
         Shooter.isPercentOutput = true;

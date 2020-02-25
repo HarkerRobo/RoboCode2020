@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.drivetrain.SwerveManualHeadingControl;
 import frc.robot.commands.shooter.SpinShooterLimelight;
-import frc.robot.commands.shooter.SpinShooterManual;
 import frc.robot.commands.spinner.SpinnerManual;
 import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Drivetrain;
@@ -91,7 +90,10 @@ public class Robot extends TimedRobot {
         Limelight.setLEDS(true);
         Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
         // Spinner.getInstance().getSolenoid().set(Spinner.DOWN);
-        System.out.println(Drivetrain.getInstance().getDefaultCommand().getName());
+
+        Autons.AutonCommands.BASELINE.toString();
+        System.out.println(Autons.getAutonCommand());
+        Autons.AutonCommands.BASELINE.toString();
     }
 
     /**
@@ -107,9 +109,9 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
-        SmartDashboard.putString("Robot Type", RobotMap.IS_PRACTICE ? "Practice" : "Comp");
+        SmartDashboard.putString("Robot Type", RobotMap.IS_COMP ? "Practice" : "Comp");
 
-        if (RobotMap.IS_PRACTICE)
+        if (RobotMap.IS_COMP)
             compressor.stop();
 
         SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getOutputCurrent());
@@ -119,6 +121,11 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("distance", SpinShooterLimelight.medianFilter.calculate(Shooter.getInstance().getLimelightDistance()));
 
         SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
+
+        // SmartDashboard.putNumber("TL RisetoFall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        // SmartDashboard.putNumber("TR RisetoFall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        // SmartDashboard.putNumber("BL RisetoFall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        // SmartDashboard.putNumber("BR RisetoFall", Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
 
         // SmartDashboard.putString("Shooter Command", Shooter.getInstance().getCurrentCommand().getName() == null);
         // Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
@@ -150,7 +157,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        
+        // CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
     }
 
     /**

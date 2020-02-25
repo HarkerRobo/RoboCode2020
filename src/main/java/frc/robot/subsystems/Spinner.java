@@ -29,7 +29,6 @@ public class Spinner extends SubsystemBase {
 
     private VictorSPX spinnerMotor;
     private DoubleSolenoid solenoid;
-    // private CANCoder cancoder; 
 
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 colorSensor;
@@ -82,7 +81,6 @@ public class Spinner extends SubsystemBase {
         spinnerMotor = new VictorSPX(RobotMap.CAN_IDS.SPINNER_ID);
         colorSensor = new ColorSensorV3(i2cPort);
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SPINNER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SPINNER_SOLENOID_REVERSE);
-        // cancoder = new CANCoder(RobotMap.CAN_IDS.CANCODER_ID);
 
         colorMatcher.addColorMatch(blueTarget);
         colorMatcher.addColorMatch(greenTarget);
@@ -145,8 +143,6 @@ public class Spinner extends SubsystemBase {
 
         spinnerMotor.configForwardSoftLimitEnable(false);
         spinnerMotor.configReverseSoftLimitEnable(false);
-
-        // spinnerMotor.configRemoteFeedbackFilter(RobotMap.CAN_IDS.CANCODER_ID, RemoteSensorSource.CANCoder, RobotMap.SPINNER_REMOTE_ORDINAL);
         
         setupPositionPID();
     } 
@@ -164,15 +160,6 @@ public class Spinner extends SubsystemBase {
     public DoubleSolenoid getSolenoid() {
         return solenoid;
     }
-
-    // public void spinToColor(ColorValue stationValue, ColorValue actualValue) {
-    //     int error = stationValue.getVal() - actualValue.getVal(); //Number of color wedges away
-    //     int multiplierVal = error < 0 ? 3 : 4; 
-
-    //     int position = multiplierVal * 8 * COLOR_OFFSET + COLOR_OFFSET * (error);
-    //     spinnerMotor.set(ControlMode.Position, position);
-    //     // bagMotor.set(ControlMode.Position, 3 * 8 * COLOR_OFFSET + COLOR_OFFSET * ());
-    // }
 
     public ColorValue getCurrentColor() {
         Color curColor = colorSensor.getColor();

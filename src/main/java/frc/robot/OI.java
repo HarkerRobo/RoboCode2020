@@ -90,14 +90,19 @@ public class OI {
             Driver left joystick x and y: Translation
             Driver right joystick x: Rotation
             Driver up/down dpad: Climber Manual
-            Driver/Operator left trigger: outtake
-            Driver/Operator right trigger: intake
+            Driver/Operator left trigger: Outtake
+            Driver/Operator right trigger: Intake
+            Operator right x: Spinner manual
         */
+
         driverGamepad.getButtonB().whilePressed(new StartEndCommand(() -> Shooter.getInstance().spinShooterPercentOutput(0.15), () -> Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0), Shooter.getInstance()));
-        driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(0)));
+        // driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(0)));
         driverGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
             new SpinShooterLimelight(), 
             new MoveBallsToShooter(false)));
+
+        //Shoot from Target Zone Command
+        driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false)));
 
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
         // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));

@@ -47,7 +47,7 @@ public class Climber extends SubsystemBase {
     public static final double FEED_FORWARD = 0.1;
 
     static {
-        if (RobotMap.IS_PRACTICE) {
+        if (RobotMap.IS_COMP) {
             MASTER_SENSOR_PHASE = false;
             FOLLOWER_SENSOR_PHASE = false;
 
