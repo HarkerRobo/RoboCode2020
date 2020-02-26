@@ -69,7 +69,7 @@ public class Shooter extends SubsystemBase {
 
     private static boolean SENSOR_PHASE;
     
-    public static final double MAX_VELOCITY = 114.3; 
+    public static final double MAX_VELOCITY = 127;//114.3; 
     public static final int FLYWHEEL_VELOCITY_SLOT = 0;
     
     public static double FLYWHEEL_KF;

@@ -97,9 +97,9 @@ public class OI {
 
         driverGamepad.getButtonB().whilePressed(new StartEndCommand(() -> Shooter.getInstance().spinShooterPercentOutput(0.15), () -> Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0), Shooter.getInstance()));
         // driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(0)));
-        driverGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
-            new SpinShooterLimelight(), 
-            new MoveBallsToShooter(false)));
+        // driverGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
+        //     new SpinShooterLimelight(), 
+        //     new MoveBallsToShooter(false)));
 
         //Shoot from Target Zone Command
         driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false)));

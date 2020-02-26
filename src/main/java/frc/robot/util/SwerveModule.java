@@ -39,6 +39,7 @@ public class SwerveModule {
 
     private static final int DRIVE_CURRENT_CONTINUOUS = 40;
     private static final int DRIVE_CURRENT_PEAK = 60;
+    private static final int DRIVE_CURRENT_PEAK_DUR = 400;
     private static final int ANGLE_CURRENT_CONTINUOUS = 15;
     private static final int ANGLE_CURRENT_PEAK = 20;
     private static final int CURRENT_PEAK_DUR = 20;
@@ -102,7 +103,7 @@ public class SwerveModule {
 
         falcon.setSelectedSensorPosition(0);
         
-        falcon.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DRIVE_CURRENT_CONTINUOUS, DRIVE_CURRENT_PEAK, CURRENT_PEAK_DUR));
+        falcon.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, DRIVE_CURRENT_CONTINUOUS, DRIVE_CURRENT_PEAK, DRIVE_CURRENT_PEAK_DUR));
 
         falcon.configVoltageCompSaturation(VOLTAGE_COMP);
         falcon.enableVoltageCompensation(true);
