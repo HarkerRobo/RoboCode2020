@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -69,6 +70,12 @@ import frc.robot.auto.Autons;
  */
 public class Robot extends TimedRobot {
     private Compressor compressor;
+    private boolean isTeleop;
+
+    @Override
+    public void teleopInit() {
+        isTeleop = true;
+    }
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -77,6 +84,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        isTeleop = false;
         Drivetrain.getInstance().setDefaultCommand(new SwerveManualHeadingControl());
         // Spinner.getInstance().setDefaultCommand(new SpinnerManual());
         BottomIntake.getInstance();
@@ -153,6 +161,17 @@ public class Robot extends TimedRobot {
         // else {
         //     Limelight.setLEDS(true);
         // }
+
+        SmartDashboard.putString("cd color spinner current color", Spinner.getInstance().getCurrentColor().toString());
+        SmartDashboard.putString("cd color spinner desired color", DriverStation.getInstance().getGameSpecificMessage());
+        SmartDashboard.putBoolean("cd hood sol", Shooter.getInstance().getSolenoid().get() == Shooter.SHOOTER_HIGH_ANGLE);
+        SmartDashboard.putBoolean("cd intake sol", BottomIntake.getInstance().getSolenoid().get() == BottomIntake.IN);
+        SmartDashboard.putBoolean("cd indexer sol", Indexer.getInstance().getSolenoid().get() == Indexer.OPEN);
+        SmartDashboard.putBoolean("cd spinner sol", Spinner.getInstance().getSolenoid().get() == Spinner.UP);
+        SmartDashboard.putNumber("cd pigeon angle", Drivetrain.getInstance().getPigeon().getFusedHeading());
+        SmartDashboard.putString("cd current auton", isTeleop ? Autons.curAuton.toString() : "Teleop Running");
+        SmartDashboard.putBoolean("cd shooter isStalling", Shooter.getInstance().isStalling());
+        SmartDashboard.putBoolean("cd intake isStalling", BottomIntake.getInstance().isStalling());
     }
 
     @Override

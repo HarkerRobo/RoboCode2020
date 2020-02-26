@@ -128,6 +128,10 @@ public class BottomIntake extends SubsystemBase {
     public void toggleSolenoid() {
         solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
     }
+
+    public boolean isStalling() {
+        return  talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY;
+    }
             
     public HSTalon getTalon() {
         return talon;

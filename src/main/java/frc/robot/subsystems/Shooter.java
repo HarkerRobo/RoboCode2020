@@ -100,6 +100,9 @@ public class Shooter extends SubsystemBase {
     private static final double DAY_MEDIUM_DISTANCE_THRESHOLD = 11.753;
     private static final double NIGHT_THRESHOLD = 18.4;  // choosing between far and close pipelines for night
 
+    private static final int CURRENT_DRAW_MIN = 10;
+    private static final int STALL_VELOCITY = 100;
+
     public static boolean isPercentOutput = true;
     
     /**
@@ -163,6 +166,11 @@ public class Shooter extends SubsystemBase {
         flywheelMaster.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, FLYWHEEL_CURRENT_CONTINUOUS, FLYWHEEL_CURRENT_PEAK, FLYWHEEL_CURRENT_PEAK_DUR));
     
         setupVelocityPID();
+    }
+
+    public boolean isStalling() {
+        return (flywheelMaster.getStatorCurrent() > CURRENT_DRAW_MIN && flywheelMaster.getSelectedSensorVelocity() < STALL_VELOCITY) || 
+                (flywheelFollower.getStatorCurrent() > CURRENT_DRAW_MIN && flywheelFollower.getSelectedSensorVelocity() < STALL_VELOCITY);
     }
 
     /**
