@@ -69,6 +69,9 @@ public class Indexer extends SubsystemBase {
 
     private DoubleSolenoid solenoid;
 
+    private static final int CURRENT_DRAW_MIN = 10;
+    private static final int STALL_VELOCITY = 100;
+
     private Indexer() {
         spine = new HSTalon(RobotMap.CAN_IDS.SPINE_TALON_ID);
         agitator = new VictorSPX(RobotMap.CAN_IDS.AGITATOR_TALON_ID);
