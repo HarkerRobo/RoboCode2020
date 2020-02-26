@@ -123,9 +123,6 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putString("Robot Type", RobotMap.IS_COMP ? "Practice" : "Comp");
 
-        if (RobotMap.IS_COMP)
-            compressor.stop();
-
         SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getOutputCurrent());
         SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getOutputCurrent());
         SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getOutputCurrent());

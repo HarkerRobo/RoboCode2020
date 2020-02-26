@@ -21,24 +21,54 @@ public class RobotMap {
      * Stores CAN Id constants.
      */
 	public static class CAN_IDS {
+
+		static {
+			if(IS_COMP) {
+				//THESE ARE IDS NOT CORRECT. FIX THEM.
+				INTAKE_SOLENOID_FORWARD = 3;
+				INTAKE_SOLENOID_REVERSE = 4;
+
+				SPINNER_SOLENOID_FORWARD = 7;
+				SPINNER_SOLENOID_REVERSE = 0;
+
+				INDEXER_SOLENOID_FORWARD = 5;
+				INDEXER_SOLENOID_REVERSE = 2;
+
+				SHOOTER_SOLENOID_FORWARD = 6;
+				SHOOTER_BACKWARD = 1;
+			}
+			else {
+				INTAKE_SOLENOID_FORWARD = 3;
+				INTAKE_SOLENOID_REVERSE = 4;
+
+				SPINNER_SOLENOID_FORWARD = 7;
+				SPINNER_SOLENOID_REVERSE = 0;
+
+				INDEXER_SOLENOID_FORWARD = 5;
+				INDEXER_SOLENOID_REVERSE = 2;
+
+				SHOOTER_SOLENOID_FORWARD = 6;
+				SHOOTER_BACKWARD = 1;
+			}
+		}
         public static final int INTAKE_MOTOR_ID = 10;
-        public static final int INTAKE_SOLENOID_FORWARD = 3;
-		public static final int INTAKE_SOLENOID_REVERSE = 4;
+        public static final int INTAKE_SOLENOID_FORWARD;
+		public static final int INTAKE_SOLENOID_REVERSE;
         
         public static final int SPINNER_ID = 13;
-		public static final int SPINNER_SOLENOID_FORWARD = 7;
-        public static final int SPINNER_SOLENOID_REVERSE = 0;
+		public static final int SPINNER_SOLENOID_FORWARD;
+        public static final int SPINNER_SOLENOID_REVERSE;
         public static final int SPINNER_CANCODER = 0;
         		
         public static final int SPINE_TALON_ID = 12;
         public static final int AGITATOR_TALON_ID = 13; //For Color Spinner and one indexer motor
-		public static final int INDEXER_SOLENOID_FORWARD = 5;
-		public static final int INDEXER_SOLENOID_REVERSE = 2;
+		public static final int INDEXER_SOLENOID_FORWARD;
+		public static final int INDEXER_SOLENOID_REVERSE;
         
 		public static final int SHOOTER_MASTER_ID = 8;
 		public static final int SHOOTER_FOLLOWER_ID = 9;
-		public static final int SHOOTER_SOLENOID_FORWARD = 6;
-		public static final int SHOOTER_BACKWARD = 1;
+		public static final int SHOOTER_SOLENOID_FORWARD;
+		public static final int SHOOTER_BACKWARD;
 
 		public static final int CLIMBER_MASTER_ID = 14;
 		public static final int CLIMBER_FOLLOWER_ID = 15;
