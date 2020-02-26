@@ -10,8 +10,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.drivetrain.SwerveManualHeadingControl;
 import frc.robot.commands.shooter.SpinShooterLimelight;
@@ -23,6 +25,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
 import frc.robot.util.Limelight;
 import frc.robot.auto.Autons;
+import frc.robot.auto.Trajectories;
     
 /**
  * Has anyone heard of the team that ran out of code? (This is a real story)
@@ -75,6 +78,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         isTeleop = true;
+        CommandScheduler.getInstance().cancelAll();
     }
 
     /**
@@ -130,6 +134,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
 
+        SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
         // SmartDashboard.putNumber("TL RisetoFall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         // SmartDashboard.putNumber("TR RisetoFall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         // SmartDashboard.putNumber("BL RisetoFall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
@@ -162,21 +167,23 @@ public class Robot extends TimedRobot {
         //     Limelight.setLEDS(true);
         // }
 
-        SmartDashboard.putString("cd color spinner current color", Spinner.getInstance().getCurrentColor().toString());
+        // SmartDashboard.putString("cd color spinner current color", Spinner.getInstance().getCurrentColor().toString());
         SmartDashboard.putString("cd color spinner desired color", DriverStation.getInstance().getGameSpecificMessage());
         SmartDashboard.putBoolean("cd hood sol", Shooter.getInstance().getSolenoid().get() == Shooter.SHOOTER_HIGH_ANGLE);
         SmartDashboard.putBoolean("cd intake sol", BottomIntake.getInstance().getSolenoid().get() == BottomIntake.IN);
         SmartDashboard.putBoolean("cd indexer sol", Indexer.getInstance().getSolenoid().get() == Indexer.OPEN);
-        SmartDashboard.putBoolean("cd spinner sol", Spinner.getInstance().getSolenoid().get() == Spinner.UP);
+        // SmartDashboard.putBoolean("cd spinner sol", Spinner.getInstance().getSolenoid().get() == Spinner.UP);
         SmartDashboard.putNumber("cd pigeon angle", Drivetrain.getInstance().getPigeon().getFusedHeading());
-        SmartDashboard.putString("cd current auton", isTeleop ? Autons.curAuton.toString() : "Teleop Running");
+        // SmartDashboard.putString("cd current auton", isTeleop ? Autons.curAuton.toString() : "Teleop Running");
         SmartDashboard.putBoolean("cd shooter isStalling", Shooter.getInstance().isStalling());
         SmartDashboard.putBoolean("cd intake isStalling", BottomIntake.getInstance().isStalling());
     }
 
     @Override
     public void autonomousInit() {
+        Drivetrain.getInstance().getPigeon().setFusedHeading(180);
         // CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
+        CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.horizontalTrajectory, Rotation2d.fromDegrees(180)));
     }
 
     /**

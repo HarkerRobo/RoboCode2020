@@ -16,6 +16,7 @@ import frc.robot.commands.indexer.SpinIndexer;
 import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.commands.shooter.SpinShooterVelocity;
 import frc.robot.subsystems.BottomIntake;
+import frc.robot.subsystems.Shooter;
 
 /**
  * Stores and selects an autonomous routine to run.
@@ -51,10 +52,12 @@ public class Autons {
 
     //Shoot three pre-loaded balls
     private static final SequentialCommandGroup three = new SequentialCommandGroup(
-        new SwerveDriveWithOdometryProfiling(Trajectories.Three.getStart(), OI.forwardHeading)
-            .raceWith(new SpinShooterVelocity(REV_SPEED)),
-        new SpinShooterLimelight().raceWith(new WaitCommand(SHOOTER_REV_TIME), new SwerveAlignWithLimelight()),
-        new ParallelRaceGroup(new SpinShooterLimelight(), new MoveBallsToShooter(false), new WaitCommand(SHOOTER_SHOOT_TIME)));
+      // new InstantCommand(() -> Shooter.getInstance().getSolenoid().set(Shooter.SHOOTER_HIGH_ANGLE)),    
+      new SwerveDriveWithOdometryProfiling(Trajectories.Three.getStart(), OI.forwardHeading)
+        //     .raceWith(new SpinShooterVelocity(58)),
+        // new SpinShooterVelocity(58).raceWith(new WaitCommand(SHOOTER_REV_TIME), new SwerveAlignWithLimelight()),
+        // new ParallelRaceGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false), new WaitCommand(SHOOTER_SHOOT_TIME))
+        );
    
     //pick up two balls from opponents trench and shoot all five
     private static final SequentialCommandGroup trenchFiveAuton = new SequentialCommandGroup(

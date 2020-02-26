@@ -33,7 +33,7 @@ public class BottomIntake extends SubsystemBase {
 
     static {
         if(RobotMap.IS_COMP) {
-            MOTOR_INVERT = false;
+            MOTOR_INVERT = true;
         } else {
             MOTOR_INVERT = true;
         }

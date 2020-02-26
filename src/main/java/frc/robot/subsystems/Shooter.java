@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
             SHOOTER_LOW_ANGLE = Value.kReverse;
 
             MASTER_INVERT = TalonFXInvertType.Clockwise;
-            FOLLOWER_INVERT = TalonFXInvertType.Clockwise;
+            FOLLOWER_INVERT = TalonFXInvertType.CounterClockwise;
 
             SENSOR_PHASE = false;
         } else {

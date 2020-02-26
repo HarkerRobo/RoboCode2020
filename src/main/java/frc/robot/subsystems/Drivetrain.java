@@ -334,16 +334,16 @@ public class Drivetrain extends SubsystemBase {
                 topLeft.getState(), topRight.getState(),
                 backLeft.getState(), backRight.getState());
 
-        SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
-        SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
-        SmartDashboard.putNumber("Current Rot", odometry.getPoseMeters().getRotation().getDegrees());
+        // SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
+        // SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
+        // SmartDashboard.putNumber("Current Rot", odometry.getPoseMeters().getRotation().getDegrees());
     }
     public void updatePositionPID() {
         stopAllDrive();
 
-        ANGLE_POSITION_KP = SmartDashboard.getNumber("Position kP", ANGLE_POSITION_KP);
-        ANGLE_POSITION_KI = SmartDashboard.getNumber("Position kI", ANGLE_POSITION_KI);
-        ANGLE_POSITION_KD = SmartDashboard.getNumber("Position kD", ANGLE_POSITION_KD);
+        // ANGLE_POSITION_KP = SmartDashboard.getNumber("Position kP", ANGLE_POSITION_KP);
+        // ANGLE_POSITION_KI = SmartDashboard.getNumber("Position kI", ANGLE_POSITION_KI);
+        // ANGLE_POSITION_KD = SmartDashboard.getNumber("Position kD", ANGLE_POSITION_KD);
 
         setupPositionPID();
     }
@@ -351,10 +351,10 @@ public class Drivetrain extends SubsystemBase {
     public void updateVelocityPID() {
         stopAllDrive();
 
-        DRIVE_VELOCITY_KF = SmartDashboard.getNumber("Velocity kF", DRIVE_VELOCITY_KF);
-        DRIVE_VELOCITY_KP = SmartDashboard.getNumber("Velocity kP", DRIVE_VELOCITY_KP);
-        DRIVE_VELOCITY_KI = SmartDashboard.getNumber("Velocity kI", DRIVE_VELOCITY_KI);
-        DRIVE_VELOCITY_KD = SmartDashboard.getNumber("Velocity kD", DRIVE_VELOCITY_KD);
+        // DRIVE_VELOCITY_KF = SmartDashboard.getNumber("Velocity kF", DRIVE_VELOCITY_KF);
+        // DRIVE_VELOCITY_KP = SmartDashboard.getNumber("Velocity kP", DRIVE_VELOCITY_KP);
+        // DRIVE_VELOCITY_KI = SmartDashboard.getNumber("Velocity kI", DRIVE_VELOCITY_KI);
+        // DRIVE_VELOCITY_KD = SmartDashboard.getNumber("Velocity kD", DRIVE_VELOCITY_KD);
 
         setupVelocityPID();
     }
@@ -365,15 +365,15 @@ public class Drivetrain extends SubsystemBase {
     public void updateMPPID() {
         stopAllDrive();
 
-        MP_X_KP = SmartDashboard.getNumber("MP X kP", MP_X_KP);
-        MP_X_KI = SmartDashboard.getNumber("MP X kI", MP_X_KI);
-        MP_X_KD = SmartDashboard.getNumber("MP X kD", MP_X_KD);
-        MP_Y_KP = SmartDashboard.getNumber("MP Y kP", MP_Y_KP);
-        MP_Y_KI = SmartDashboard.getNumber("MP Y kI", MP_Y_KI);
-        MP_Y_KD = SmartDashboard.getNumber("MP Y kD", MP_Y_KD);
-        MP_THETA_KP = SmartDashboard.getNumber("MP THETA kP", MP_THETA_KP);
-        MP_THETA_KI = SmartDashboard.getNumber("MP THETA kI", MP_THETA_KI);
-        MP_THETA_KD = SmartDashboard.getNumber("MP THETA kD", MP_THETA_KD);
+        // MP_X_KP = SmartDashboard.getNumber("MP X kP", MP_X_KP);
+        // MP_X_KI = SmartDashboard.getNumber("MP X kI", MP_X_KI);
+        // MP_X_KD = SmartDashboard.getNumber("MP X kD", MP_X_KD);
+        // MP_Y_KP = SmartDashboard.getNumber("MP Y kP", MP_Y_KP);
+        // MP_Y_KI = SmartDashboard.getNumber("MP Y kI", MP_Y_KI);
+        // MP_Y_KD = SmartDashboard.getNumber("MP Y kD", MP_Y_KD);
+        // MP_THETA_KP = SmartDashboard.getNumber("MP THETA kP", MP_THETA_KP);
+        // MP_THETA_KI = SmartDashboard.getNumber("MP THETA kI", MP_THETA_KI);
+        // MP_THETA_KD = SmartDashboard.getNumber("MP THETA kD", MP_THETA_KD);
     }
 
 

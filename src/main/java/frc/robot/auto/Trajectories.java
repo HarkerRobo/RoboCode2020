@@ -25,8 +25,8 @@ public class Trajectories {
     public static TrajectoryConfig config = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY,
             Drivetrain.MP_MAX_DRIVE_ACCELERATION).setKinematics(Drivetrain.getInstance().getKinematics());
 
-    public static TrajectoryConfig slowConfig = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY / 2,
-            Drivetrain.MP_MAX_DRIVE_ACCELERATION / 2).setKinematics(Drivetrain.getInstance().getKinematics());
+    public static TrajectoryConfig slowConfig = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY / 5,
+            Drivetrain.MP_MAX_DRIVE_ACCELERATION / 5).setKinematics(Drivetrain.getInstance().getKinematics());
 
     /**
      * Trajectory used for moving off of the initiation line
@@ -76,9 +76,9 @@ public class Trajectories {
         * https://imgur.com/a/eLtqCyb
         */
        public static Trajectory rightStarting = TrajectoryGenerator.generateTrajectory(
-           List.of(new Pose2d(25.40 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(-45)), 
+           List.of(new Pose2d(25.40 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(90)), 
                    new Pose2d(19.00 * 0.3048, 50.20 * 0.3048, Rotation2d.fromDegrees(90))),
-           config);
+           slowConfig);
        
        public static Trajectory getLeft() { return leftStarting; }
        public static Trajectory getMiddle() { return middleStarting; }
@@ -512,23 +512,23 @@ public class Trajectories {
     /**
      * Trajectories used for testing
      */
-    public class Test {
-        public Trajectory horizontalTrajectory = TrajectoryGenerator.generateTrajectory(
+    public static class Test {
+        public static Trajectory horizontalTrajectory = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
                     new Pose2d(3, 0, Rotation2d.fromDegrees(0))),
             config);
 
-        public Trajectory verticalTrajectory = TrajectoryGenerator.generateTrajectory(
+        public static Trajectory verticalTrajectory = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
                     new Pose2d(0, 1, Rotation2d.fromDegrees(90))),
             config);
 
-        public Trajectory initiationToBackTest = TrajectoryGenerator.generateTrajectory(
+        public static Trajectory initiationToBackTest = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
                     new Pose2d(2, 0, Rotation2d.fromDegrees(0))),
             config);
 
-        public Trajectory circle = TrajectoryGenerator.generateTrajectory(
+        public static Trajectory circle = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
                     new Pose2d(2, 2, Rotation2d.fromDegrees(90)), 
                     new Pose2d(0, 4, Rotation2d.fromDegrees(180)),
@@ -536,7 +536,7 @@ public class Trajectories {
                     new Pose2d(0, 0, Rotation2d.fromDegrees(0))), 
             config);
 
-        public Trajectory heart = TrajectoryGenerator.generateTrajectory(
+        public static Trajectory heart = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
                     new Pose2d(2, 2.5, Rotation2d.fromDegrees(90)),
                     new Pose2d(1, 4, Rotation2d.fromDegrees(210)),
