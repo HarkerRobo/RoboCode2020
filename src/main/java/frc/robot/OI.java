@@ -102,8 +102,8 @@ public class OI {
         //     new MoveBallsToShooter(false)));
 
         //Shoot from Target Zone Command
-        driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false)));
-
+        // driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false)));
+        driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.verticalTrajectory, Rotation2d.fromDegrees(0)));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
         // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
         driverGamepad.getButtonSelect().whilePressed(new ParallelCommandGroup(
@@ -138,6 +138,7 @@ public class OI {
         // operatorGamepad.getRightDPadButton().whenPressed(new SpinnerPositionColorSensor());
         operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(
             new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR)), 
+      
             new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR)), 
             () -> !RobotMap.IS_NIGHT));
 

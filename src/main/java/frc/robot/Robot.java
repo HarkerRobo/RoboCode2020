@@ -89,7 +89,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         isTeleop = false;
-        Drivetrain.getInstance().setDefaultCommand(new SwerveManualHeadingControl());
+        Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
+        
         // Spinner.getInstance().setDefaultCommand(new SpinnerManual());
         BottomIntake.getInstance();
         Indexer.getInstance();
@@ -106,6 +107,8 @@ public class Robot extends TimedRobot {
         Autons.AutonCommands.BASELINE.toString();
         System.out.println(Autons.getAutonCommand());
         Autons.AutonCommands.BASELINE.toString();
+        // Drivetrain.getInstance().getPigeon().setFusedHeading(180);
+
     }
 
     /**
@@ -165,22 +168,22 @@ public class Robot extends TimedRobot {
         // }
 
         // SmartDashboard.putString("cd color spinner current color", Spinner.getInstance().getCurrentColor().toString());
-        SmartDashboard.putString("cd color spinner desired color", DriverStation.getInstance().getGameSpecificMessage());
-        SmartDashboard.putBoolean("cd hood sol", Shooter.getInstance().getSolenoid().get() == Shooter.SHOOTER_HIGH_ANGLE);
-        SmartDashboard.putBoolean("cd intake sol", BottomIntake.getInstance().getSolenoid().get() == BottomIntake.IN);
-        SmartDashboard.putBoolean("cd indexer sol", Indexer.getInstance().getSolenoid().get() == Indexer.OPEN);
+        // SmartDashboard.putString("cd color spinner desired color", DriverStation.getInstance().getGameSpecificMessage());
+        // SmartDashboard.putBoolean("cd hood sol", Shooter.getInstance().getSolenoid().get() == Shooter.SHOOTER_HIGH_ANGLE);
+        // SmartDashboard.putBoolean("cd intake sol", BottomIntake.getInstance().getSolenoid().get() == BottomIntake.IN);
+        // SmartDashboard.putBoolean("cd indexer sol", Indexer.getInstance().getSolenoid().get() == Indexer.OPEN);
         // SmartDashboard.putBoolean("cd spinner sol", Spinner.getInstance().getSolenoid().get() == Spinner.UP);
-        SmartDashboard.putNumber("cd pigeon angle", Drivetrain.getInstance().getPigeon().getFusedHeading());
+        // SmartDashboard.putNumber("cd pigeon angle", Drivetrain.getInstance().getPigeon().getFusedHeading());
         // SmartDashboard.putString("cd current auton", isTeleop ? Autons.curAuton.toString() : "Teleop Running");
-        SmartDashboard.putBoolean("cd shooter isStalling", Shooter.getInstance().isStalling());
-        SmartDashboard.putBoolean("cd intake isStalling", BottomIntake.getInstance().isStalling());
+        // SmartDashboard.putBoolean("cd shooter isStalling", Shooter.getInstance().isStalling());
+        // SmartDashboard.putBoolean("cd intake isStalling", BottomIntake.getInstance().isStalling());
     }
 
     @Override
     public void autonomousInit() {
-        Drivetrain.getInstance().getPigeon().setFusedHeading(180);
+        Drivetrain.getInstance().getPigeon().setFusedHeading(0);
         // CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
-        CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.horizontalTrajectory, Rotation2d.fromDegrees(180)));
+        // CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.verticalTrajectory, Rotation2d.fromDegrees(180)));
     }
 
     /**

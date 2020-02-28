@@ -514,13 +514,13 @@ public class Trajectories {
      */
     public static class Test {
         public static Trajectory horizontalTrajectory = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-                    new Pose2d(3, 0, Rotation2d.fromDegrees(0))),
+            List.of(new Pose2d(3, 0, Rotation2d.fromDegrees(180)), 
+                    new Pose2d(0, 0, Rotation2d.fromDegrees(180))),
             config);
 
         public static Trajectory verticalTrajectory = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
-                    new Pose2d(0, 1, Rotation2d.fromDegrees(90))),
+            List.of(new Pose2d(0, 3, Rotation2d.fromDegrees(270)), 
+                    new Pose2d(0, 0, Rotation2d.fromDegrees(270))),
             config);
 
         public static Trajectory initiationToBackTest = TrajectoryGenerator.generateTrajectory(
