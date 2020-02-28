@@ -79,6 +79,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         isTeleop = true;
         CommandScheduler.getInstance().cancelAll();
+        Drivetrain.getInstance().getPigeon().setFusedHeading(180);
     }
 
     /**
@@ -181,9 +182,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        Drivetrain.getInstance().getPigeon().setFusedHeading(0);
+        // Drivetrain.getInstance().getPigeon().setFusedHeading(0);
         // CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
-        // CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.verticalTrajectory, Rotation2d.fromDegrees(180)));
+        CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.horizontalTrajectory, Rotation2d.fromDegrees(0)));
     }
 
     /**
