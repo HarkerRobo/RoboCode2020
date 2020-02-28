@@ -34,7 +34,7 @@ public class Autons {
     }
     
     //Change this before the match.
-    public static StartingPosition startingPosition = StartingPosition.RIGHT;
+    public static StartingPosition startingPosition = StartingPosition.MIDDLE;
     public static AutonCommands curAuton = AutonCommands.THREE; 
 
     //Brings the intake out, required at the start of every autonomous configuration
@@ -52,13 +52,27 @@ public class Autons {
 
     //Shoot three pre-loaded balls
     private static final SequentialCommandGroup three = new SequentialCommandGroup(
-      // new InstantCommand(() -> Shooter.getInstance().getSolenoid().set(Shooter.SHOOTER_HIGH_ANGLE)),    
-      new SwerveDriveWithOdometryProfiling(Trajectories.Three.getStart(), OI.forwardHeading)
-        //     .raceWith(new SpinShooterVelocity(58)),
-        // new SpinShooterVelocity(58).raceWith(new WaitCommand(SHOOTER_REV_TIME), new SwerveAlignWithLimelight()),
-        // new ParallelRaceGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false), new WaitCommand(SHOOTER_SHOOT_TIME))
-        );
+        new InstantCommand(() -> Shooter.getInstance().getSolenoid().set(Shooter.SHOOTER_HIGH_ANGLE)),    
+        new SwerveDriveWithOdometryProfiling(Trajectories.Three.getStart(), OI.forwardHeading)
+        //      .raceWith(new SpinShooterVelocity(58)),
+        //  new SpinShooterVelocity(58).raceWith(new WaitCommand(SHOOTER_REV_TIME)),
+        //  new ParallelRaceGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false), new WaitCommand(SHOOTER_SHOOT_TIME))
+    );
+    // private static final SequentialCommandGroup three = new SequentialCommandGroup(
+    //   new InstantCommand(() -> Shooter.getInstance().getSolenoid().set(Shooter.SHOOTER_LOW_ANGLE)),    
+    //   new SwerveDriveWithOdometryProfiling(Trajectories.Three.getMiddle(), OI.forwardHeading)
+    //         .raceWith(new SpinShooterVelocity(90)),
+    //     new SpinShooterLimelight().raceWith(new WaitCommand(SHOOTER_REV_TIME), new SwerveAutonAlignWithLimelight()),
+    //     new ParallelRaceGroup(new SpinShooterLimelight(), new MoveBallsToShooter(false), new WaitCommand(SHOOTER_SHOOT_TIME))
+    //     );
    
+    private static final SequentialCommandGroup threeFlex = new SequentialCommandGroup(
+      new InstantCommand(() -> Shooter.getInstance().getSolenoid().set(Shooter.SHOOTER_LOW_ANGLE)),    
+      new SwerveDriveWithOdometryProfiling(Trajectories.Three.flexStarting, OI.forwardHeading)
+           .raceWith(new SpinShooterVelocity(58)),
+       new SpinShooterVelocity(58).raceWith(new WaitCommand(SHOOTER_REV_TIME), new SwerveAutonAlignWithLimelight()),
+       new ParallelRaceGroup(new SpinShooterLimelight(), new MoveBallsToShooter(false), new WaitCommand(SHOOTER_SHOOT_TIME))
+    );
     //pick up two balls from opponents trench and shoot all five
     private static final SequentialCommandGroup trenchFiveAuton = new SequentialCommandGroup(
         new InstantCommand(
@@ -173,7 +187,7 @@ public class Autons {
     );
 
     public static CommandBase getAutonCommand() {
-        return AutonCommands.THREE.value/*curAuton.value*/;
+        return threeFlex/*curAuton.value*/;
     }
 
     public static enum AutonCommands {

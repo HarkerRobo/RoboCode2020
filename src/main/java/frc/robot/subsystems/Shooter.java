@@ -114,14 +114,14 @@ public class Shooter extends SubsystemBase {
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_BACKWARD);
         
         setupFlywheel();
-        SmartDashboard.putNumber("flywheel kp", FLYWHEEL_KP);
-        SmartDashboard.putNumber("flywheel kd", FLYWHEEL_KD);
+        // SmartDashboard.putNumber("flywheel kp", FLYWHEEL_KP);
+        // SmartDashboard.putNumber("flywheel kd", FLYWHEEL_KD);
     }
 
     @Override
     public void periodic() {
         double distance = getLimelightDistance();
-        SmartDashboard.putBoolean("isPercentOutput", isPercentOutput);
+        // SmartDashboard.putBoolean("isPercentOutput", isPercentOutput);
         
         if (distance != 0.0) {
             if (RobotMap.IS_NIGHT) {

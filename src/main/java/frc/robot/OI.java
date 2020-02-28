@@ -53,7 +53,7 @@ public class OI {
 
     public static TrajectoryConfig TRAJ_CONFIG = Trajectories.config;
 
-    public static Rotation2d forwardHeading = Rotation2d.fromDegrees(180);
+    public static Rotation2d forwardHeading = Rotation2d.fromDegrees(0);
     public static Rotation2d pickupFiveHeading = Rotation2d.fromDegrees(120);
 
     private OI() {
@@ -103,7 +103,7 @@ public class OI {
 
         //Shoot from Target Zone Command
         // driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false)));
-        driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.horizontalTrajectory, Rotation2d.fromDegrees(0)));
+        driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.verticalTrajectory, Rotation2d.fromDegrees(180)));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
         // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
         driverGamepad.getButtonSelect().whilePressed(new ParallelCommandGroup(
@@ -125,7 +125,6 @@ public class OI {
             new MoveBallsToShooter(false)));
  
         operatorGamepad.getButtonBumperRight().whilePressed(new SpinShooterVelocity(90));
-
         operatorGamepad.getButtonB().whenPressed(new InstantCommand(() -> BottomIntake.getInstance().toggleSolenoid()));
         operatorGamepad.getButtonA().whilePressed(new MoveBallsToShooter(false));
         operatorGamepad.getButtonX().whenPressed(new InstantCommand(() -> Indexer.getInstance().toggleSolenoid()));

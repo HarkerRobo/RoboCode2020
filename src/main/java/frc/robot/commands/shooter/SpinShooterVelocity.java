@@ -32,7 +32,7 @@ public class SpinShooterVelocity extends IndefiniteCommand {
         addRequirements(Shooter.getInstance());
         this.velocity = velocity;
 
-        SmartDashboard.putNumber("Set shooter speed", velocity);
+        // SmartDashboard.putNumber("Set shooter speed", velocity);
     }
 
     public void execute() {

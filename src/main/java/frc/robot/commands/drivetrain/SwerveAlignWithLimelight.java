@@ -64,7 +64,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
         //double speed = -thorController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_DRIVE_VELOCITY;
         txController.setSetpoint(SmartDashboard.getNumber("TX", Drivetrain.TX_SETPOINT));
         SmartDashboard.putNumber("TX setpoint", txController.getSetpoint());
-        SmartDashboard.putNumber("TX error", Limelight.getTx());
+        // SmartDashboard.putNumber("TX error", Limelight.getTx());
 
         double turn = txController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_ROTATION_VELOCITY;
 

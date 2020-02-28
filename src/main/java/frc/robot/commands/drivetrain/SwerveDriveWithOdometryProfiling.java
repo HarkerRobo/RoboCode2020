@@ -59,6 +59,7 @@ public class SwerveDriveWithOdometryProfiling extends HSSwerveDriveOdometry {
         Drivetrain.getInstance().getOdometry().resetPosition(initialPose, currentRot);
 
         long initialTime = System.currentTimeMillis();
+        
         boolean isAtSepoint = false;
         Rotation2d initialRotation = initialPose.getRotation().plus(Rotation2d.fromDegrees(90));
         SmartDashboard.putNumber("initialRotation", initialRotation.getDegrees());

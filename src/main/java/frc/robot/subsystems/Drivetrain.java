@@ -210,9 +210,9 @@ public class Drivetrain extends SubsystemBase {
             MP_Y_KI = 0;
             MP_Y_KD = 15;
 
-            MP_THETA_KP = 8;//3.1;
+            MP_THETA_KP = 6.3;//3.1;
             MP_THETA_KI = 0;
-            MP_THETA_KD = 3;
+            MP_THETA_KD = 40;//3
         }
     }
     
@@ -288,7 +288,7 @@ public class Drivetrain extends SubsystemBase {
         pigeon.configFactoryDefault();
         pigeon.zero();
         pigeon.setFusedHeading(0);
-        pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.BiasedStatus_2_Gyro, 1);  
+        pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.BiasedStatus_2_Gyro, 5);  
 
         Conversions.setWheelDiameter(WHEEL_DIAMETER);
 
@@ -312,15 +312,15 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("Position kI", ANGLE_POSITION_KI);
         // SmartDashboard.putNumber("Position kD", ANGLE_POSITION_KD);
 
-        // SmartDashboard.putNumber("MP X kP", MP_X_KP);
-        // SmartDashboard.putNumber("MP X kI", MP_X_KI);
-        // SmartDashboard.putNumber("MP X kD", MP_X_KD);
-        // SmartDashboard.putNumber("MP Y kP", MP_Y_KP);
-        // SmartDashboard.putNumber("MP Y kI", MP_Y_KI);
-        // SmartDashboard.putNumber("MP Y kD", MP_Y_KD);
-        // SmartDashboard.putNumber("MP THETA kP", MP_THETA_KP);
-        // SmartDashboard.putNumber("MP THETA kI", MP_THETA_KI);
-        // SmartDashboard.putNumber("MP THETA kD", MP_THETA_KD);
+        SmartDashboard.putNumber("MP X kP", MP_X_KP);
+        SmartDashboard.putNumber("MP X kI", MP_X_KI);
+        SmartDashboard.putNumber("MP X kD", MP_X_KD);
+        SmartDashboard.putNumber("MP Y kP", MP_Y_KP);
+        SmartDashboard.putNumber("MP Y kI", MP_Y_KI);
+        SmartDashboard.putNumber("MP Y kD", MP_Y_KD);
+        SmartDashboard.putNumber("MP THETA kP", MP_THETA_KP);
+        SmartDashboard.putNumber("MP THETA kI", MP_THETA_KI);
+        SmartDashboard.putNumber("MP THETA kD", MP_THETA_KD);
     }
 
     /**
@@ -330,13 +330,15 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         // updateVelocityPID();
+        // updatePositionPID();
         odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading()),
                 topLeft.getState(), topRight.getState(),
                 backLeft.getState(), backRight.getState());
 
-        SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
-        SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
+        // SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
+        // SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
         SmartDashboard.putNumber("Current Rot", odometry.getPoseMeters().getRotation().getDegrees());
+        // SmartDashboard.putNumber("Top Left Angle Error", topLeft.getAngleMotor().getClosedLoopError() / 4096*360);
     }
     public void updatePositionPID() {
         stopAllDrive();
@@ -365,15 +367,15 @@ public class Drivetrain extends SubsystemBase {
     public void updateMPPID() {
         stopAllDrive();
 
-        // MP_X_KP = SmartDashboard.getNumber("MP X kP", MP_X_KP);
-        // MP_X_KI = SmartDashboard.getNumber("MP X kI", MP_X_KI);
-        // MP_X_KD = SmartDashboard.getNumber("MP X kD", MP_X_KD);
-        // MP_Y_KP = SmartDashboard.getNumber("MP Y kP", MP_Y_KP);
-        // MP_Y_KI = SmartDashboard.getNumber("MP Y kI", MP_Y_KI);
-        // MP_Y_KD = SmartDashboard.getNumber("MP Y kD", MP_Y_KD);
-        // MP_THETA_KP = SmartDashboard.getNumber("MP THETA kP", MP_THETA_KP);
-        // MP_THETA_KI = SmartDashboard.getNumber("MP THETA kI", MP_THETA_KI);
-        // MP_THETA_KD = SmartDashboard.getNumber("MP THETA kD", MP_THETA_KD);
+        MP_X_KP = SmartDashboard.getNumber("MP X kP", MP_X_KP);
+        MP_X_KI = SmartDashboard.getNumber("MP X kI", MP_X_KI);
+        MP_X_KD = SmartDashboard.getNumber("MP X kD", MP_X_KD);
+        MP_Y_KP = SmartDashboard.getNumber("MP Y kP", MP_Y_KP);
+        MP_Y_KI = SmartDashboard.getNumber("MP Y kI", MP_Y_KI);
+        MP_Y_KD = SmartDashboard.getNumber("MP Y kD", MP_Y_KD);
+        MP_THETA_KP = SmartDashboard.getNumber("MP THETA kP", MP_THETA_KP);
+        MP_THETA_KI = SmartDashboard.getNumber("MP THETA kI", MP_THETA_KI);
+        MP_THETA_KD = SmartDashboard.getNumber("MP THETA kD", MP_THETA_KD);
     }
 
 

@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
         // Climber.getInstance();
 
         OI.getInstance();
-        compressor = new Compressor();  
+        // compressor = new Compressor();  
 
         Limelight.setLEDS(true);
         Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
@@ -125,17 +125,17 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
-        SmartDashboard.putString("Robot Type", RobotMap.IS_COMP ? "Practice" : "Comp");
+        // SmartDashboard.putString("Robot Type", RobotMap.IS_COMP ? "Practice" : "Comp");
 
-        SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getOutputCurrent());
-        SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getOutputCurrent());
-        SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getOutputCurrent());
+        // SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getOutputCurrent());
+        // SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getOutputCurrent());
+        // SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getOutputCurrent());
 
         SmartDashboard.putNumber("distance", SpinShooterLimelight.medianFilter.calculate(Shooter.getInstance().getLimelightDistance()));
 
-        SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
+        // SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
 
-        SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
+        // SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
         // SmartDashboard.putNumber("TL RisetoFall", Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         // SmartDashboard.putNumber("TR RisetoFall", Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         // SmartDashboard.putNumber("BL RisetoFall", Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
@@ -182,9 +182,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        // Drivetrain.getInstance().getPigeon().setFusedHeading(0);
-        // CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
-        CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.horizontalTrajectory, Rotation2d.fromDegrees(0)));
+        Drivetrain.getInstance().getPigeon().setFusedHeading(0);
+        CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
+        // CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.horizontalTrajectory, Rotation2d.fromDegrees(0)));
     }
 
     /**
