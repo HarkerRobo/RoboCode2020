@@ -32,7 +32,6 @@ public class SpinIndexer extends IndefiniteCommand {
     @Override
     public void initialize() {
         Indexer.getInstance().getAgitator().setNeutralMode(NeutralMode.Coast);
-        Indexer.getInstance().getSolenoid().set(backwards ? Indexer.OPEN : Indexer.CLOSED);
     }
 
     @Override

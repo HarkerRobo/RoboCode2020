@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -96,14 +97,16 @@ public class BottomIntake extends SubsystemBase {
     public void periodic() {
         if(OI.getInstance().getDriverGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
             CommandScheduler.getInstance().schedule(new ParallelCommandGroup(
+                new InstantCommand(() -> Indexer.getInstance().getSolenoid().set(Indexer.CLOSED), Indexer.getInstance())),
                 new SpinIntakeVelocity(0.5), 
-                new SpinIndexer(0.6, false)));
+                new SpinIndexer(0.5, false));
                 
             jamFlag = false;
         } else if(OI.getInstance().getDriverGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
             CommandScheduler.getInstance().schedule(new ParallelCommandGroup( //Outaking while reversing spine 
+                new InstantCommand(() -> Indexer.getInstance().getSolenoid().set(Indexer.OPEN), Indexer.getInstance())),
                 new SpinIntakeVelocity(-0.5), 
-                new SpinIndexer(0.6, true)));
+                new SpinIndexer(0.8, true));
             
             jamFlag = false;
         } else if (!jamFlag) {
@@ -130,7 +133,7 @@ public class BottomIntake extends SubsystemBase {
     }
 
     public boolean isStalling() {
-        return  talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY;
+        return talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY;
     }
             
     public HSTalon getTalon() {

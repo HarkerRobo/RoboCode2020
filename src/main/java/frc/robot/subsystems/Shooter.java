@@ -111,7 +111,7 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         flywheelMaster = new TalonFX(RobotMap.CAN_IDS.SHOOTER_MASTER_ID);
         flywheelFollower = new TalonFX(RobotMap.CAN_IDS.SHOOTER_FOLLOWER_ID);
-        solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_BACKWARD);
+        solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_SOLENOID_BACKWARD);
         
         setupFlywheel();
         // SmartDashboard.putNumber("flywheel kp", FLYWHEEL_KP);

@@ -143,7 +143,7 @@ public class Drivetrain extends SubsystemBase {
             DRIVE_VELOCITY_KF = 0.06; //theoretical: 0.034;
             DRIVE_VELOCITY_KP = 0.7;
             DRIVE_VELOCITY_KI = 0.0;
-            DRIVE_VELOCITY_KD = 20;
+            DRIVE_VELOCITY_KD = 10;
 
             DRIVE_RAMP_RATE = 0.1;
             ANGLE_RAMP_RATE = 0.2;
@@ -312,15 +312,15 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("Position kI", ANGLE_POSITION_KI);
         // SmartDashboard.putNumber("Position kD", ANGLE_POSITION_KD);
 
-        SmartDashboard.putNumber("MP X kP", MP_X_KP);
-        SmartDashboard.putNumber("MP X kI", MP_X_KI);
-        SmartDashboard.putNumber("MP X kD", MP_X_KD);
-        SmartDashboard.putNumber("MP Y kP", MP_Y_KP);
-        SmartDashboard.putNumber("MP Y kI", MP_Y_KI);
-        SmartDashboard.putNumber("MP Y kD", MP_Y_KD);
-        SmartDashboard.putNumber("MP THETA kP", MP_THETA_KP);
-        SmartDashboard.putNumber("MP THETA kI", MP_THETA_KI);
-        SmartDashboard.putNumber("MP THETA kD", MP_THETA_KD);
+        // SmartDashboard.putNumber("MP X kP", MP_X_KP);
+        // SmartDashboard.putNumber("MP X kI", MP_X_KI);
+        // SmartDashboard.putNumber("MP X kD", MP_X_KD);
+        // SmartDashboard.putNumber("MP Y kP", MP_Y_KP);
+        // SmartDashboard.putNumber("MP Y kI", MP_Y_KI);
+        // SmartDashboard.putNumber("MP Y kD", MP_Y_KD);
+        // SmartDashboard.putNumber("MP THETA kP", MP_THETA_KP);
+        // SmartDashboard.putNumber("MP THETA kI", MP_THETA_KI);
+        // SmartDashboard.putNumber("MP THETA kD", MP_THETA_KD);
     }
 
     /**
@@ -329,8 +329,6 @@ public class Drivetrain extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        // updateVelocityPID();
-        // updatePositionPID();
         odometry.update(Rotation2d.fromDegrees(pigeon.getFusedHeading()),
                 topLeft.getState(), topRight.getState(),
                 backLeft.getState(), backRight.getState());

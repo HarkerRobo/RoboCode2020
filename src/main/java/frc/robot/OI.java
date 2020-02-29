@@ -43,7 +43,7 @@ import harkerrobolib.wrappers.XboxGamepad;
 public class OI {
     private static OI instance;
 
-    public static final double XBOX_JOYSTICK_DEADBAND = 0.15;
+    public static final double XBOX_JOYSTICK_DEADBAND = 0.1;
     public static final double XBOX_TRIGGER_DEADBAND = 0.1;
 
     private static final double SHOOTER_REV_TIME = 2;
@@ -116,6 +116,7 @@ public class OI {
         //         () -> Drivetrain.getInstance().setDefaultCommand(Drivetrain.getInstance().getDefaultCommand().getName().equals("SwerveManual") ? new SwerveManualHeadingControl() : new SwerveManual()))
         //         );
 
+        driverGamepad.getUpDPadButton().whilePressed(new SpinIndexer(0.7, false));
 
         // driverGamepad.getLeftDPadButton().whenPressed(new SetClimberPosition(Climber.MIN_POSITION, Climber.FEED_FORWARD));
         // driverGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.MAX_POSITION, Climber.FEED_FORWARD));
@@ -131,7 +132,8 @@ public class OI {
 
         operatorGamepad.getButtonSelect().whilePressed(new SpinIntakeVelocity(0.3));
         operatorGamepad.getButtonStart().whenPressed(new InstantCommand(() -> Shooter.getInstance().toggleHoodAngle()));
-        operatorGamepad.getLeftDPadButton().whilePressed(jumble);
+        // operatorGamepad.getLeftDPadButton().whilePressed(jumble);
+        operatorGamepad.getLeftDPadButton().whilePressed(new SpinIntakeVelocity(0.5));
         // operatorGamepad.getButtonY().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
         // operatorGamepad.getUpDPadButton().whenPressed(new RotationControlTimed());
         // operatorGamepad.getRightDPadButton().whenPressed(new SpinnerPositionColorSensor());
