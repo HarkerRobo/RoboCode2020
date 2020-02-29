@@ -37,8 +37,8 @@ public class Shooter extends SubsystemBase {
             FLYWHEEL_KD = 0.7;
             FLYWHEEL_IZONE = 150;
 
-            SHOOTER_HIGH_ANGLE = Value.kForward;
-            SHOOTER_LOW_ANGLE = Value.kReverse;
+            HIGH_ANGLE = Value.kForward;
+            LOW_ANGLE = Value.kReverse;
 
             MASTER_INVERT = TalonFXInvertType.Clockwise;
             FOLLOWER_INVERT = TalonFXInvertType.CounterClockwise;
@@ -51,8 +51,8 @@ public class Shooter extends SubsystemBase {
             FLYWHEEL_KD = 0.7;
             FLYWHEEL_IZONE = 150;
 
-            SHOOTER_HIGH_ANGLE = Value.kForward;
-            SHOOTER_LOW_ANGLE = Value.kReverse;
+            HIGH_ANGLE = Value.kForward;
+            LOW_ANGLE = Value.kReverse;
 
             MASTER_INVERT = TalonFXInvertType.Clockwise;
             FOLLOWER_INVERT = TalonFXInvertType.CounterClockwise;
@@ -80,8 +80,8 @@ public class Shooter extends SubsystemBase {
     
     private static DoubleSolenoid solenoid;
     
-    public static DoubleSolenoid.Value SHOOTER_HIGH_ANGLE; 
-    public static DoubleSolenoid.Value SHOOTER_LOW_ANGLE; 
+    public static DoubleSolenoid.Value HIGH_ANGLE; 
+    public static DoubleSolenoid.Value LOW_ANGLE; 
     
     private static final int FLYWHEEL_CURRENT_CONTINUOUS = 50;
     private static final int FLYWHEEL_CURRENT_PEAK = 60;
@@ -190,7 +190,7 @@ public class Shooter extends SubsystemBase {
      * at low it switches the position to high.
      */
     public void toggleHoodAngle() {
-        solenoid.set(solenoid.get() == SHOOTER_HIGH_ANGLE ? SHOOTER_LOW_ANGLE : SHOOTER_HIGH_ANGLE);
+        solenoid.set(solenoid.get() == HIGH_ANGLE ? LOW_ANGLE : HIGH_ANGLE);
     }
     
     /**
