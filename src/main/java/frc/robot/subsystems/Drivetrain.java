@@ -206,13 +206,13 @@ public class Drivetrain extends SubsystemBase {
             MP_X_KI = 0;
             MP_X_KD = 15;//15;
 
-            MP_Y_KP = 12;//22;//0.7;
+            MP_Y_KP = 20;//12;//22;//0.7;
             MP_Y_KI = 0;
             MP_Y_KD = 15;
 
-            MP_THETA_KP = 6.3;//3.1;
+            MP_THETA_KP = 10;//20;//45;//30;//6.3;//3.1;
             MP_THETA_KI = 0;
-            MP_THETA_KD = 40;//3
+            MP_THETA_KD = 0;//40;//3
         }
     }
     
@@ -221,8 +221,8 @@ public class Drivetrain extends SubsystemBase {
     public static final double MAX_ROTATION_VELOCITY = (3 * Math.PI);
     public static final double MAX_ROTATION_ACCELERATION = 2 * (2 * Math.PI);
     
-    public static final double MP_MAX_DRIVE_VELOCITY = 3.5;
-    public static final double MP_MAX_DRIVE_ACCELERATION = 3;
+    public static final double MP_MAX_DRIVE_VELOCITY = 3;
+    public static final double MP_MAX_DRIVE_ACCELERATION = 2.5;
 
     public static final double GEAR_RATIO = 6;
 
@@ -336,6 +336,7 @@ public class Drivetrain extends SubsystemBase {
         // SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
         // SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
         SmartDashboard.putNumber("Current Rot", odometry.getPoseMeters().getRotation().getDegrees());
+        SmartDashboard.putNumber("pig head", getPigeon().getFusedHeading());
         // SmartDashboard.putNumber("Top Left Angle Error", topLeft.getAngleMotor().getClosedLoopError() / 4096*360);
     }
     public void updatePositionPID() {

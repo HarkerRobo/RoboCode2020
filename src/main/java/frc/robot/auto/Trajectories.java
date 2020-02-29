@@ -28,6 +28,9 @@ public class Trajectories {
     public static TrajectoryConfig slowConfig = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY / 5,
             Drivetrain.MP_MAX_DRIVE_ACCELERATION / 5).setKinematics(Drivetrain.getInstance().getKinematics());
 
+    public static TrajectoryConfig mediumConfig = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY / 2,
+            Drivetrain.MP_MAX_DRIVE_ACCELERATION / 2).setKinematics(Drivetrain.getInstance().getKinematics());
+
     /**
      * Trajectory used for moving off of the initiation line
      */
@@ -67,14 +70,14 @@ public class Trajectories {
        /**
         * https://imgur.com/a/KnwF104
         */
-       public static Trajectory middleStarting = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(19.00 * 0.3048, 50.20 * 0.3048, Rotation2d.fromDegrees(270)), 
-                    new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270))), 
-            config);
     //    public static Trajectory middleStarting = TrajectoryGenerator.generateTrajectory(
-    //        List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
-    //                new Pose2d(1, 0, Rotation2d.fromDegrees(90))), //towards driver station
-    //        config);
+    //         List.of(new Pose2d(19.00 * 0.3048, 50.20 * 0.3048, Rotation2d.fromDegrees(270)), 
+    //                 new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270))), 
+    //         config);
+       public static Trajectory middleStarting = TrajectoryGenerator.generateTrajectory(
+           List.of(new Pose2d(0, 3, Rotation2d.fromDegrees(270)), 
+                   new Pose2d(0, 0, Rotation2d.fromDegrees(270))), //towards driver station
+           config);
 
        /**
         * https://imgur.com/a/eLtqCyb
@@ -84,10 +87,10 @@ public class Trajectories {
                    new Pose2d(19.00 * 0.3048, 50.20 * 0.3048, Rotation2d.fromDegrees(90))),
            slowConfig);
        
-        public static Trajectory flexStarting = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(1, 1, Rotation2d.fromDegrees(270)),
-                    new Pose2d(0, 0, Rotation2d.fromDegrees(270))),
-            config);
+        // public static Trajectory flexStarting = TrajectoryGenerator.generateTrajectory(
+        //     List.of(new Pose2d(0, 1, Rotation2d.fromDegrees(270)),
+        //             new Pose2d(0, 0, Rotation2d.fromDegrees(270))),
+        //     config);
         
        public static Trajectory getLeft() { return leftStarting; }
        public static Trajectory getMiddle() { return middleStarting; }
@@ -109,9 +112,9 @@ public class Trajectories {
          * https://imgur.com/a/Cr3jWYP
          */
         public static Trajectory leftStarting = TrajectoryGenerator.generateTrajectory( 
-            List.of(new Pose2d(1.60 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(180)),
-                    new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(180))),
-            config);
+            List.of(new Pose2d(/*1.60*/2.49 * 0.3048, /*42.00*/32.50 * 0.3048, Rotation2d.fromDegrees(90/*270*/)),
+                    new Pose2d(/*2.49*/1.60 * 0.3048, /*32.50*/42.00 * 0.3048, Rotation2d.fromDegrees(90/*270*/))),
+            mediumConfig);
         
         /**
          * https://imgur.com/a/xulkyU1
@@ -125,8 +128,9 @@ public class Trajectories {
          * https://imgur.com/a/wSmQIoM
          */
         public static Trajectory pickupToShoot = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(0)),
-                    new Pose2d(19.00 * 0.3048, 50.20 * 0.3048, Rotation2d.fromDegrees(0))),
+            List.of(
+                new Pose2d(19.00 * 0.3048, /*50.20*//*40*/34 * 0.3048, Rotation2d.fromDegrees(270/*90*/)),
+                new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(270))),
             config);
 
         public static Trajectory getLeft() { return leftStarting; }

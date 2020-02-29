@@ -79,7 +79,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         isTeleop = true;
         CommandScheduler.getInstance().cancelAll();
-        Drivetrain.getInstance().getPigeon().setFusedHeading(180);
+        // Drivetrain.getInstance().getPigeon().setFusedHeading(/*18*/0);
     }
 
     /**
@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
         Autons.AutonCommands.BASELINE.toString();
         System.out.println(Autons.getAutonCommand());
         Autons.AutonCommands.BASELINE.toString();
-        // Drivetrain.getInstance().getPigeon().setFusedHeading(180);
+        // Drivetrain.getInstance().getPigeon().setFusedHeading(0);
 
     }
 
@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getOutputCurrent());
 
         SmartDashboard.putNumber("distance", SpinShooterLimelight.medianFilter.calculate(Shooter.getInstance().getLimelightDistance()));
-
+        SmartDashboard.putString("solenoid", Indexer.getInstance().getSolenoid().get().toString());
         // SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
 
         // SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());
@@ -182,7 +182,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        Drivetrain.getInstance().getPigeon().setFusedHeading(0);
+        // Drivetrain.getInstance().getPigeon().setFusedHeading(0);
         CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
         // CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.horizontalTrajectory, Rotation2d.fromDegrees(0)));
     }
