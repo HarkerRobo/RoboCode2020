@@ -76,65 +76,65 @@ public class Drivetrain extends SubsystemBase {
     private static boolean BL_ANGLE_SENSOR_PHASE;
     private static boolean BR_ANGLE_SENSOR_PHASE;
 
-    public static final int TL_OFFSET;//15561;
-    public static final int TR_OFFSET;//2492;
-    public static final int BL_OFFSET;//15351;
-    private static final int BR_OFFSET;//10413;
+    public static final int TELEOP_TL_OFFSET;//15561;
+    public static final int TELEOP_TR_OFFSET;//2492;
+    public static final int TELEOP_BL_OFFSET;//15351;
+    public static final int TELEOP_BR_OFFSET;//10413;
 
     public static final int ANGLE_POSITION_SLOT = 0;
     private static double ANGLE_POSITION_KP;
     private static double ANGLE_POSITION_KI;
     private static double ANGLE_POSITION_KD;
-
+    
     public static final int DRIVE_VELOCITY_SLOT = 0;
     private static double DRIVE_VELOCITY_KP;
     private static double DRIVE_VELOCITY_KI;
     private static double DRIVE_VELOCITY_KD;
     private static double DRIVE_VELOCITY_KF;
-
+    
     public static final double PIGEON_kP;
-
+    
     public static double MP_X_KP;
     public static double MP_X_KI;
     public static double MP_X_KD;
-
+    
     public static double MP_Y_KP;
     public static double MP_Y_KI;
     public static double MP_Y_KD;
-
+    
     public static double MP_THETA_KP;
     public static double MP_THETA_KI;
     public static double MP_THETA_KD;
-
+    
     public static final double DRIVE_RAMP_RATE;
     public static final double ANGLE_RAMP_RATE;
-
+    
     static {
         if (RobotMap.IS_COMP) { //Practice constants
             TL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             TR_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             BL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             BR_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
-
+            
             TL_ANGLE_INVERTED = true;
             TR_ANGLE_INVERTED = true;
             BL_ANGLE_INVERTED = true;
             BR_ANGLE_INVERTED = false;
-
+            
             TL_DRIVE_SENSOR_PHASE = true;
             TR_DRIVE_SENSOR_PHASE = true;
             BL_DRIVE_SENSOR_PHASE = false;
             BR_DRIVE_SENSOR_PHASE = false;
-
+            
             TL_ANGLE_SENSOR_PHASE = true;
             TR_ANGLE_SENSOR_PHASE = true;
             BL_ANGLE_SENSOR_PHASE = true;
             BR_ANGLE_SENSOR_PHASE = false;
-
-            TL_OFFSET = 9084; //9154;
-            TR_OFFSET = 5951;
-            BL_OFFSET = 1582; //1604;
-            BR_OFFSET = 5891; //5724;
+            
+            TELEOP_TL_OFFSET = 9084; //9154;
+            TELEOP_TR_OFFSET = 5951;
+            TELEOP_BL_OFFSET = 1582; //1604;
+            TELEOP_BR_OFFSET = 5891; //5724;
             
             ANGLE_POSITION_KP = 1.1;
             ANGLE_POSITION_KI = 0.0;
@@ -144,35 +144,35 @@ public class Drivetrain extends SubsystemBase {
             DRIVE_VELOCITY_KP = 0.7;
             DRIVE_VELOCITY_KI = 0.0;
             DRIVE_VELOCITY_KD = 10;
-
+            
             DRIVE_RAMP_RATE = 0.1;
             ANGLE_RAMP_RATE = 0.2;
             
             PIGEON_kP = 0.05;
-
+            
             MP_X_KP = 15;//8
             MP_X_KI = 0;
             MP_X_KD = 20;
-
+            
             MP_Y_KP = 15;//6
             MP_Y_KI = 0;
             MP_Y_KD = 20;
-
+            
             MP_THETA_KP = 7.0;
             MP_THETA_KI = 0;
             MP_THETA_KD = 0;
-        
+            
         } else { //Comp constants
             TL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             TR_DRIVE_INVERTED = TalonFXInvertType.Clockwise; 
             BL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
             BR_DRIVE_INVERTED = TalonFXInvertType.Clockwise;
-
+            
             TL_ANGLE_INVERTED = false;
             TR_ANGLE_INVERTED = true;
             BL_ANGLE_INVERTED = false;
             BR_ANGLE_INVERTED = true;
-
+            
             TL_DRIVE_SENSOR_PHASE = false;
             TR_DRIVE_SENSOR_PHASE = false;
             BL_DRIVE_SENSOR_PHASE = false;
@@ -183,10 +183,10 @@ public class Drivetrain extends SubsystemBase {
             BL_ANGLE_SENSOR_PHASE = false;
             BR_ANGLE_SENSOR_PHASE = true;
 
-            TL_OFFSET = 11358;//11484;//11575;
-            TR_OFFSET = 3567;//14079;//14161;
-            BL_OFFSET = 11192;//11444;//11400;  
-            BR_OFFSET = 6344;//6291;//6447;
+            TELEOP_TL_OFFSET = 11358;//11484;//11575;
+            TELEOP_TR_OFFSET = 3567;//14079;//14161;
+            TELEOP_BL_OFFSET = 11192;//11444;//11400;  
+            TELEOP_BR_OFFSET = 6344;//6291;//6447;
             
             ANGLE_POSITION_KP = 1.1;
             ANGLE_POSITION_KI = 0.0;
@@ -196,25 +196,31 @@ public class Drivetrain extends SubsystemBase {
             DRIVE_VELOCITY_KI = 0.0;
             DRIVE_VELOCITY_KD = 5;
             DRIVE_VELOCITY_KF = 0.034; // theoretical: 0.034;
-
+            
             DRIVE_RAMP_RATE = 0.1;
             ANGLE_RAMP_RATE = 0.2;  
             
             PIGEON_kP = 0.02;
-
+            
             MP_X_KP = 14;//6;//2.6;
             MP_X_KI = 0;
             MP_X_KD = 15;//15;
-
+            
             MP_Y_KP = 20;//12;//22;//0.7;
             MP_Y_KI = 0;
             MP_Y_KD = 15;
-
+            
             MP_THETA_KP = 10;//20;//45;//30;//6.3;//3.1;
             MP_THETA_KI = 0;
             MP_THETA_KD = 0;//40;//3
         }
     }
+
+    //Rotated by 180 degrees from normal angle encoder conventions, modulated for wrap around
+    public static final int AUTON_TL_OFFSET = (TELEOP_TL_OFFSET + 8192) % 16384;
+    public static final int AUTON_TR_OFFSET = (TELEOP_TR_OFFSET + 8192) % 16384;
+    public static final int AUTON_BL_OFFSET = (TELEOP_BL_OFFSET + 8192) % 16384;
+    public static final int AUTON_BR_OFFSET = (TELEOP_BR_OFFSET + 8192) % 16384;
     
     public static final double MAX_DRIVE_VELOCITY = 4;
     public static final double MAX_DRIVE_ACCELERATION = 5;
@@ -223,9 +229,9 @@ public class Drivetrain extends SubsystemBase {
     
     public static final double MP_MAX_DRIVE_VELOCITY = 3;
     public static final double MP_MAX_DRIVE_ACCELERATION = 2.5;
-
+    
     public static final double GEAR_RATIO = 6;
-
+    
     //conversions
     public static final double METERS_PER_FOOT = 0.3048;
     public static final double FEET_PER_METER = 3.28084;
@@ -274,10 +280,6 @@ public class Drivetrain extends SubsystemBase {
         backRight = new SwerveModule(RobotMap.CAN_IDS.BR_DRIVE_ID, BR_DRIVE_INVERTED, BR_DRIVE_SENSOR_PHASE,
                 RobotMap.CAN_IDS.BR_ANGLE_ID, BR_ANGLE_INVERTED, BR_ANGLE_SENSOR_PHASE);
 
-        topLeft.getAngleMotor().setSelectedSensorPosition((topLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - TL_OFFSET) / 4);
-        topRight.getAngleMotor().setSelectedSensorPosition((topRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - TR_OFFSET) / 4);
-        backLeft.getAngleMotor().setSelectedSensorPosition((backLeft.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - BL_OFFSET) / 4);
-        backRight.getAngleMotor().setSelectedSensorPosition((backRight.getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - BR_OFFSET) / 4);
 
         applyToAllDrive((motor) -> motor.setSelectedSensorPosition(0));
 
@@ -333,8 +335,8 @@ public class Drivetrain extends SubsystemBase {
                 topLeft.getState(), topRight.getState(),
                 backLeft.getState(), backRight.getState());
 
-        // SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
-        // SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
+        SmartDashboard.putNumber("Current X", odometry.getPoseMeters().getTranslation().getX());
+        SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
         SmartDashboard.putNumber("Current Rot", odometry.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("pig head", getPigeon().getFusedHeading());
         // SmartDashboard.putNumber("Top Left Angle Error", topLeft.getAngleMotor().getClosedLoopError() / 4096*360);

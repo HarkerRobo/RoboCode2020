@@ -73,13 +73,21 @@ import frc.robot.auto.Trajectories;
  */
 public class Robot extends TimedRobot {
     private Compressor compressor;
-    private boolean isTeleop;
+    private boolean wasTeleop;
 
     @Override
     public void teleopInit() {
-        isTeleop = true;
         CommandScheduler.getInstance().cancelAll();
-        // Drivetrain.getInstance().getPigeon().setFusedHeading(/*18*/0);
+        Drivetrain.getInstance().getPigeon().zero();
+
+        if (!wasTeleop)
+            Drivetrain.getInstance().getPigeon().addFusedHeading(11517.95);
+
+        Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.TELEOP_TL_OFFSET) / 4);
+        Drivetrain.getInstance().getTopRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.TELEOP_TR_OFFSET) / 4);
+        Drivetrain.getInstance().getBackLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.TELEOP_BL_OFFSET) / 4);
+        Drivetrain.getInstance().getBackRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.TELEOP_BR_OFFSET) / 4);
+        wasTeleop = true;
     }
 
     /**
@@ -89,8 +97,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        isTeleop = false;
-        Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
+        Drivetrain.getInstance().setDefaultCommand(new SwerveManualHeadingControl());
 
         // Spinner.getInstance().setDefaultCommand(new SpinnerManual());
         BottomIntake.getInstance();
@@ -110,6 +117,7 @@ public class Robot extends TimedRobot {
         Autons.AutonCommands.BASELINE.toString();
         // Drivetrain.getInstance().getPigeon().setFusedHeading(0);
 
+        wasTeleop = true;
     }
 
     /**
@@ -182,9 +190,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        // Drivetrain.getInstance().getPigeon().setFusedHeading(0);
+        Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.AUTON_TL_OFFSET) / 4);
+        Drivetrain.getInstance().getTopRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.AUTON_TR_OFFSET) / 4);
+        Drivetrain.getInstance().getBackLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.AUTON_BL_OFFSET) / 4);
+        Drivetrain.getInstance().getBackRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.AUTON_BR_OFFSET) / 4);
+            
         CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
-        // CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.horizontalTrajectory, Rotation2d.fromDegrees(0)));
+        // CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.rendezvousTest, Rotation2d.fromDegrees(0)));
+        wasTeleop = false;
     }
 
     /**

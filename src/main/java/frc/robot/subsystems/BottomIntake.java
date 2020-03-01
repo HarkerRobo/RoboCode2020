@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -61,7 +62,7 @@ public class BottomIntake extends SubsystemBase {
     private DoubleSolenoid solenoid; 
 
     private static boolean jamFlag = false;
-
+    
     private BottomIntake() {
         talon = new HSTalon(RobotMap.CAN_IDS.INTAKE_MOTOR_ID);
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.INTAKE_SOLENOID_FORWARD, RobotMap.CAN_IDS.INTAKE_SOLENOID_REVERSE);
@@ -117,7 +118,7 @@ public class BottomIntake extends SubsystemBase {
             jamFlag = true;
         }   
 
-        if (talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY)
+        if (talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY && !DriverStation.getInstance().isAutonomous())
             CommandScheduler.getInstance().schedule(new ParallelRaceGroup(new SpinIntakeVelocity(-0.3), new WaitCommand(0.2)));
     }
 
