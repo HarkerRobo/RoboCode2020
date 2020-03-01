@@ -44,8 +44,8 @@ public class Trajectories {
          * robot)
          */
         public static Trajectory moveForward = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(0, 2, Rotation2d.fromDegrees(90 + 180)),
-                    new Pose2d(0, 0, Rotation2d.fromDegrees(90 + 180))), 
+            List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(90)), 
+                    new Pose2d(0, 1.5, Rotation2d.fromDegrees(90))),
             config);
 
         /**
@@ -54,12 +54,12 @@ public class Trajectories {
          * (Can start anywhere on initiation line with 2 meters of space behind robot)
          */
         public static Trajectory moveBackward = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(0, -2, Rotation2d.fromDegrees(270 + 180)),
-                    new Pose2d(0, 0, Rotation2d.fromDegrees(270 + 180))),
-            config);
+            List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(270)),
+                    new Pose2d(0, -1.5, Rotation2d.fromDegrees(270))),
+            config);    
     }
 
-    /*
+    /**
      * Trajectories used in three ball configurations
      */
     public static class Three {
@@ -67,74 +67,71 @@ public class Trajectories {
          * https://imgur.com/a/rUSiKb4
          */
         public static Trajectory leftStarting = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(19.00 * 0.3048, 50.20 * 0.3048, Rotation2d.fromDegrees(90 + 180)),
-                        new Pose2d(1.60 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(30 + 180))),
+                List.of(new Pose2d(1.60 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(30)),
+                        new Pose2d(19.00 * 0.3048, 48.00 * 0.3048, Rotation2d.fromDegrees(90))),
                 config);
 
         /**
          * https://imgur.com/a/KnwF104
          */
         public static Trajectory middleStarting = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(19.00 * 0.3048, 50.20 * 0.3048, Rotation2d.fromDegrees(270 + 180)), 
-                    new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270 + 180))),
+            List.of(new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(90)),
+                    new Pose2d(19.00 * 0.3048, 48.00 * 0.3048, Rotation2d.fromDegrees(90))), 
             config);
 
         /**
          * https://imgur.com/a/eLtqCyb
          */
         public static Trajectory rightStarting = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(19.00 * 0.3048, 50.20 * 0.3048, Rotation2d.fromDegrees(90 + 180)), 
-                    new Pose2d(25.40 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(90 + 180))),
-            slowConfig);
-       
-        // public static Trajectory flexStarting = TrajectoryGenerator.generateTrajectory(
-        //     List.of(new Pose2d(0, 1, Rotation2d.fromDegrees(270)),
-        //             new Pose2d(0, 0, Rotation2d.fromDegrees(270))),
-        //     config);
+            List.of(new Pose2d(25.40 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(90)),
+                    new Pose2d(19.00 * 0.3048, 48.00 * 0.3048, Rotation2d.fromDegrees(90))), 
+            config);
         
-       public static Trajectory getLeft() { return leftStarting; }
-       public static Trajectory getMiddle() { return middleStarting; }
-       public static Trajectory getRight() { return rightStarting; }
-       public static Trajectory getStart() {
+        public static Trajectory getLeft() { return leftStarting; }
+        public static Trajectory getMiddle() { return middleStarting; }
+        public static Trajectory getRight() { return rightStarting; }
+
+        public static Trajectory getStart() {
             StartingPosition s = Autons.startingPosition;
 
             if(s == StartingPosition.LEFT) return getLeft();
             if(s == StartingPosition.MIDDLE) return getMiddle();
             else return getRight();
         }
-   }
+    }
 
     /**
      * Trajectories used in five ball configurations that pickup two balls from the opponent's trench
      */
-    public static class FiveTrench  {
+    public static class FiveTrench {
         /**
          * https://imgur.com/a/Cr3jWYP
          */
         public static Trajectory leftStarting = TrajectoryGenerator.generateTrajectory( 
-            List.of(new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(270 + 180)),
-                    new Pose2d(1.60 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270 + 180))),
+            List.of(new Pose2d(1.60 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270)),
+                    new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(270))),
             config);
         
         /**
          * https://imgur.com/a/xulkyU1
          */
         public static Trajectory middleStarting = TrajectoryGenerator.generateTrajectory( 
-            List.of(new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(270 + 180)),
-                    new Pose2d(8.50 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270 + 180))),
+            List.of(new Pose2d(8.50 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270)),
+                    new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(270))),
             config);
 
         /**
          * https://imgur.com/a/wSmQIoM
          */
         public static Trajectory pickupToShoot = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(19.00 * 0.3048, 40.00 * 0.3048, Rotation2d.fromDegrees(90 + 180)),
-                    new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(90 + 180))),
+            List.of(new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(90)),
+                    new Pose2d(19.00 * 0.3048, 41.00 * 0.3048, Rotation2d.fromDegrees(90))),
             config);
 
         public static Trajectory getLeft() { return leftStarting; }
         public static Trajectory getMiddle() { return middleStarting; }
         public static Trajectory getRight() { return Baseline.moveForward; }
+
         public static Trajectory getStart() {
             StartingPosition s = Autons.startingPosition;
 
@@ -148,22 +145,26 @@ public class Trajectories {
      * Trajectories used in five ball configurations that pickup two balls from the rendevous point
      */
     public static class FiveRendezvous {
-        /**
-         * https://imgur.com/a/QC43cB7
-         */
+        public static Trajectory leftStarting = TrajectoryGenerator.generateTrajectory(
+            List.of(
+                new Pose2d(1.60 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(0)),
+                new Pose2d(12.16 * 0.3048, 34.38 * 0.3048, Rotation2d.fromDegrees(296.5))),
+            config);
+
         public static Trajectory middleStarting = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(18.41 * 0.3048, 31.95 * 0.3048, Rotation2d.fromDegrees(201 + 180)), //-110.556
-                    new Pose2d(19.35 * 0.3048, 36.72 * 0.3048, Rotation2d.fromDegrees(314 + 180)), //136.47
-                    new Pose2d(8.50 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270 + 180))),
+            List.of(
+                new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(180)),
+                new Pose2d(11.56 * 0.3048, 40.64 * 0.3048, Rotation2d.fromDegrees(224)),
+                new Pose2d(12.16 * 0.3048, 34.38 * 0.3048, Rotation2d.fromDegrees(296.5))),
             config);
-            
-        /**
-         * https://imgur.com/a/NiTftF8
-         */
-        public static Trajectory rightStarting = TrajectoryGenerator.generateTrajectory( 
-            List.of(new Pose2d(18.41 * 0.3048, 31.95 * 0.3048, Rotation2d.fromDegrees(201 + 180)), //-110.556
-                    new Pose2d(25.40 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270 + 180))),
-            config);
+
+        // /**
+        //  * https://imgur.com/a/NiTftF8
+        //  */
+        // public static Trajectory rightStarting = TrajectoryGenerator.generateTrajectory( 
+        //     List.of(new Pose2d(25.40 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270)),
+        //             new Pose2d(18.41 * 0.3048, 31.95 * 0.3048, Rotation2d.fromDegrees(201))),
+        //     config);
         
         /**
          * https://imgur.com/a/mHWSoxw 
@@ -172,14 +173,16 @@ public class Trajectories {
          * has more points to avoid hitting shield generator)
          */
         public static Trajectory pickupToShoot = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(19.00 * 0.3048, 40.00 * 0.3048, Rotation2d.fromDegrees(90 + 180)),
-                    new Pose2d(20.00 * 0.3048, 35.00 * 0.3048, Rotation2d.fromDegrees(90 + 180)),
-                    new Pose2d(18.41 * 0.3048, 31.95 * 0.3048, Rotation2d.fromDegrees(21 + 180))), // 69.444
-            config);
+            List.of(
+                new Pose2d(12.16 * 0.3048, 34.38 * 0.3048, Rotation2d.fromDegrees(296.5 + 180)),
+                new Pose2d(11.56 * 0.3048, 40.64 * 0.3048, Rotation2d.fromDegrees(224 + 180)),
+                new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(180 + 180))),
+            config);    
             
         public static Trajectory getLeft() { return Baseline.moveForward; }
         public static Trajectory getMiddle() { return middleStarting; }
-        public static Trajectory getRight() { return rightStarting; }
+        // public static Trajectory getRight() { return rightStarting; }
+        public static Trajectory getRight() { return Baseline.moveForward; }
         public static Trajectory getStart() {
             StartingPosition s = Autons.startingPosition;
 
@@ -194,25 +197,25 @@ public class Trajectories {
      */
     public static class EightTrench {
         public static Trajectory middleStarting = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(19.00 * 0.3048, 40.00 * 0.3048, Rotation2d.fromDegrees(270 + 180)),
-                    new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270 + 180))), 
+            List.of(new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270)), 
+                    new Pose2d(19.00 * 0.3048, 41.00 * 0.3048, Rotation2d.fromDegrees(270))),
             config);
 
         public static Trajectory rightStarting = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(19.00 * 0.3048, 40.00 * 0.3048, Rotation2d.fromDegrees(180 + 180)),
-                    new Pose2d(25.40 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(180 + 180))),
+            List.of(new Pose2d(25.40 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(180)),
+                    new Pose2d(19.00 * 0.3048, 41.00 * 0.3048, Rotation2d.fromDegrees(180))),
             config);
         
         public static Trajectory pickUpTrenchBalls = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(270 + 180)),
-                    new Pose2d(24.75 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(270 + 180)),
-                    new Pose2d(19.00 * 0.3048, 40.00 * 0.3048, Rotation2d.fromDegrees(270 + 180))),
+            List.of(new Pose2d(19.00 * 0.3048, 41.00 * 0.3048, Rotation2d.fromDegrees(0)),
+                    new Pose2d(24.75 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(270)),
+                    new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(270))),
             config);
         
         public static Trajectory alignFromTrench = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(19.00 * 0.3048, 40.00 * 0.3048, Rotation2d.fromDegrees(90 + 180)), 
-                    new Pose2d(24.75 * 0.3048, 32.00 * 0.3048, Rotation2d.fromDegrees(90 + 180)),
-                    new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(90 + 180))),
+            List.of(new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(90)),
+                    new Pose2d(24.75 * 0.3048, 32.00 * 0.3048, Rotation2d.fromDegrees(90)),
+                    new Pose2d(19.00 * 0.3048, 41.00 * 0.3048, Rotation2d.fromDegrees(90))), 
             config);
 
         public static Trajectory getLeft() { return Baseline.moveForward; }
@@ -531,6 +534,14 @@ public class Trajectories {
      * Trajectories used for testing
      */
     public static class Test {
+
+        public static Trajectory rendezvousTest = TrajectoryGenerator.generateTrajectory(
+            List.of(
+                    new Pose2d(19 * 0.3048, 42 * 0.3048, Rotation2d.fromDegrees(180)),
+                    new Pose2d(11.56 * 0.3048, 40.64 * 0.3048, Rotation2d.fromDegrees(224)),
+                    new Pose2d(12.16 * 0.3048, 34.38 * 0.3048, Rotation2d.fromDegrees(296.5))),
+            config);
+
         public static Trajectory horizontalTrajectory = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(3, 0, Rotation2d.fromDegrees(180)), 
                     new Pose2d(0, 0, Rotation2d.fromDegrees(180))),
