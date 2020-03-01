@@ -25,7 +25,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
     
     private static final double SCALE_A = 0.0296;//LIN_SCALE 2.32;
     private static final double SCALE_B = -0.53;
-    private static final double SCALE_C = 94.5;
+    private static final double SCALE_C = 94.5+7;
 
     private static final int NUM_SAMPLES = 30;
     public static MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);

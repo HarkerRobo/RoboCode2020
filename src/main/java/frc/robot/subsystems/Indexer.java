@@ -43,7 +43,7 @@ public class Indexer extends SubsystemBase {
     private VictorSPX agitator;
     
     public static final double SPINE_OUTPUT_MULTIPLIER = 1;
-    public static final double AGITATOR_OUTPUT_MULTIPLIER = 0.85;
+    public static final double AGITATOR_OUTPUT_MULTIPLIER = 0.95;
 
     public static final int VOLTAGE_COMPENSATION = 10;
     public static final double RAMP_RATE = 0.04;
