@@ -95,11 +95,20 @@ public class OI {
             Operator right x: Spinner manual
         */
 
+        driverGamepad.getButtonA().whenPressed(new InstantCommand(() -> { 
+                System.out.println(Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+                System.out.println(Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+                System.out.println(Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+                System.out.println(Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        }));
+
         driverGamepad.getButtonB().whilePressed(new StartEndCommand(() -> Shooter.getInstance().spinShooterPercentOutput(0.15), () -> Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0), Shooter.getInstance()));
         // driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(0)));
-        // driverGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
-        //     new SpinShooterLimelight(), 
-        //     new MoveBallsToShooter(false)));
+        driverGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
+            new SpinShooterLimelight(), 
+            new MoveBallsToShooter(false)));
+
+        driverGamepad.getButtonX().whilePressed(new SpinIndexer(0.7, true));
 
         //Shoot from Target Zone Command
         // driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false)));
@@ -125,7 +134,6 @@ public class OI {
             new SpinShooterLimelight(), 
             new MoveBallsToShooter(false)));
  
-        operatorGamepad.getButtonBumperRight().whilePressed(new SpinShooterVelocity(90));
         operatorGamepad.getButtonB().whenPressed(new InstantCommand(() -> BottomIntake.getInstance().toggleSolenoid()));
         operatorGamepad.getButtonA().whilePressed(new MoveBallsToShooter(false));
         operatorGamepad.getButtonX().whenPressed(new InstantCommand(() -> Indexer.getInstance().toggleSolenoid()));

@@ -34,7 +34,7 @@ public class Shooter extends SubsystemBase {
             FLYWHEEL_KF = 0.064; // tune;
             FLYWHEEL_KP = 0.05; // tune;
             FLYWHEEL_KI = 0.001;
-            FLYWHEEL_KD = 0.7;
+            FLYWHEEL_KD = 0.9;
             FLYWHEEL_IZONE = 150;
 
             HIGH_ANGLE = Value.kForward;
@@ -114,8 +114,8 @@ public class Shooter extends SubsystemBase {
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_SOLENOID_BACKWARD);
         
         setupFlywheel();
-        // SmartDashboard.putNumber("flywheel kp", FLYWHEEL_KP);
         // SmartDashboard.putNumber("flywheel kd", FLYWHEEL_KD);
+        // SmartDashboard.putNumber("flywheel kp", FLYWHEEL_KP);
     }
 
     @Override

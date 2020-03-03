@@ -36,6 +36,7 @@ public class SpinShooterVelocity extends IndefiniteCommand {
     }
 
     public void execute() {
+        // Shooter.getInstance().spinShooterVelocity(SmartDashboard.getNumber("Set shooter speed", velocity));
         Shooter.getInstance().spinShooterVelocity(velocity);
 
         SmartDashboard.putNumber("Shooter velocity error", Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getClosedLoopError(), SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV));

@@ -21,16 +21,17 @@ public class SpinShooterLimelight extends IndefiniteCommand {
 
     public static final double SHOOTER_HIGH_ANGLE_DEGREES = 50;
     public static final double SHOOTER_LOW_ANGLE_DEGREES = 21;
-    
-    private static final double SCALE_A = 0.0296;//LIN_SCALE 2.32;
-    private static final double SCALE_B = -0.53;
-    private static final double SCALE_C = 94.5;
+    private static final double SCALE_A = 0.139165;
+    private static final double SCALE_B = -4.15045;
+    private static final double SCALE_C = 131.773;
 
     private static final int NUM_SAMPLES = 30;
     public static MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);
 
     public SpinShooterLimelight() {
         addRequirements(Shooter.getInstance());
+
+        SmartDashboard.putNumber("Set shooter speed", 100);
     }
 
     @Override
@@ -39,6 +40,9 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         Limelight.setCamModeVision();
 
         medianFilter.reset();
+
+        // Shooter.getInstance().getMaster().config_kP(Shooter.FLYWHEEL_VELOCITY_SLOT, SmartDashboard.getNumber("flywheel kp", Shooter.FLYWHEEL_KP));
+        // Shooter.getInstance().getMaster().config_kD(Shooter.FLYWHEEL_VELOCITY_SLOT, SmartDashboard.getNumber("flywheel kd", Shooter.FLYWHEEL_KD));
     }
     
     public void execute() {

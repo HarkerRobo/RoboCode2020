@@ -133,13 +133,14 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
+        SmartDashboard.putNumber("LL Distance", Shooter.getInstance().getLimelightDistance());
+
         // SmartDashboard.putString("Robot Type", RobotMap.IS_COMP ? "Practice" : "Comp");
 
         // SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getOutputCurrent());
         // SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getOutputCurrent());
         // SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getOutputCurrent());
 
-        SmartDashboard.putNumber("distance", SpinShooterLimelight.medianFilter.calculate(Shooter.getInstance().getLimelightDistance()));
         SmartDashboard.putString("solenoid", Indexer.getInstance().getSolenoid().get().toString());
         // SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
 

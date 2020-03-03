@@ -254,7 +254,7 @@ public class Drivetrain extends SubsystemBase {
     public static final double TX_kD = 0.0007;//0.3;
     public static final double LIMELIGHT_KS = 0;
 
-	public static final double TX_SETPOINT = -1.7;
+	public static final double TX_SETPOINT = 0;//-1.7;
     public static final double TX_ALLOWABLE_ERROR = 0.4;
 
 	public static final double HEADING_KP = 0.01;
