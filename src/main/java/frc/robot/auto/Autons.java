@@ -180,7 +180,7 @@ public class Autons {
     );
 
     public static CommandBase getAutonCommand() {
-        return rendezvousFiveAuton/*curAuton.value*/;
+        return three/*curAuton.value*/;
     }
 
     public static enum AutonCommands {

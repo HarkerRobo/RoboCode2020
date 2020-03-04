@@ -21,9 +21,9 @@ public class SpinShooterLimelight extends IndefiniteCommand {
 
     public static final double SHOOTER_HIGH_ANGLE_DEGREES = 50;
     public static final double SHOOTER_LOW_ANGLE_DEGREES = 21;
-    private static final double SCALE_A = 0.139165;
-    private static final double SCALE_B = -4.15045;
-    private static final double SCALE_C = 131.773;
+    private static final double SCALE_A = 0.375576;//0.139165;
+    private static final double SCALE_B = -13.3005;//-4.15045;
+    private static final double SCALE_C = 217.474;//131.773;
 
     private static final int NUM_SAMPLES = 30;
     public static MedianFilter medianFilter = new MedianFilter(NUM_SAMPLES);

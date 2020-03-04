@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManualHeadingControl());
 
-        // Spinner.getInstance().setDefaultCommand(new SpinnerManual());
+        Spinner.getInstance().setDefaultCommand(new SpinnerManual());
         BottomIntake.getInstance();
         Indexer.getInstance();
         Shooter.getInstance();
@@ -134,14 +134,14 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
 
         SmartDashboard.putNumber("LL Distance", Shooter.getInstance().getLimelightDistance());
-
+        SmartDashboard.putBoolean("isPercentOutput", Shooter.isPercentOutput);
         // SmartDashboard.putString("Robot Type", RobotMap.IS_COMP ? "Practice" : "Comp");
 
         // SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getOutputCurrent());
         // SmartDashboard.putNumber("Shooter Current", Shooter.getInstance().getMaster().getOutputCurrent());
         // SmartDashboard.putNumber("Intake Current", BottomIntake.getInstance().getTalon().getOutputCurrent());
 
-        SmartDashboard.putString("solenoid", Indexer.getInstance().getSolenoid().get().toString());
+        // SmartDashboard.putString("solenoid", Indexer.getInstance().getSolenoid().get().toString());
         // SmartDashboard.putString("Indexer Piston", Indexer.getInstance().getSolenoid().get().toString());
 
         // SmartDashboard.putNumber("Pigeon Heading", Drivetrain.getInstance().getPigeon().getFusedHeading());

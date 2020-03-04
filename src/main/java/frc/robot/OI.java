@@ -104,9 +104,6 @@ public class OI {
 
         driverGamepad.getButtonB().whilePressed(new StartEndCommand(() -> Shooter.getInstance().spinShooterPercentOutput(0.15), () -> Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0), Shooter.getInstance()));
         // driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(0)));
-        driverGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
-            new SpinShooterLimelight(), 
-            new MoveBallsToShooter(false)));
 
         driverGamepad.getButtonX().whilePressed(new SpinIndexer(0.7, true));
 
@@ -125,7 +122,7 @@ public class OI {
         //         () -> Drivetrain.getInstance().setDefaultCommand(Drivetrain.getInstance().getDefaultCommand().getName().equals("SwerveManual") ? new SwerveManualHeadingControl() : new SwerveManual()))
         //         );
 
-        operatorGamepad.getLeftDPadButton().whilePressed(new SpinIndexer(0.7, false));
+        // operatorGamepad.getLeftDPadButton().whilePressed(new SpinIndexer(0.7, false));
 
         // driverGamepad.getLeftDPadButton().whenPressed(new SetClimberPosition(Climber.MIN_POSITION, Climber.FEED_FORWARD));
         // driverGamepad.getRightDPadButton().whenPressed(new SetClimberPosition(Climber.MAX_POSITION, Climber.FEED_FORWARD));
@@ -133,34 +130,36 @@ public class OI {
         operatorGamepad.getButtonBumperLeft().whilePressed(new ParallelCommandGroup(
             new SpinShooterLimelight(), 
             new MoveBallsToShooter(false)));
- 
+        operatorGamepad.getButtonBumperRight().whilePressed(new SpinShooterVelocity(90));
         operatorGamepad.getButtonB().whenPressed(new InstantCommand(() -> BottomIntake.getInstance().toggleSolenoid()));
         operatorGamepad.getButtonA().whilePressed(new MoveBallsToShooter(false));
         operatorGamepad.getButtonX().whenPressed(new InstantCommand(() -> Indexer.getInstance().toggleSolenoid()));
-
+        operatorGamepad.getLeftDPadButton().whilePressed(jumble);
         operatorGamepad.getButtonSelect().whilePressed(new SpinIntakeVelocity(0.3));
         operatorGamepad.getButtonStart().whenPressed(new InstantCommand(() -> Shooter.getInstance().toggleHoodAngle()));
         // operatorGamepad.getLeftDPadButton().whilePressed(jumble);
         // operatorGamepad.getLeftDPadButton().whilePressed(new SpinIntakeVelocity(0.5));
-        // operatorGamepad.getButtonY().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
+        operatorGamepad.getButtonY().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
         // operatorGamepad.getUpDPadButton().whenPressed(new RotationControlTimed());
-        // operatorGamepad.getRightDPadButton().whenPressed(new SpinnerPositionColorSensor());
-        operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(
-            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR)), 
+        // operatorGamepad.getDownDPadButton().whenPressed(new SpinnerPositionColorSensor());
+        operatorGamepad.getRightDPadButton().whenPressed(new SpinIndexer(0.7, false));
+        // operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(
+        //     new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR)), 
       
-            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR)), 
-            () -> !RobotMap.IS_NIGHT));
+        //     new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR)), 
+        //     () -> !RobotMap.IS_NIGHT));
 
-        operatorGamepad.getRightDPadButton().whenPressed(new ConditionalCommand(
-            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_MEDIUM)), 
-            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR)), 
-            () -> !RobotMap.IS_NIGHT));
+        // operatorGamepad.getRightDPadButton().whenPressed(new ConditionalCommand(
+        //     new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_MEDIUM)), 
+        //     new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_FAR)), 
+        //     () -> !RobotMap.IS_NIGHT));
 
-        operatorGamepad.getUpDPadButton().whenPressed(new ConditionalCommand(
-            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE)), 
-            new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE)), 
-            () -> !RobotMap.IS_NIGHT));
-        }
+        // operatorGamepad.getUpDPadButton().whenPressed(new ConditionalCommand(
+        //     new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_CLOSE)), 
+        //     new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.NIGHT_CLOSE)), 
+        //     () -> !RobotMap.IS_NIGHT));
+        // 
+    }
 
     /**
      * Returns the driver Xbox controller
