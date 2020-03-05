@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -41,17 +42,17 @@ public class Climber extends SubsystemBase {
     
     public static final int MAX_POSITION = 15800;
     public static final int MIN_POSITION = 200;
-    private static final int FORWARD_SOFT_LIMIT = 16000;
+    private static final int FORWARD_SOFT_LIMIT = 300000;
     private static final int REVERSE_SOFT_LIMIT = 0;
 
-    public static final double FEED_FORWARD = 0.1;
+    public static boolean isSoftLimiting; 
 
     static {
         if (RobotMap.IS_COMP) {
-            MASTER_SENSOR_PHASE = false;
+            MASTER_SENSOR_PHASE = true;
             FOLLOWER_SENSOR_PHASE = false;
 
-            MASTER_INVERTED = TalonFXInvertType.Clockwise;
+            MASTER_INVERTED = TalonFXInvertType.CounterClockwise;
             FOLLOWER_INVERTED = TalonFXInvertType.Clockwise;
 
             CLIMBER_POSITION_KP = 0.0; // tune
@@ -75,6 +76,7 @@ public class Climber extends SubsystemBase {
         follower = new TalonFX(RobotMap.CAN_IDS.CLIMBER_FOLLOWER_ID);
         
         setupTalons();
+        isSoftLimiting = true;
         setupPositionPID();
     }
     
@@ -123,6 +125,13 @@ public class Climber extends SubsystemBase {
         master.config_kP(CLIMBER_POSITION_SLOT, CLIMBER_POSITION_KP);
         master.config_kI(CLIMBER_POSITION_SLOT, CLIMBER_POSITION_KI);
         master.config_kD(CLIMBER_POSITION_SLOT, CLIMBER_POSITION_KD);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("climber pos", master.getSelectedSensorPosition());
+        SmartDashboard.putNumber("climber current", master.getOutputCurrent());
+        
     }
 
     public TalonFX getMaster() {

@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.bottomintake.SpinIntakeVelocity;
-import frc.robot.commands.climber.SetClimberPosition;
 import frc.robot.commands.drivetrain.SwerveAlignWithLimelight;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.commands.drivetrain.SwerveManual;
@@ -94,7 +93,11 @@ public class OI {
             Driver/Operator right trigger: Intake
             Operator right x: Spinner manual
         */
-
+        driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> {
+            Climber.getInstance().getMaster().configForwardSoftLimitEnable(!Climber.isSoftLimiting);
+            Climber.getInstance().getFollower().configForwardSoftLimitEnable(!Climber.isSoftLimiting);
+            Climber.isSoftLimiting = !Climber.isSoftLimiting;
+        }));
         driverGamepad.getButtonA().whenPressed(new InstantCommand(() -> { 
                 System.out.println(Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
                 System.out.println(Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
@@ -112,9 +115,9 @@ public class OI {
         driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.verticalTrajectory, Rotation2d.fromDegrees(0)));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
         // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
-        driverGamepad.getButtonSelect().whilePressed(new ParallelCommandGroup(
-            new SpinShooterVelocity(90), 
-            new MoveBallsToShooter(false)));
+        // driverGamepad.getButtonSelect().whilePressed(new ParallelCommandGroup(
+        //     new SpinShooterVelocity(90), 
+        //     new MoveBallsToShooter(false)));
 
         driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
         // driverGamepad.getButtonX().whenPressed(

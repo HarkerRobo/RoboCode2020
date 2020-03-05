@@ -13,12 +13,14 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.climber.MoveClimberManual;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.drivetrain.SwerveManualHeadingControl;
 import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.commands.spinner.SpinnerManual;
 import frc.robot.subsystems.BottomIntake;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
@@ -103,7 +105,7 @@ public class Robot extends TimedRobot {
         BottomIntake.getInstance();
         Indexer.getInstance();
         Shooter.getInstance();
-        // Climber.getInstance();
+        Climber.getInstance().setDefaultCommand(new MoveClimberManual());
 
         OI.getInstance();
         // compressor = new Compressor();  
