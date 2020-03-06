@@ -70,6 +70,8 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
     private static boolean aPressed;
     private static boolean aFlag;
     
+    public static boolean isOptimized;
+
     public SwerveManualHeadingControl() {
         addRequirements(Drivetrain.getInstance());
         headingController = new PIDController(Drivetrain.HEADING_KP, Drivetrain.HEADING_KI, Drivetrain.HEADING_KD);
@@ -102,6 +104,7 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
 
         joystickFlag = false;
         headingFlag = false;
+        isOptimized = false;
     }
 
     @Override
@@ -180,7 +183,7 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
         if (joystickFlag)
-            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, false);
+            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, isOptimized);
 
         // if(Timer.getFPGATimestamp() - lastPigeonUpdateTime > 0.01) {
         //     double currentTime = Timer.getFPGATimestamp();

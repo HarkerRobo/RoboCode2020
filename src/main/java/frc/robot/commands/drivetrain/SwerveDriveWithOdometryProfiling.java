@@ -61,7 +61,7 @@ public class SwerveDriveWithOdometryProfiling extends HSSwerveDriveOdometry {
         long initialTime = System.currentTimeMillis();
         
         boolean isAtSepoint = false;
-        Rotation2d initialRotation = initialPose.getRotation().plus(Rotation2d.fromDegrees(180));
+        Rotation2d initialRotation = trajectory.getInitialPose().getRotation().minus(Rotation2d.fromDegrees(0));
         SmartDashboard.putNumber("initialRotation", initialRotation.getDegrees());
         //Perhaps add some functionality to rotate robot to the heading as well
         while (System.currentTimeMillis() - initialTime < TIMEOUT && !isAtSepoint) {

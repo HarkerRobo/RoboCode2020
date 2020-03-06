@@ -104,7 +104,7 @@ public class OI {
                 System.out.println(Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
                 System.out.println(Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
         }));
-
+        driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> SwerveManualHeadingControl.isOptimized = !SwerveManualHeadingControl.isOptimized));
         driverGamepad.getButtonB().whilePressed(new StartEndCommand(() -> Shooter.getInstance().spinShooterPercentOutput(0.15), () -> Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0), Shooter.getInstance()));
         // driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(0)));
 
@@ -119,7 +119,7 @@ public class OI {
         //     new SpinShooterVelocity(90), 
         //     new MoveBallsToShooter(false)));
 
-        driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
+        // driverGamepad.getButtonStart().whilePressed(new MoveBallsToShooter(false));
         // driverGamepad.getButtonX().whenPressed(
         //     new InstantCommand(
         //         () -> Drivetrain.getInstance().setDefaultCommand(Drivetrain.getInstance().getDefaultCommand().getName().equals("SwerveManual") ? new SwerveManualHeadingControl() : new SwerveManual()))

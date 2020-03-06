@@ -35,7 +35,7 @@ public class Autons {
     
     //Change this before the match.
     public static StartingPosition startingPosition = StartingPosition.RIGHT;
-    public static AutonCommands curAuton = AutonCommands.EIGHT_TRENCH; 
+    // public static AutonCommands curAuton = AutonCommands.EIGHT_TRENCH; 
 
     //Brings the intake out, required at the start of every autonomous configuration
     // private static InstantCommand intakeOut = new InstantCommand(
@@ -47,8 +47,14 @@ public class Autons {
     private static final double SHOOTER_SHOOT_TIME = 4.0; // how long it takes to shoot all the balls
     private static final Rotation2d leftRendezvousHeading= Rotation2d.fromDegrees(-26.5);
     private static final Rotation2d rightRendezvousHeading= Rotation2d.fromDegrees(65);
+
     private static final SequentialCommandGroup baselineAuto = new SequentialCommandGroup(
         new SwerveDriveWithOdometryProfiling(Trajectories.Baseline.moveForward, OI.forwardHeading)
+    );
+
+    private static final SequentialCommandGroup test = new SequentialCommandGroup(
+        new SwerveDriveWithOdometryProfiling(Trajectories.Test.verticalTrajectory, OI.forwardHeading)
+            .raceWith(new SpinIntakeVelocity(0.6))
     );
 
     //Shoot three pre-loaded balls
