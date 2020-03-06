@@ -116,7 +116,7 @@ public class Trajectories {
          * https://imgur.com/a/xulkyU1
          */
         public static Trajectory middleStarting = TrajectoryGenerator.generateTrajectory( 
-            List.of(new Pose2d(8.50 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270)),
+            List.of(new Pose2d(8.50 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(270)),//change to 180?
                     new Pose2d(2.49 * 0.3048, 32.50 * 0.3048, Rotation2d.fromDegrees(270))),
             config);
 
@@ -179,7 +179,7 @@ public class Trajectories {
                 new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(180 + 180))),
             config);    
             
-        public static Trajectory getLeft() { return Baseline.moveForward; }
+        public static Trajectory getLeft() { return leftStarting; }
         public static Trajectory getMiddle() { return middleStarting; }
         // public static Trajectory getRight() { return rightStarting; }
         public static Trajectory getRight() { return Baseline.moveForward; }
@@ -208,13 +208,19 @@ public class Trajectories {
         
         public static Trajectory pickUpTrenchBalls = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(19.00 * 0.3048, 41.00 * 0.3048, Rotation2d.fromDegrees(0)),
-                    new Pose2d(24.75 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(270)),
-                    new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(270))),
+            
+                    new Pose2d(24.75 * 0.3048, 40.00 * 0.3048, Rotation2d.fromDegrees(270)),
+                    new Pose2d(24.75 * 0.3048, 30.00 * 0.3048, Rotation2d.fromDegrees(270))),
+                    // new Pose2d(24.75 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(270)),
+                    // new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(270))),
             config);
         
         public static Trajectory alignFromTrench = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(90)),
-                    new Pose2d(24.75 * 0.3048, 32.00 * 0.3048, Rotation2d.fromDegrees(90)),
+            List.of(
+                    // new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegree]\s(90)),
+                    // new Pose2d(24.75 * 0.3048, 32.00 * 0.3048, Rotation2d.fromDegrees(90)),
+                    new Pose2d(24.75 * 0.3048, 30.00 * 0.3048, Rotation2d.fromDegrees(90)),
+                    new Pose2d(24.75 * 0.3048, 40.00 * 0.3048, Rotation2d.fromDegrees(90)),
                     new Pose2d(19.00 * 0.3048, 41.00 * 0.3048, Rotation2d.fromDegrees(90))), 
             config);
 

@@ -199,7 +199,7 @@ public class Robot extends TimedRobot {
         Drivetrain.getInstance().getBackRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.AUTON_BR_OFFSET) / 4);
             
         CommandScheduler.getInstance().schedule(Autons.getAutonCommand());
-        // CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.rendezvousTest, Rotation2d.fromDegrees(0)));
+        // CommandScheduler.getInstance().schedule(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(0)));
         wasTeleop = false;
     }
 

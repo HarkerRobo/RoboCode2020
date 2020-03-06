@@ -210,9 +210,9 @@ public class Drivetrain extends SubsystemBase {
             MP_Y_KI = 0;
             MP_Y_KD = 15;
             
-            MP_THETA_KP = 10;//20;//45;//30;//6.3;//3.1;
+            MP_THETA_KP = 7;//10;
             MP_THETA_KI = 0;
-            MP_THETA_KD = 0;//40;//3
+            MP_THETA_KD = 0;
         }
     }
 

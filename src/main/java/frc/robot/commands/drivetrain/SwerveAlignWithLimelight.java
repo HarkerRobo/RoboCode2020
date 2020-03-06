@@ -1,5 +1,6 @@
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.OI;
@@ -66,7 +67,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
         SmartDashboard.putNumber("TX setpoint", txController.getSetpoint());
         // SmartDashboard.putNumber("TX error", Limelight.getTx());
 
-        double turn = txController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_ROTATION_VELOCITY;
+        double turn = txController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_ROTATION_VELOCITY * (DriverStation.getInstance().isAutonomous() ? -1 : 1);
 
         double translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         double translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
