@@ -208,11 +208,8 @@ public class Trajectories {
         
         public static Trajectory pickUpTrenchBalls = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(19.00 * 0.3048, 41.00 * 0.3048, Rotation2d.fromDegrees(0)),
-            
-                    new Pose2d(24.75 * 0.3048, 40.00 * 0.3048, Rotation2d.fromDegrees(270)),
-                    new Pose2d(24.75 * 0.3048, 30.00 * 0.3048, Rotation2d.fromDegrees(270))),
-                    // new Pose2d(24.75 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(270)),
-                    // new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(270))),
+                    new Pose2d(24.75 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(270)),
+                    new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(270))),
             config);
         
         public static Trajectory alignFromTrench = TrajectoryGenerator.generateTrajectory(

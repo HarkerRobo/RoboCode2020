@@ -34,8 +34,8 @@ public class RobotMap {
                 SPINNER_SOLENOID_FORWARD = 2;
                 SPINNER_SOLENOID_REVERSE = 5;
 
-                INTAKE_SOLENOID_FORWARD = 0;
-                INTAKE_SOLENOID_REVERSE = 7;
+                INTAKE_SOLENOID_FORWARD = 7;
+                INTAKE_SOLENOID_REVERSE = 0;
             } else {
                 SHOOTER_SOLENOID_FORWARD = 6;
                 SHOOTER_SOLENOID_BACKWARD = 1;
