@@ -94,34 +94,6 @@ public class BottomIntake extends SubsystemBase {
         talon.setSensorPhase(SENSOR_PHASE);
     }
 
-    @Override
-    public void periodic() {
-        if(OI.getInstance().getDriverGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
-            CommandScheduler.getInstance().schedule(new ParallelCommandGroup(
-                new InstantCommand(() -> Indexer.getInstance().getSolenoid().set(Indexer.CLOSED), Indexer.getInstance())),
-                new SpinIntakeVelocity(0.5), 
-                new SpinIndexer(0.5, false));
-                
-            jamFlag = false;
-        } else if(OI.getInstance().getDriverGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
-            CommandScheduler.getInstance().schedule(new ParallelCommandGroup( //Outaking while reversing spine 
-                new InstantCommand(() -> Indexer.getInstance().getSolenoid().set(Indexer.OPEN), Indexer.getInstance())),
-                new SpinIntakeVelocity(-0.5), 
-                new SpinIndexer(0.8, true));
-            
-            jamFlag = false;
-        } else if (!jamFlag) {
-            CommandScheduler.getInstance().schedule(new ParallelCommandGroup(
-                new SpinIntakeVelocity(0),
-                new SpinIndexer(0, false)));
-                
-            jamFlag = true;
-        }   
-
-        if (talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY && !DriverStation.getInstance().isAutonomous())
-            CommandScheduler.getInstance().schedule(new ParallelRaceGroup(new SpinIntakeVelocity(-0.3), new WaitCommand(0.2)));
-    }
-
     public void spinIntake(double magnitude) {
         if(magnitude == 0) 
             talon.set(ControlMode.Disabled, 0);
