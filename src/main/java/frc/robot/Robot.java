@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.bottomintake.IntakeDefault;
 import frc.robot.commands.climber.MoveClimberManual;
 import frc.robot.commands.drivetrain.SwerveDriveWithOdometryProfiling;
 import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.drivetrain.SwerveManualHeadingControl;
+import frc.robot.commands.indexer.IndexerDefault;
 import frc.robot.commands.shooter.SpinShooterLimelight;
 import frc.robot.commands.spinner.SpinnerManual;
 import frc.robot.subsystems.BottomIntake;
@@ -99,11 +101,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        Drivetrain.getInstance().setDefaultCommand(new SwerveManualHeadingControl());
+        Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
 
         Spinner.getInstance().setDefaultCommand(new SpinnerManual());
-        BottomIntake.getInstance();
-        Indexer.getInstance();
+        BottomIntake.getInstance().setDefaultCommand(new IntakeDefault());
+        Indexer.getInstance().setDefaultCommand(new IndexerDefault());
         Shooter.getInstance();
         Climber.getInstance().setDefaultCommand(new MoveClimberManual());
 

@@ -93,11 +93,11 @@ public class OI {
             Driver/Operator right trigger: Intake
             Operator right x: Spinner manual
         */
-        driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> {
-            Climber.getInstance().getMaster().configForwardSoftLimitEnable(!Climber.isSoftLimiting);
-            Climber.getInstance().getFollower().configForwardSoftLimitEnable(!Climber.isSoftLimiting);
-            Climber.isSoftLimiting = !Climber.isSoftLimiting;
-        }));
+        // driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> {
+        //     Climber.getInstance().getMaster().configForwardSoftLimitEnable(!Climber.isSoftLimiting);
+        //     Climber.getInstance().getFollower().configForwardSoftLimitEnable(!Climber.isSoftLimiting);
+        //     Climber.isSoftLimiting = !Climber.isSoftLimiting;
+       // }));
         driverGamepad.getButtonA().whenPressed(new InstantCommand(() -> { 
                 System.out.println(Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
                 System.out.println(Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
@@ -112,9 +112,9 @@ public class OI {
 
         //Shoot from Target Zone Command
         // driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false)));
-        driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.verticalTrajectory, Rotation2d.fromDegrees(0)));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
         // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
+
         // driverGamepad.getButtonSelect().whilePressed(new ParallelCommandGroup(
         //     new SpinShooterVelocity(90), 
         //     new MoveBallsToShooter(false)));
@@ -146,7 +146,7 @@ public class OI {
         operatorGamepad.getButtonY().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
         // operatorGamepad.getUpDPadButton().whenPressed(new RotationControlTimed());
         // operatorGamepad.getDownDPadButton().whenPressed(new SpinnerPositionColorSensor());
-        operatorGamepad.getRightDPadButton().whenPressed(new SpinIndexer(0.7, false));
+        operatorGamepad.getRightDPadButton().whilePressed(new SpinIndexer(0.7, false));
         // operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(
         //     new CallMethodCommand(() -> Limelight.setPipeline(RobotMap.PIPELINES.DAY_FAR)), 
       
