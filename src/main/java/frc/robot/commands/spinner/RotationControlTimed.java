@@ -18,9 +18,9 @@ import frc.robot.subsystems.Spinner;
  * @since Februrary 14, 2020
  */
 public class RotationControlTimed extends CommandBase {
-    private static final double OUTPUT_MULTIPLIER = 0.7;
+    private static final double OUTPUT_MULTIPLIER = 0.8;
     private static double currentTime;
-    private static final double TIMEOUT = 3000;
+    private static final double TIMEOUT = 2200; //ms
 
     public RotationControlTimed() {
         addRequirements(Spinner.getInstance());

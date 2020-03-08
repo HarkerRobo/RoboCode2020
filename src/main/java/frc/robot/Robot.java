@@ -20,7 +20,6 @@ import frc.robot.commands.drivetrain.SwerveManual;
 import frc.robot.commands.drivetrain.SwerveManualHeadingControl;
 import frc.robot.commands.indexer.IndexerDefault;
 import frc.robot.commands.shooter.SpinShooterLimelight;
-import frc.robot.commands.spinner.SpinnerManual;
 import frc.robot.subsystems.BottomIntake;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -103,7 +102,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
 
-        Spinner.getInstance().setDefaultCommand(new SpinnerManual());
+        Spinner.getInstance();
         BottomIntake.getInstance().setDefaultCommand(new IntakeDefault());
         Indexer.getInstance().setDefaultCommand(new IndexerDefault());
         Shooter.getInstance();
