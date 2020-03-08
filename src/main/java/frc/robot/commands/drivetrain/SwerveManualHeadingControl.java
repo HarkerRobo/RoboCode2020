@@ -61,20 +61,20 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
     private static double turnVel;
     private static double turnAccel;
     
-    private PIDController headingController;
-    private static boolean joystickFlag;
-    private static boolean headingFlag;
+    public static PIDController headingController;
+    public static boolean joystickFlag;
+    public static boolean headingFlag;
 
     private static boolean xPressed;
     private static boolean xFlag;
     private static boolean aPressed;
     private static boolean aFlag;
     
-    public static boolean isOptimized;
+    public static boolean isNotOptimized;
 
     public SwerveManualHeadingControl() {
         addRequirements(Drivetrain.getInstance());
-        headingController = new PIDController(Drivetrain.HEADING_KP, Drivetrain.HEADING_KI, Drivetrain.HEADING_KD);
+        headingController = new PIDController(Drivetrain.MANUAL_HEADING_KP, Drivetrain.MANUAL_HEADING_KI, Drivetrain.MANUAL_HEADING_KD);
         pigeonFlag = false;
 
         // pigeonAngle = 90;
@@ -104,15 +104,15 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
 
         joystickFlag = false;
         headingFlag = false;
-        isOptimized = false;
+        isNotOptimized = false;
     }
 
     @Override
     public void execute() {
         translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
-        headingX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), 0.3);
-        headingY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightY(), 0.3);
+        headingX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), 0.25);
+        headingY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightY(), 0.25);
 
         if (headingY != 0 || headingX != 0) {
             headingAngle = Math.toDegrees(Math.atan2(headingY, headingX));
@@ -176,14 +176,14 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
         // }
 
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
+            translateX, translateY, headingFlag ? turnMagnitude : 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
 
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
         if (joystickFlag)
-            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, isOptimized);
+            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, isNotOptimized);
 
         // if(Timer.getFPGATimestamp() - lastPigeonUpdateTime > 0.01) {
         //     double currentTime = Timer.getFPGATimestamp();
@@ -203,5 +203,7 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
     @Override
     public void end(boolean interrupted) {
         Drivetrain.getInstance().stopAllDrive();
+        headingFlag = false;
+        joystickFlag = false;
     }
 }
