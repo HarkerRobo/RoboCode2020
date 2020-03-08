@@ -93,11 +93,8 @@ public class OI {
             Driver/Operator right trigger: Intake
             Operator right x: Spinner manual
         */
-        // driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> {
-        //     Climber.getInstance().getMaster().configForwardSoftLimitEnable(!Climber.isSoftLimiting);
-        //     Climber.getInstance().getFollower().configForwardSoftLimitEnable(!Climber.isSoftLimiting);
-        //     Climber.isSoftLimiting = !Climber.isSoftLimiting;
-       // }));
+        // driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> Climber.getInstance().toggleSoftLimits()));
+        
         driverGamepad.getButtonA().whenPressed(new InstantCommand(() -> { 
                 System.out.println(Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
                 System.out.println(Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());

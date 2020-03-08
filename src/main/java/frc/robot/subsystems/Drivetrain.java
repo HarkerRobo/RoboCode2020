@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -51,6 +52,12 @@ public class Drivetrain extends SubsystemBase {
     private SwerveDriveOdometry odometry;
     private SwerveDriveKinematics kinematics;
 
+    private static final int LEFT_ZERO_PORT = 1;
+    private static final int RIGHT_ZERO_PORT = 0;
+    
+    private DigitalInput leftZeroSwitch;
+    private DigitalInput rightZeroSwitch;
+
     public static final Translation2d FRONT_LEFT_LOCATION = new Translation2d(-Drivetrain.DT_WIDTH/2, Drivetrain.DT_LENGTH/2);
     public static final Translation2d FRONT_RIGHT_LOCATION = new Translation2d(Drivetrain.DT_WIDTH/2, Drivetrain.DT_LENGTH/2);
     public static final Translation2d BACK_LEFT_LOCATION = new Translation2d(-Drivetrain.DT_WIDTH/2, -Drivetrain.DT_LENGTH/2);
@@ -76,10 +83,10 @@ public class Drivetrain extends SubsystemBase {
     private static boolean BL_ANGLE_SENSOR_PHASE;
     private static boolean BR_ANGLE_SENSOR_PHASE;
 
-    public static final int TELEOP_TL_OFFSET;//15561;
-    public static final int TELEOP_TR_OFFSET;//2492;
-    public static final int TELEOP_BL_OFFSET;//15351;
-    public static final int TELEOP_BR_OFFSET;//10413;
+    public static final int DEFAULT_TELEOP_TL_OFFSET;//15561;
+    public static final int DEFAULT_TELEOP_TR_OFFSET;//2492;
+    public static final int DEFAULT_TELEOP_BL_OFFSET;//15351;
+    public static final int DEFAULT_TELEOP_BR_OFFSET;//10413;
 
     public static final int ANGLE_POSITION_SLOT = 0;
     private static double ANGLE_POSITION_KP;
@@ -131,10 +138,10 @@ public class Drivetrain extends SubsystemBase {
             BL_ANGLE_SENSOR_PHASE = true;
             BR_ANGLE_SENSOR_PHASE = false;
             
-            TELEOP_TL_OFFSET = 9084; //9154;
-            TELEOP_TR_OFFSET = 5951;
-            TELEOP_BL_OFFSET = 1582; //1604;
-            TELEOP_BR_OFFSET = 5891; //5724;
+            DEFAULT_TELEOP_TL_OFFSET = 9084; //9154;
+            DEFAULT_TELEOP_TR_OFFSET = 5951;
+            DEFAULT_TELEOP_BL_OFFSET = 1582; //1604;
+            DEFAULT_TELEOP_BR_OFFSET = 5891; //5724;
             
             ANGLE_POSITION_KP = 1.1;
             ANGLE_POSITION_KI = 0.0;
@@ -183,10 +190,10 @@ public class Drivetrain extends SubsystemBase {
             BL_ANGLE_SENSOR_PHASE = false;
             BR_ANGLE_SENSOR_PHASE = true;
 
-            TELEOP_TL_OFFSET = 11358;//11484;//11575;
-            TELEOP_TR_OFFSET = 3567;//14079;//14161;
-            TELEOP_BL_OFFSET = 11192;//11444;//11400;  
-            TELEOP_BR_OFFSET = 6344;//6291;//6447;
+            DEFAULT_TELEOP_TL_OFFSET = 11358;//11484;//11575;
+            DEFAULT_TELEOP_TR_OFFSET = 3567;//14079;//14161;
+            DEFAULT_TELEOP_BL_OFFSET = 11192;//11444;//11400;  
+            DEFAULT_TELEOP_BR_OFFSET = 6344;//6291;//6447;
             
             ANGLE_POSITION_KP = 1.1;
             ANGLE_POSITION_KI = 0.0;
@@ -216,11 +223,17 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+    //Not constant, can be changed when limit switches are pressed
+    public static int ACTUAL_TL_OFFSET = DEFAULT_TELEOP_TL_OFFSET;
+    public static int ACTUAL_TR_OFFSET = DEFAULT_TELEOP_TR_OFFSET;
+    public static int ACTUAL_BL_OFFSET = DEFAULT_TELEOP_BL_OFFSET;
+    public static int ACTUAL_BR_OFFSET = DEFAULT_TELEOP_BR_OFFSET;
+
     //Rotated by 180 degrees from normal angle encoder conventions, modulated for wrap around
-    public static final int AUTON_TL_OFFSET = (TELEOP_TL_OFFSET + 8192) % 16384;
-    public static final int AUTON_TR_OFFSET = (TELEOP_TR_OFFSET + 8192) % 16384;
-    public static final int AUTON_BL_OFFSET = (TELEOP_BL_OFFSET + 8192) % 16384;
-    public static final int AUTON_BR_OFFSET = (TELEOP_BR_OFFSET + 8192) % 16384;
+    public static int AUTON_TL_OFFSET = (ACTUAL_TL_OFFSET + 8192) % 16384;
+    public static int AUTON_TR_OFFSET = (ACTUAL_TR_OFFSET + 8192) % 16384;
+    public static int AUTON_BL_OFFSET = (ACTUAL_BL_OFFSET + 8192) % 16384;
+    public static int AUTON_BR_OFFSET = (ACTUAL_BR_OFFSET + 8192) % 16384;
     
     public static final double MAX_DRIVE_VELOCITY = 4;
     public static final double MAX_DRIVE_ACCELERATION = 5;
@@ -280,6 +293,8 @@ public class Drivetrain extends SubsystemBase {
         backRight = new SwerveModule(RobotMap.CAN_IDS.BR_DRIVE_ID, BR_DRIVE_INVERTED, BR_DRIVE_SENSOR_PHASE,
                 RobotMap.CAN_IDS.BR_ANGLE_ID, BR_ANGLE_INVERTED, BR_ANGLE_SENSOR_PHASE);
 
+        leftZeroSwitch = new DigitalInput(LEFT_ZERO_PORT);
+        rightZeroSwitch = new DigitalInput(RIGHT_ZERO_PORT);
 
         applyToAllDrive((motor) -> motor.setSelectedSensorPosition(0));
 
@@ -339,8 +354,11 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Current Y", odometry.getPoseMeters().getTranslation().getY());
         SmartDashboard.putNumber("Current Rot", odometry.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("pig head", getPigeon().getFusedHeading());
-        // SmartDashboard.putNumber("Top Left Angle Error", topLeft.getAngleMotor().getClosedLoopError() / 4096*360);
+
+        SmartDashboard.putBoolean("leftZeroSwitch", leftZeroSwitch.get());
+        SmartDashboard.putBoolean("rightZeroSwitch", rightZeroSwitch.get());
     }
+
     public void updatePositionPID() {
         stopAllDrive();
 
@@ -378,7 +396,6 @@ public class Drivetrain extends SubsystemBase {
         MP_THETA_KI = SmartDashboard.getNumber("MP THETA kI", MP_THETA_KI);
         MP_THETA_KD = SmartDashboard.getNumber("MP THETA kD", MP_THETA_KD);
     }
-
 
     /**
      * Returns the currently-estimated pose of the robot based on odometry.
@@ -535,6 +552,14 @@ public class Drivetrain extends SubsystemBase {
 
     public HSPigeon getPigeon() {
         return pigeon;
+    }
+
+    public boolean getLeftZeroPressed() {
+        return !leftZeroSwitch.get();
+    }
+    
+    public boolean getRightZeroPressed() {
+        return !rightZeroSwitch.get();
     }
 
     public SwerveDriveKinematics getKinematics() {

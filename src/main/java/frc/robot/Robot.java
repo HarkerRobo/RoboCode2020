@@ -87,10 +87,10 @@ public class Robot extends TimedRobot {
         if (!wasTeleop)
             Drivetrain.getInstance().getPigeon().addFusedHeading(11517.95);
 
-        Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.TELEOP_TL_OFFSET) / 4);
-        Drivetrain.getInstance().getTopRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.TELEOP_TR_OFFSET) / 4);
-        Drivetrain.getInstance().getBackLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.TELEOP_BL_OFFSET) / 4);
-        Drivetrain.getInstance().getBackRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.TELEOP_BR_OFFSET) / 4);
+        Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.ACTUAL_TL_OFFSET) / 4);
+        Drivetrain.getInstance().getTopRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.ACTUAL_TR_OFFSET) / 4);
+        Drivetrain.getInstance().getBackLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.ACTUAL_BL_OFFSET) / 4);
+        Drivetrain.getInstance().getBackRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.ACTUAL_BR_OFFSET) / 4);
         wasTeleop = true;
     }
 
@@ -139,6 +139,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putNumber("LL Distance", Shooter.getInstance().getLimelightDistance());
         SmartDashboard.putBoolean("isPercentOutput", Shooter.isPercentOutput);
+
         // SmartDashboard.putString("Robot Type", RobotMap.IS_COMP ? "Practice" : "Comp");
 
         // SmartDashboard.putNumber("Indexer Current", Indexer.getInstance().getSpine().getOutputCurrent());
@@ -236,5 +237,34 @@ public class Robot extends TimedRobot {
         Limelight.setLEDS(false);
 
         CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void disabledPeriodic() {
+        // if (Drivetrain.getInstance().getLeftZeroPressed()) {
+        //     int topLeftAbsolute = Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs();
+        //     int bottomLeftAbsolute = Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs();
+
+        //     Drivetrain.ACTUAL_TL_OFFSET = topLeftAbsolute;
+        //     Drivetrain.ACTUAL_BL_OFFSET = bottomLeftAbsolute;
+        //     Drivetrain.AUTON_TL_OFFSET = (Drivetrain.ACTUAL_TL_OFFSET + 8192) % 16384;
+        //     Drivetrain.AUTON_BL_OFFSET = (Drivetrain.ACTUAL_BL_OFFSET + 8192) % 16384;
+
+        //     Drivetrain.getInstance().getTopLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.ACTUAL_TL_OFFSET) / 4);
+        //     Drivetrain.getInstance().getBackLeft().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.ACTUAL_BL_OFFSET) / 4);
+        // }
+
+        // if (Drivetrain.getInstance().getRightZeroPressed()) {
+        //     int topRightAbsolute = Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs();
+        //     int bottomRightAbsolute = Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs();
+
+        //     Drivetrain.ACTUAL_TR_OFFSET = topRightAbsolute;
+        //     Drivetrain.ACTUAL_BR_OFFSET = bottomRightAbsolute;
+        //     Drivetrain.AUTON_TR_OFFSET = (Drivetrain.ACTUAL_TL_OFFSET + 8192) % 16384;
+        //     Drivetrain.AUTON_BR_OFFSET = (Drivetrain.ACTUAL_BL_OFFSET + 8192) % 16384;
+
+        //     Drivetrain.getInstance().getTopRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.ACTUAL_TR_OFFSET) / 4);
+        //     Drivetrain.getInstance().getBackRight().getAngleMotor().setSelectedSensorPosition((Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs() - Drivetrain.ACTUAL_BR_OFFSET) / 4);
+        // }
     }
 }

@@ -45,7 +45,7 @@ public class Climber extends SubsystemBase {
     private static final int FORWARD_SOFT_LIMIT = 300000;
     private static final int REVERSE_SOFT_LIMIT = 0;
 
-    public static boolean isSoftLimiting; 
+    private static boolean isSoftLimiting; 
 
     static {
         if (RobotMap.IS_COMP) {
@@ -129,9 +129,15 @@ public class Climber extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("climber pos", master.getSelectedSensorPosition());
-        SmartDashboard.putNumber("climber current", master.getOutputCurrent());
-        
+        // SmartDashboard.putNumber("climber pos", master.getSelectedSensorPosition());
+        // SmartDashboard.putNumber("climber current", master.getOutputCurrent());
+    }
+
+    public void toggleSoftLimits() {
+        isSoftLimiting = !isSoftLimiting;
+
+        master.configForwardSoftLimitEnable(isSoftLimiting);
+        master.configReverseSoftLimitEnable(isSoftLimiting);
     }
 
     public TalonFX getMaster() {
