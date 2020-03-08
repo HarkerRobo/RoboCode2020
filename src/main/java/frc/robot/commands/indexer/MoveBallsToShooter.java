@@ -30,6 +30,7 @@ public class MoveBallsToShooter extends IndefiniteCommand {
 
     public MoveBallsToShooter(boolean backwards) {
         addRequirements(Indexer.getInstance()); 
+        
         this.backwards = backwards;
     }
 
