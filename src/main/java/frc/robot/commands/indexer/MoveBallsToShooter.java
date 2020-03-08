@@ -40,8 +40,8 @@ public class MoveBallsToShooter extends IndefiniteCommand {
 
         Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
 
-        if (DriverStation.getInstance().isAutonomous())
-            Shooter.isPercentOutput = false;
+        // if (DriverStation.getInstance().isAutonomous())
+        //     Shooter.isPercentOutput = false;
 
         startTime = System.currentTimeMillis();
     }

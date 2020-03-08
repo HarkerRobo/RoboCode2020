@@ -30,7 +30,7 @@ public class Trajectories {
     public static TrajectoryConfig slowConfig = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY / 5,
             Drivetrain.MP_MAX_DRIVE_ACCELERATION / 5).setKinematics(Drivetrain.getInstance().getKinematics());
 
-    public static TrajectoryConfig mediumConfig = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY / 2,
+    public static TrajectoryConfig mediumConfig = new TrajectoryConfig(Drivetrain.MP_MAX_DRIVE_VELOCITY / 1.8,
             Drivetrain.MP_MAX_DRIVE_ACCELERATION / 2).setKinematics(Drivetrain.getInstance().getKinematics());
 
     /**
@@ -212,11 +212,11 @@ public class Trajectories {
                     new Pose2d(23.6 * 0.3048, 20 * 0.3048, Rotation2d.fromDegrees(270))),
             mediumConfig);
 
-        // public static Trajectory pickUpTrenchBallsFastMiddle = TrajectoryGenerator.generateTrajectory(
-        //     List.of(new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(0)),
-        //             new Pose2d(23.5 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(270)),
-        //             new Pose2d(23.6 * 0.3048, 20 * 0.3048, Rotation2d.fromDegrees(270))),
-        //     mediumConfig);
+        public static Trajectory pickUpTrenchBallsFastMiddle = TrajectoryGenerator.generateTrajectory(
+            List.of(new Pose2d(19.00 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(0)),
+                    new Pose2d(23.5 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(270)),
+                    new Pose2d(23.6 * 0.3048, 20 * 0.3048, Rotation2d.fromDegrees(270))),
+            mediumConfig);
         
         public static Trajectory alignFromTrench = TrajectoryGenerator.generateTrajectory(
             List.of(

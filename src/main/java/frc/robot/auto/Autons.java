@@ -135,9 +135,8 @@ public class Autons {
     // //same as above, but shoots from starting position instead of moving back
     // private static final SequentialCommandGroup trenchEightAutonFast = new SequentialCommandGroup(
     //     new InstantCommand(() -> Shooter.getInstance().getSolenoid().set(Shooter.LOW_ANGLE), Shooter.getInstance()),
-    //     new WaitCommand(0.5).raceWith(new SpinShooterVelocity(REV_SPEED)),
-    //     new InstantCommand(() -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance()), 
-    //     new SpinShooterLimelight().raceWith(new WaitCommand(1.5), new SwerveAlignWithLimelight(), new MoveBallsToShooter(false)),
+    //     new InstantCommand(() -> BottomIntake.getInstance().getSolenoid().set(BottomIntake.OUT), BottomIntake.getInstance()),
+    //     new SpinShooterLimelight().raceWith(new WaitCommand(3), new SwerveAlignWithLimelight(), new MoveBallsToShooter(false)),
     //     new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.pickUpTrenchBallsFastMiddle, OI.forwardHeading) // pick up trench balls
     //         .raceWith(new SpinIntakeVelocity(0.6), new SpinIndexer(0.6, false)),
     //     new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.alignFromTrench, OI.forwardHeading) // move to viable space and align with target from trench
