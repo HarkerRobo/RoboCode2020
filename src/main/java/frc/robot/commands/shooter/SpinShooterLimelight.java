@@ -58,7 +58,7 @@ public class SpinShooterLimelight extends IndefiniteCommand {
         // double desiredVel = averageDistance * SmartDashboard.getNumber("scale", SCALE);
 
         // quadratic
-        double desiredVel = (averageDistance * averageDistance * SCALE_A + averageDistance * SCALE_B + SCALE_C);
+        double desiredVel = 0.98 * (averageDistance * averageDistance * SCALE_A + averageDistance * SCALE_B + SCALE_C);
 
         Shooter.getInstance().spinShooterVelocity(desiredVel);
 

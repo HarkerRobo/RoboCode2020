@@ -257,9 +257,13 @@ public class Drivetrain extends SubsystemBase {
 	public static final double TX_SETPOINT = 0;//-1.7;
     public static final double TX_ALLOWABLE_ERROR = 0.4;
 
-	public static final double HEADING_KP = 0.01;
+	public static final double HEADING_KP = 0.07;
 	public static final double HEADING_KI = 0.0;
-	public static final double HEADING_KD = 0.0;
+    public static final double HEADING_KD = 0.0;
+    
+	public static final double MANUAL_HEADING_KP = 0.01;
+	public static final double MANUAL_HEADING_KI = 0.0;
+	public static final double MANUAL_HEADING_KD = 0.0;
 
     /**
      * Default constructor for Drivetrain
