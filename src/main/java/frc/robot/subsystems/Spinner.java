@@ -35,9 +35,9 @@ public class Spinner extends SubsystemBase {
     private final ColorMatch colorMatcher = new ColorMatch();
 
     public static final int SPINNER_POSITION_SLOT = 0;
-    private static final double SPINNER_POSITION_KP = 0.7; 
-    private static final double SPINNER_POSITION_KI = 0;
-    private static final double SPINNER_POSITION_KD = 0;
+    // private static final double SPINNER_POSITION_KP = 0.7; 
+    // private static final double SPINNER_POSITION_KI = 0;
+    // private static final double SPINNER_POSITION_KD = 0;
    
     /**
      * Distance (in encoder ticks) the motor needs to turn to rotate the wheel by one wedge

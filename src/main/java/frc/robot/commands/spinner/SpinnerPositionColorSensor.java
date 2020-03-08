@@ -47,7 +47,7 @@ public class SpinnerPositionColorSensor extends CommandBase {
 
         Spinner.getInstance().getSpinnerMotor().setNeutralMode(NeutralMode.Brake);
         Spinner.getInstance().getSpinnerMotor().configOpenloopRamp(0);
-
+        
         initDiff = Spinner.getInstance().getCurrentColor().getVal() - stationVal.getVal();
     }
 

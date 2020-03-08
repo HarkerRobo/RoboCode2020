@@ -186,7 +186,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("cd hood sol", Shooter.getInstance().getSolenoid().get() == Shooter.HIGH_ANGLE);
         SmartDashboard.putBoolean("cd intake sol", BottomIntake.getInstance().getSolenoid().get() == BottomIntake.IN);
         SmartDashboard.putBoolean("cd indexer sol", Indexer.getInstance().getSolenoid().get() == Indexer.OPEN);
-        // SmartDashboard.putBoolean("cd spinner sol", Spinner.getInstance().getSolenoid().get() == Spinner.UP);
+        SmartDashboard.putBoolean("cd spinner sol", Spinner.getInstance().getSolenoid().get() == Spinner.UP);
         SmartDashboard.putNumber("cd pigeon angle", Drivetrain.getInstance().getPigeon().getFusedHeading());
         // SmartDashboard.putString("cd current auton", isTeleop ? Autons.curAuton.toString() : "Teleop Running");
         SmartDashboard.putBoolean("cd shooter isStalling", Shooter.getInstance().isStalling());
