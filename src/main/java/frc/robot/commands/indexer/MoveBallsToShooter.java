@@ -2,6 +2,7 @@ package frc.robot.commands.indexer;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import harkerrobolib.commands.IndefiniteCommand;
@@ -38,13 +39,16 @@ public class MoveBallsToShooter extends IndefiniteCommand {
 
         Indexer.getInstance().getSolenoid().set(Indexer.OPEN);
 
+        if (DriverStation.getInstance().isAutonomous())
+            Shooter.isPercentOutput = false;
+
         startTime = System.currentTimeMillis();
     }
 
     @Override
     public void execute() {
         long currentTime = System.currentTimeMillis();
-
+        
         if (!Shooter.isPercentOutput && currentTime - startTime > MIN_TIME) {
             if (currentTime % Indexer.AGITATOR_CYCLE_DUR < Indexer.AGITATOR_ON_DURATION)
                 Indexer.getInstance().spinAgitator(Indexer.AGITATOR_DEFAULT_OUTPUT);

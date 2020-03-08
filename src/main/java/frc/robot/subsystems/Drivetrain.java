@@ -150,17 +150,17 @@ public class Drivetrain extends SubsystemBase {
             
             PIGEON_kP = 0.05;
             
-            MP_X_KP = 15;//8
+            MP_X_KP = 8;//8
             MP_X_KI = 0;
-            MP_X_KD = 20;
+            MP_X_KD = 6; //20
             
-            MP_Y_KP = 15;//6
+            MP_Y_KP = 6;//6
             MP_Y_KI = 0;
-            MP_Y_KD = 20;
+            MP_Y_KD = 6; //20
             
             MP_THETA_KP = 7.0;
             MP_THETA_KI = 0;
-            MP_THETA_KD = 0;
+            MP_THETA_KD = 4;
             
         } else { //Comp constants
             TL_DRIVE_INVERTED = TalonFXInvertType.Clockwise;

@@ -34,7 +34,7 @@ public class Autons {
     }
     
     //Change this before the match.
-    public static StartingPosition startingPosition = StartingPosition.RIGHT;
+    public static StartingPosition startingPosition = StartingPosition.MIDDLE;
     // public static AutonCommands curAuton = AutonCommands.EIGHT_TRENCH; 
 
     //Brings the intake out, required at the start of every autonomous configuration

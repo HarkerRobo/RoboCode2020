@@ -6,7 +6,7 @@ package frc.robot;
  * @since January 6, 2020
  */
 public class RobotMap {
-	public static final boolean IS_COMP = false; 
+	public static final boolean IS_COMP = true; 
 	public static final boolean IS_NIGHT = false;
 
     public static final int DRIVER_PORT = 0;
@@ -34,8 +34,8 @@ public class RobotMap {
                 SPINNER_SOLENOID_FORWARD = 2;
                 SPINNER_SOLENOID_REVERSE = 5;
 
-                INTAKE_SOLENOID_FORWARD = 0;
-                INTAKE_SOLENOID_REVERSE = 7;
+                INTAKE_SOLENOID_FORWARD = 7;
+                INTAKE_SOLENOID_REVERSE = 0;
             } else {
                 SHOOTER_SOLENOID_FORWARD = 6;
                 SHOOTER_SOLENOID_BACKWARD = 1;

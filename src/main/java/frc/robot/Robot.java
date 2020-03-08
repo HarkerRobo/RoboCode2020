@@ -115,7 +115,7 @@ public class Robot extends TimedRobot {
         // Spinner.getInstance().getSolenoid().set(Spinner.DOWN);
 
         Autons.AutonCommands.BASELINE.toString();
-        System.out.println(Autons.getAutonCommand());
+        // System.out.println(Autons.getAutonCommand());
         Autons.AutonCommands.BASELINE.toString();
         // Drivetrain.getInstance().getPigeon().setFusedHeading(0);
 
