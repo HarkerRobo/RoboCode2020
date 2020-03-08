@@ -30,11 +30,16 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
     private static final int TX_VELOCITY_MULTIPLIER = 0;
     // private static final double OFFSET = 0;
-
+    private static final double SCALE_A = 0.0000892308;
+    private static final double SCALE_B = 0.00145809;
+    private static final double SCALE_C = -0.0970321;
+    private static final double SCALE_D = -0.968366;
     private PIDController txController;
 
     private double prevXPos;
     private double prevTime;
+    private boolean bPressed;
+    private boolean bFlag;
 
     public SwerveAlignWithLimelight() {
         addRequirements(Drivetrain.getInstance());
@@ -57,6 +62,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
         prevXPos = Drivetrain.getInstance().getOdometry().getPoseMeters().getTranslation().getX();
         prevTime = System.currentTimeMillis();
+        bPressed = false;
     }
     
     @Override
@@ -65,12 +71,22 @@ public class SwerveAlignWithLimelight extends CommandBase {
         //double speed = -thorController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_DRIVE_VELOCITY;
         txController.setSetpoint(SmartDashboard.getNumber("TX", Drivetrain.TX_SETPOINT));
         SmartDashboard.putNumber("TX setpoint", txController.getSetpoint());
+        bFlag = OI.getInstance().getDriverGamepad().getButtonB().get() == true && bPressed == false;
+
         // SmartDashboard.putNumber("TX error", Limelight.getTx());
 
         double turn = txController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_ROTATION_VELOCITY * (DriverStation.getInstance().isAutonomous() ? -1 : 1);
 
         double translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         double translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
+        double pigeonHeading = (Drivetrain.getInstance().getPigeon().getFusedHeading() +180) % 360;//have to have pigeon heading to have shooter forward as 0
+        if (bFlag) {
+            Drivetrain.TX_SETPOINT = 
+                SCALE_A * Math.pow(pigeonHeading, 3) +
+                SCALE_B * Math.pow(pigeonHeading, 2) +
+                SCALE_C * Math.pow(pigeonHeading, 1) + SCALE_D
+            ;
+        }
         double turnManual = -3 * MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
         
         translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
@@ -91,7 +107,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
         turn -= xVel * TX_VELOCITY_MULTIPLIER;
         // turn -= OFFSET;
-        
+        bPressed = OI.getInstance().getDriverGamepad().getButtonB().get();
         if (Math.abs(Limelight.getTx()) < Drivetrain.TX_ALLOWABLE_ERROR)
             turn = 0;
 

@@ -6,8 +6,8 @@ package frc.robot;
  * @since January 6, 2020
  */
 public class RobotMap {
-	public static final boolean IS_COMP = true; 
-	public static final boolean IS_NIGHT = false;
+	public static final boolean IS_COMP = false; 
+	public static final boolean IS_NIGHT = true;
 
     public static final int DRIVER_PORT = 0;
     public static final int OPERATOR_PORT = 1;
