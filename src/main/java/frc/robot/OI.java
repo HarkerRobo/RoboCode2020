@@ -96,21 +96,22 @@ public class OI {
         */
         // driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> Climber.getInstance().toggleSoftLimits()));
         
-        driverGamepad.getButtonA().whenPressed(new InstantCommand(() -> { 
-                System.out.println(Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-                System.out.println(Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-                System.out.println(Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-                System.out.println(Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
-        }));
+        // driverGamepad.getButtonA().whenPressed(new InstantCommand(() -> { 
+        //         System.out.println(Drivetrain.getInstance().getTopLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        //         System.out.println(Drivetrain.getInstance().getTopRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        //         System.out.println(Drivetrain.getInstance().getBackLeft().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        //         System.out.println(Drivetrain.getInstance().getBackRight().getAngleMotor().getSensorCollection().getPulseWidthRiseToFallUs());
+        // }));
+
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> SwerveManualHeadingControl.isNotOptimized = !SwerveManualHeadingControl.isNotOptimized));
         driverGamepad.getButtonB().whilePressed(new StartEndCommand(() -> Shooter.getInstance().spinShooterPercentOutput(0.15), () -> Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0), Shooter.getInstance()));
         // driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(0)));
 
-        driverGamepad.getButtonX().whilePressed(new SpinIndexer(0.7, true));
+        // driverGamepad.getButtonX().whilePressed(new SpinIndexer(0.7, true));
 
         //Shoot from Target Zone Command
-        // driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(58), new MoveBallsToShooter(false)));
-        driverGamepad.getButtonY().whenPressed(new SwerveRotateToHeading(180));
+        driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(65), new MoveBallsToShooter(false)));
+        // driverGamepad.getButtonY().whenPressed(new SwerveRotateToHeading(180));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
         // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));
 
@@ -143,7 +144,7 @@ public class OI {
         // operatorGamepad.getLeftDPadButton().whilePressed(jumble);
         // operatorGamepad.getLeftDPadButton().whilePressed(new SpinIntakeVelocity(0.5));
         operatorGamepad.getButtonY().whenPressed(new InstantCommand(() -> Spinner.getInstance().toggleSolenoid()));
-        // operatorGamepad.getUpDPadButton().whenPressed(new RotationControlTimed());
+        operatorGamepad.getUpDPadButton().whenPressed(new RotationControlTimed());
         // operatorGamepad.getDownDPadButton().whenPressed(new SpinnerPositionColorSensor());
         operatorGamepad.getRightDPadButton().whilePressed(new SpinIndexer(0.7, false));
         // operatorGamepad.getDownDPadButton().whenPressed(new ConditionalCommand(

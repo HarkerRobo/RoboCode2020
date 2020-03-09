@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        Drivetrain.getInstance().setDefaultCommand(new SwerveManual());
+        Drivetrain.getInstance().setDefaultCommand(new SwerveManualHeadingControl());
 
         Spinner.getInstance();
         BottomIntake.getInstance().setDefaultCommand(new IntakeDefault());
