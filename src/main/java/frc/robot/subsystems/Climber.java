@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * 
  * @author Chirag Kaushik
  * @author Shahzeb Lakhani
+ * @author Jatin Kohli
  * @since January 18, 2020
  */
 public class Climber extends SubsystemBase {
@@ -34,16 +36,23 @@ public class Climber extends SubsystemBase {
     private static final double CLIMBER_RAMP_RATE = 0.1;
     private static final int VOLTAGE_COMP = 10;
 
-    private static final int CURRENT_CONTINUOUS = 50;
-    private static final int CURRENT_PEAK = 60;
-    private static final int CURRENT_PEAK_DURATION = 50;
+    private static final int CURRENT_CONTINUOUS = 60;
+    private static final int CURRENT_PEAK = 70;
+    private static final int CURRENT_PEAK_DURATION = 100;
+    
+    public static final int MAX_POSITION = 15800;
+    public static final int MIN_POSITION = 200;
+    private static final int FORWARD_SOFT_LIMIT = 300000;
+    private static final int REVERSE_SOFT_LIMIT = 0;
+
+    private static boolean isSoftLimiting; 
 
     static {
-        if (RobotMap.IS_PRACTICE) {
-            MASTER_SENSOR_PHASE = false;
+        if (RobotMap.IS_COMP) {
+            MASTER_SENSOR_PHASE = true;
             FOLLOWER_SENSOR_PHASE = false;
 
-            MASTER_INVERTED = TalonFXInvertType.Clockwise;
+            MASTER_INVERTED = TalonFXInvertType.CounterClockwise;
             FOLLOWER_INVERTED = TalonFXInvertType.Clockwise;
 
             CLIMBER_POSITION_KP = 0.0; // tune
@@ -67,6 +76,7 @@ public class Climber extends SubsystemBase {
         follower = new TalonFX(RobotMap.CAN_IDS.CLIMBER_FOLLOWER_ID);
         
         setupTalons();
+        isSoftLimiting = true;
         setupPositionPID();
     }
     
@@ -75,13 +85,15 @@ public class Climber extends SubsystemBase {
         follower.configFactoryDefault();
 
         master.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, RobotMap.DEFAULT_TIMEOUT);
-        follower.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, RobotMap.PRIMARY_INDEX, RobotMap.DEFAULT_TIMEOUT);
 
         master.setNeutralMode(NeutralMode.Brake);
         follower.setNeutralMode(NeutralMode.Brake);
 
-        master.configForwardSoftLimitEnable(false);
-        master.configReverseSoftLimitEnable(false);
+        master.configForwardSoftLimitThreshold(FORWARD_SOFT_LIMIT);
+        master.configReverseSoftLimitThreshold(REVERSE_SOFT_LIMIT);
+
+        master.configForwardSoftLimitEnable(true);
+        master.configReverseSoftLimitEnable(true);
         master.overrideLimitSwitchesEnable(false);
         
         follower.configForwardSoftLimitEnable(false);
@@ -89,7 +101,6 @@ public class Climber extends SubsystemBase {
         follower.overrideLimitSwitchesEnable(false);
 
         master.setSelectedSensorPosition(0);
-        follower.setSelectedSensorPosition(0);
 
         follower.follow(master);
 
@@ -101,6 +112,7 @@ public class Climber extends SubsystemBase {
 
         master.configVoltageCompSaturation(VOLTAGE_COMP);
         follower.configVoltageCompSaturation(VOLTAGE_COMP);
+
         master.enableVoltageCompensation(true);
         follower.enableVoltageCompensation(true);
 
@@ -115,6 +127,19 @@ public class Climber extends SubsystemBase {
         master.config_kD(CLIMBER_POSITION_SLOT, CLIMBER_POSITION_KD);
     }
 
+    @Override
+    public void periodic() {
+        // SmartDashboard.putNumber("climber pos", master.getSelectedSensorPosition());
+        // SmartDashboard.putNumber("climber current", master.getOutputCurrent());
+    }
+
+    public void toggleSoftLimits() {
+        isSoftLimiting = !isSoftLimiting;
+
+        master.configForwardSoftLimitEnable(isSoftLimiting);
+        master.configReverseSoftLimitEnable(isSoftLimiting);
+    }
+
     public TalonFX getMaster() {
         return master;
     }
@@ -125,7 +150,7 @@ public class Climber extends SubsystemBase {
 
     public static Climber getInstance() {
         if (instance == null) 
-            return new Climber();
+            instance = new Climber();
         return instance;
     }
 }

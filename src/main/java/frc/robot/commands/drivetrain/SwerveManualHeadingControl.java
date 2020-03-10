@@ -6,10 +6,10 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
+import harkerrobolib.commands.IndefiniteCommand;
 import harkerrobolib.util.MathUtil;
 
 /**
@@ -30,10 +30,10 @@ import harkerrobolib.util.MathUtil;
  * @author Rohan Bhowmik
  * @since 2/16/20
  */
-public class SwerveManualHeadingControl extends CommandBase {
+public class SwerveManualHeadingControl extends IndefiniteCommand {
 
     static {
-        if (RobotMap.IS_PRACTICE) {
+        if (RobotMap.IS_COMP) {
             HIGH_VELOCITY_HEADING_MULTIPLIER = 0.16;
             LOW_VELOCITY_HEADING_MULTIPLIER = 0.09;
         } else {
@@ -61,12 +61,22 @@ public class SwerveManualHeadingControl extends CommandBase {
     private static double turnVel;
     private static double turnAccel;
     
-    private static boolean joystickFlag;
-    private PIDController headingController;
+    public static PIDController headingController;
+    public static boolean joystickFlag;
+    public static boolean headingFlag;
+    public static boolean flag;
+    public static boolean prevHeadingFlag;
+
+    private static boolean xPressed;
+    private static boolean xFlag;
+    private static boolean aPressed;
+    private static boolean aFlag;
     
+    public static boolean isNotOptimized;
+
     public SwerveManualHeadingControl() {
         addRequirements(Drivetrain.getInstance());
-        headingController = new PIDController(Drivetrain.HEADING_KP, Drivetrain.HEADING_KI, Drivetrain.HEADING_KD);
+        headingController = new PIDController(Drivetrain.MANUAL_HEADING_KP, Drivetrain.MANUAL_HEADING_KI, Drivetrain.MANUAL_HEADING_KD);
         pigeonFlag = false;
 
         // pigeonAngle = 90;
@@ -75,6 +85,10 @@ public class SwerveManualHeadingControl extends CommandBase {
         lastPigeonUpdateTime = Timer.getFPGATimestamp();
         prevPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
         prevVel = 0;
+        xPressed = false;
+        xFlag = false;
+        aPressed = false;
+        aFlag = false;
     }
 
     @Override
@@ -91,39 +105,77 @@ public class SwerveManualHeadingControl extends CommandBase {
         pigeonAngle = prevPigeonHeading;
 
         joystickFlag = false;
+        headingFlag = false;
+        isNotOptimized = false;
+        flag = false;
+        prevHeadingFlag = false;
     }
 
     @Override
     public void execute() {
         translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
-        headingX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
-        headingY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightY(), OI.XBOX_JOYSTICK_DEADBAND);
+        headingX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), 0.25);
+        headingY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightY(), 0.25);
 
-        if (headingY != 0 && headingX != 0) {
+        if (headingY != 0 || headingX != 0) {
             headingAngle = Math.toDegrees(Math.atan2(headingY, headingX));
+            headingAngle -= 90;
+            SmartDashboard.putNumber("heading angle", headingAngle);
+
             while (Drivetrain.getInstance().getPigeon().getFusedHeading() - headingAngle > 180) {
                 headingAngle += 360;
             }
-            while (Drivetrain.getInstance().getPigeon().getFusedHeading() - headingAngle < 180) {
+
+            while (Drivetrain.getInstance().getPigeon().getFusedHeading() - headingAngle <- 180) {
                 headingAngle -= 360;
             }
+
+            headingFlag = true;
+        } else {
+            headingFlag = false;
         }
-        turnMagnitude = headingController.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), headingAngle);
+
+        if (headingFlag == false && prevHeadingFlag == true) {
+            flag = true;
+        } 
+        else if (headingFlag == true) {
+            flag = false;
+        }
+        
+        turnMagnitude = -1 * headingController.calculate(Drivetrain.getInstance().getPigeon().getFusedHeading(), headingAngle);
+        SmartDashboard.putNumber("turn mag", turnMagnitude);
 
         if (Math.abs(translateX) > 0 || Math.abs(translateY) > 0 || Math.abs(headingX) > 0 || Math.abs(headingY) > 0) {
             joystickFlag = true;
         }
-
+        
         //scale input from joysticks
-        translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
-        translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY;
+        translateX *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY * ((OI.getInstance().getDriverGamepad().getButtonBumperLeft().get() == true) ? 0.4 : 1);
+        translateY *= OUTPUT_MULTIPLIER * Drivetrain.MAX_DRIVE_VELOCITY * ((OI.getInstance().getDriverGamepad().getButtonBumperLeft().get() == true) ? 0.4 : 1);
         turnMagnitude *= -1 * OUTPUT_MULTIPLIER * Drivetrain.MAX_ROTATION_VELOCITY;
-
+        
         // double currentPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
+        xFlag = xPressed && OI.getInstance().getDriverGamepad().getButtonX().get() == false;
+        xPressed = OI.getInstance().getDriverGamepad().getButtonX().get();
+
+        if (xFlag) {
+            headingAngle = Drivetrain.getInstance().getPigeon().getFusedHeading() - 130;
+        }
+        aFlag = aPressed  == true && OI.getInstance().getDriverGamepad().getButtonA().get() == false;
+        aPressed = OI.getInstance().getDriverGamepad().getButtonA().get();
+        if (aFlag) {
+            headingAngle = Drivetrain.getInstance().getPigeon().getFusedHeading() + 130;
+        }
+        if (xPressed) {
+            turnMagnitude = -0.7 * OUTPUT_MULTIPLIER * Drivetrain.MAX_ROTATION_VELOCITY;
+        }
+        else if (aPressed) {
+            turnMagnitude = 0.7 * OUTPUT_MULTIPLIER * Drivetrain.MAX_ROTATION_VELOCITY;
+        }
 
         // if(pigeonFlag && turnMagnitude == 0) { //If there was joystick input but now there is not
-        //     double velocityHeadingMultiplier = Math.abs(turnVel) > TURN_VEL_THRESHOLD ? HIGH_VELOCITY_HEADING_MULTIPLIER : LOW_VELOCITY_HEADING_MULTIPLIER;
+            //     double velocityHeadingMultiplier = Math.abs(turnVel) > TURN_VEL_THRESHOLD ? HIGH_VELOCITY_HEADING_MULTIPLIER : LOW_VELOCITY_HEADING_MULTIPLIER;
 
         //     // account for momentum when turning
         //     pigeonAngle = currentPigeonHeading + turnVel * velocityHeadingMultiplier + turnAccel * ACCELERATION_HEADING_MULTIPLIER;
@@ -135,16 +187,16 @@ public class SwerveManualHeadingControl extends CommandBase {
         //     // turnMagnitude = !RobotMap.IS_PRACTICE ? Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading) : turnMagnitude;
         //     turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
         // }
-
+        
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateX, translateY, turnMagnitude, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
+            translateX * (OI.getInstance().getDriverGamepad().getButtonY().get() ? -1 : 1), translateY * (OI.getInstance().getDriverGamepad().getButtonY().get() ? -1 : 1), headingFlag || flag ? turnMagnitude : 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
 
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
 
         if (joystickFlag)
-            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, false);
+            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], IS_PERCENT_OUTPUT, isNotOptimized);
 
         // if(Timer.getFPGATimestamp() - lastPigeonUpdateTime > 0.01) {
         //     double currentTime = Timer.getFPGATimestamp();
@@ -159,15 +211,13 @@ public class SwerveManualHeadingControl extends CommandBase {
         //     prevTime = currentTime;
         //     lastPigeonUpdateTime = Timer.getFPGATimestamp();
         // }
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
+        prevHeadingFlag = headingFlag;
     }
 
     @Override
     public void end(boolean interrupted) {
         Drivetrain.getInstance().stopAllDrive();
+        headingFlag = false;
+        joystickFlag = false;
     }
 }

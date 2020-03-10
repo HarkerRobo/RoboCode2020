@@ -2,11 +2,8 @@ package frc.robot.commands.shooter;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
-import frc.robot.util.Limelight;
 import harkerrobolib.commands.IndefiniteCommand;
 import harkerrobolib.util.Conversions;
 import harkerrobolib.util.Conversions.SpeedUnit;
@@ -35,12 +32,11 @@ public class SpinShooterVelocity extends IndefiniteCommand {
         addRequirements(Shooter.getInstance());
         this.velocity = velocity;
 
-        SmartDashboard.putNumber("Set shooter speed", velocity);
+        // SmartDashboard.putNumber("Set shooter speed", velocity);
     }
 
     public void execute() {
-        velocity = SmartDashboard.getNumber("Set shooter speed", velocity);
-
+        // Shooter.getInstance().spinShooterVelocity(SmartDashboard.getNumber("Set shooter speed", velocity));
         Shooter.getInstance().spinShooterVelocity(velocity);
 
         SmartDashboard.putNumber("Shooter velocity error", Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, Shooter.getInstance().getMaster().getClosedLoopError(), SpeedUnit.FEET_PER_SECOND, Shooter.WHEEL_DIAMETER, Shooter.TICKS_PER_REV));

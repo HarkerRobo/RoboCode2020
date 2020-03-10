@@ -33,6 +33,7 @@ public class SpinnerPositionColorSensor extends CommandBase {
     @Override
     public void initialize() {
         String info = DriverStation.getInstance().getGameSpecificMessage();
+
         if (info.equals("B")) 
             stationVal = ColorValue.RED; // our sensor and the field sensor are not in the same location
         else if(info.equals("R")) 
@@ -46,7 +47,7 @@ public class SpinnerPositionColorSensor extends CommandBase {
 
         Spinner.getInstance().getSpinnerMotor().setNeutralMode(NeutralMode.Brake);
         Spinner.getInstance().getSpinnerMotor().configOpenloopRamp(0);
-
+        
         initDiff = Spinner.getInstance().getCurrentColor().getVal() - stationVal.getVal();
     }
 
@@ -66,15 +67,14 @@ public class SpinnerPositionColorSensor extends CommandBase {
     }
 
     @Override
+    public boolean isFinished() {
+        return Spinner.getInstance().getCurrentColor().getVal() == stationVal.getVal();
+    }
+
+    @Override
     public void end(boolean interrupted) {
         Spinner.getInstance().getSpinnerMotor().set(ControlMode.Disabled, 0);
 
         Spinner.getInstance().getSpinnerMotor().configOpenloopRamp(Indexer.RAMP_RATE);
     }
-
-    @Override
-    public boolean isFinished() {
-        return Spinner.getInstance().getCurrentColor().getVal() == stationVal.getVal();
-    }
-
 }

@@ -144,7 +144,7 @@ public class HSSwerveDriveOdometry extends CommandBase {
         // The robot will go to the desired rotation of the final pose in the
         // trajectory,
         // not following the poses at individual states.
-        double targetAngularVel = m_thetaController.calculate(m_pose.get().getRotation().getRadians(),
+        double targetAngularVel = m_thetaController.calculate(Math.toRadians(-Drivetrain.getInstance().getPigeon().getFusedHeading()),
                 heading.getRadians());
 
         double vRef = desiredState.velocityMetersPerSecond;
@@ -155,9 +155,9 @@ public class HSSwerveDriveOdometry extends CommandBase {
 
         var targetModuleStates = m_kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
-        SmartDashboard.putNumber("Target X Vel", targetXVel);
-        SmartDashboard.putNumber("Target Y Vel", targetYVel);
-        // SmartDashboard.putNumber("Trajectory Angle", heading.getDegrees());
+        SmartDashboard.putNumber("Target X Pos", desiredPose.getTranslation().getX());
+        SmartDashboard.putNumber("Target Y Pos", desiredPose.getTranslation().getY());
+        SmartDashboard.putNumber("Trajectory Angle", heading.getDegrees());
 
         SmartDashboard.putNumber("Trajectory X Error", m_xController.getPositionError());
         SmartDashboard.putNumber("Trajectory Y Error", m_yController.getPositionError());

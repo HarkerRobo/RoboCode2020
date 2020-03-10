@@ -4,9 +4,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,10 +34,10 @@ public class BottomIntake extends SubsystemBase {
     public static final Value OUT = Value.kForward;
 
     static {
-        if(RobotMap.IS_PRACTICE) {
-            MOTOR_INVERT = false; //Change accordingly
+        if(RobotMap.IS_COMP) {
+            MOTOR_INVERT = true;
         } else {
-            MOTOR_INVERT = true; //Change accordingly
+            MOTOR_INVERT = true;
         }
     }
 
@@ -60,10 +62,9 @@ public class BottomIntake extends SubsystemBase {
     private DoubleSolenoid solenoid; 
 
     private static boolean jamFlag = false;
-
+    
     private BottomIntake() {
         talon = new HSTalon(RobotMap.CAN_IDS.INTAKE_MOTOR_ID);
-
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.INTAKE_SOLENOID_FORWARD, RobotMap.CAN_IDS.INTAKE_SOLENOID_REVERSE);
 
         setupTalons();
@@ -93,45 +94,6 @@ public class BottomIntake extends SubsystemBase {
         talon.setSensorPhase(SENSOR_PHASE);
     }
 
-    @Override
-    public void periodic() {
-        if(OI.getInstance().getDriverGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getRightTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
-            CommandScheduler.getInstance().schedule(new ParallelCommandGroup(
-                new SpinIntakeVelocity(0.5), 
-                new SpinIndexer(0.6, false)));
-                
-            jamFlag = false;
-        } else if(OI.getInstance().getDriverGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND || OI.getInstance().getOperatorGamepad().getLeftTrigger() > OI.XBOX_TRIGGER_DEADBAND) {
-            CommandScheduler.getInstance().schedule(new ParallelCommandGroup( //Outaking while reversing spine 
-                new SpinIntakeVelocity(-0.5), 
-                new SpinIndexer(0.6, true)));
-            
-            jamFlag = false;
-        } else if (!jamFlag) {
-            CommandScheduler.getInstance().schedule(new ParallelCommandGroup(
-                new SpinIntakeVelocity(0),
-                new SpinIndexer(0, false)));
-                
-            jamFlag = true;
-        }   
-
-        if (talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY) {
-            CommandScheduler.getInstance().schedule(new ParallelRaceGroup(new SpinIntakeVelocity(-0.3), new WaitCommand(0.2)));
-            SmartDashboard.putBoolean("yonk", true);
-        }
-        else {
-            SmartDashboard.putBoolean("yonk",false);
-        }
-    }
-            
-    public HSTalon getTalon() {
-        return talon;
-    }
-
-    public DoubleSolenoid getSolenoid() {
-        return solenoid;
-    }
-
     public void spinIntake(double magnitude) {
         if(magnitude == 0) 
             talon.set(ControlMode.Disabled, 0);
@@ -141,6 +103,18 @@ public class BottomIntake extends SubsystemBase {
 
     public void toggleSolenoid() {
         solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
+    }
+
+    public boolean isStalling() {
+        return talon.getStatorCurrent() > CURRENT_DRAW_MIN && talon.getSelectedSensorVelocity() < JAMMED_VELOCITY;
+    }
+            
+    public HSTalon getTalon() {
+        return talon;
+    }
+
+    public DoubleSolenoid getSolenoid() {
+        return solenoid;
     }
 
     public static BottomIntake getInstance() {

@@ -5,11 +5,10 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.util.Limelight;
+import harkerrobolib.commands.IndefiniteCommand;
 import harkerrobolib.util.MathUtil;
 
 /**
@@ -30,9 +29,9 @@ import harkerrobolib.util.MathUtil;
  * @author Rohan Bhowmik
  * @since 11/4/19
  */
-public class SwerveManual extends CommandBase {
+public class SwerveManual extends IndefiniteCommand {
     static {
-        if (RobotMap.IS_PRACTICE) {
+        if (RobotMap.IS_COMP) {
             HIGH_VELOCITY_HEADING_MULTIPLIER = 0.16;
             LOW_VELOCITY_HEADING_MULTIPLIER = 0.09;
         } else {
@@ -43,6 +42,7 @@ public class SwerveManual extends CommandBase {
 
     private static final double OUTPUT_MULTIPLIER = 1;
     private static final boolean IS_PERCENT_OUTPUT = false;
+
     private static double HIGH_VELOCITY_HEADING_MULTIPLIER;
     private static double LOW_VELOCITY_HEADING_MULTIPLIER;
     private static final double ACCELERATION_HEADING_MULTIPLIER = 0;
@@ -67,8 +67,6 @@ public class SwerveManual extends CommandBase {
 
         pigeonFlag = false;
 
-        // pigeonAngle = 90;
-        // prevPigeonHeading = 90;
         prevTime = Timer.getFPGATimestamp();
         lastPigeonUpdateTime = Timer.getFPGATimestamp();
         prevPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
@@ -84,6 +82,7 @@ public class SwerveManual extends CommandBase {
         Drivetrain.getInstance().applyToAllAngle(
             (angleMotor) -> angleMotor.selectProfileSlot(Drivetrain.ANGLE_POSITION_SLOT, RobotMap.PRIMARY_INDEX)
         );
+
         pigeonFlag = true;
         prevPigeonHeading = Drivetrain.getInstance().getPigeon().getFusedHeading();
         pigeonAngle = prevPigeonHeading;
@@ -145,11 +144,8 @@ public class SwerveManual extends CommandBase {
             prevTime = currentTime;
             lastPigeonUpdateTime = Timer.getFPGATimestamp();
         }
-    }
 
-    @Override
-    public boolean isFinished() {
-        return false;
+        // SmartDashboard.putNumber("Current velocity", Drivetrain.getInstance().getTopLeft().getDriveMotor().getSelectedSensorVelocity());
     }
 
     @Override

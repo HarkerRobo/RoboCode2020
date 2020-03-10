@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.commands.shooter.SpinShooterLimelight;
@@ -31,15 +30,18 @@ import harkerrobolib.util.Conversions.SpeedUnit;
  */
 public class Shooter extends SubsystemBase {
     static {
-        if(RobotMap.IS_PRACTICE) {
-            FLYWHEEL_KF = 0.003; // tune;
-            FLYWHEEL_KP = 0.01; // tune;
+        if(RobotMap.IS_COMP) {
+            FLYWHEEL_KF = 0.064; // tune;
+            FLYWHEEL_KP = 0.05; // tune;
+            FLYWHEEL_KI = 0.001;
+            FLYWHEEL_KD = 0.9;
+            FLYWHEEL_IZONE = 150;
 
-            SHOOTER_HIGH_ANGLE = Value.kForward;
-            SHOOTER_LOW_ANGLE = Value.kReverse;
+            HIGH_ANGLE = Value.kForward;
+            LOW_ANGLE = Value.kReverse;
 
             MASTER_INVERT = TalonFXInvertType.Clockwise;
-            FOLLOWER_INVERT = TalonFXInvertType.Clockwise;
+            FOLLOWER_INVERT = TalonFXInvertType.CounterClockwise;
 
             SENSOR_PHASE = false;
         } else {
@@ -49,11 +51,11 @@ public class Shooter extends SubsystemBase {
             FLYWHEEL_KD = 0.7;
             FLYWHEEL_IZONE = 150;
 
-            SHOOTER_HIGH_ANGLE = Value.kForward;
-            SHOOTER_LOW_ANGLE = Value.kReverse;
+            HIGH_ANGLE = Value.kForward;
+            LOW_ANGLE = Value.kReverse;
 
-            MASTER_INVERT = TalonFXInvertType.CounterClockwise;
-            FOLLOWER_INVERT = TalonFXInvertType.Clockwise;
+            MASTER_INVERT = TalonFXInvertType.Clockwise;
+            FOLLOWER_INVERT = TalonFXInvertType.CounterClockwise;
 
             SENSOR_PHASE = false;
         }
@@ -67,7 +69,7 @@ public class Shooter extends SubsystemBase {
 
     private static boolean SENSOR_PHASE;
     
-    public static final double MAX_VELOCITY = 114.3; 
+    public static final double MAX_VELOCITY = 110;//125;//114.3; 
     public static final int FLYWHEEL_VELOCITY_SLOT = 0;
     
     public static double FLYWHEEL_KF;
@@ -78,8 +80,8 @@ public class Shooter extends SubsystemBase {
     
     private static DoubleSolenoid solenoid;
     
-    public static DoubleSolenoid.Value SHOOTER_HIGH_ANGLE; 
-    public static DoubleSolenoid.Value SHOOTER_LOW_ANGLE; 
+    public static DoubleSolenoid.Value HIGH_ANGLE; 
+    public static DoubleSolenoid.Value LOW_ANGLE; 
     
     private static final int FLYWHEEL_CURRENT_CONTINUOUS = 50;
     private static final int FLYWHEEL_CURRENT_PEAK = 60;
@@ -98,24 +100,28 @@ public class Shooter extends SubsystemBase {
     private static final double DAY_MEDIUM_DISTANCE_THRESHOLD = 11.753;
     private static final double NIGHT_THRESHOLD = 18.4;  // choosing between far and close pipelines for night
 
+    private static final int CURRENT_DRAW_MIN = 10;
+    private static final int STALL_VELOCITY = 100;
+
     public static boolean isPercentOutput = true;
+    
     /**
      * Constructs a Shooter.
      */
     public Shooter() {
         flywheelMaster = new TalonFX(RobotMap.CAN_IDS.SHOOTER_MASTER_ID);
         flywheelFollower = new TalonFX(RobotMap.CAN_IDS.SHOOTER_FOLLOWER_ID);
-        solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_BACKWARD);
+        solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SHOOTER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SHOOTER_SOLENOID_BACKWARD);
         
         setupFlywheel();
-        SmartDashboard.putNumber("flywheel kp", FLYWHEEL_KP);
-        SmartDashboard.putNumber("flywheel kd", FLYWHEEL_KD);
+        // SmartDashboard.putNumber("flywheel kd", FLYWHEEL_KD);
+        // SmartDashboard.putNumber("flywheel kp", FLYWHEEL_KP);
     }
 
     @Override
     public void periodic() {
         double distance = getLimelightDistance();
-        SmartDashboard.putBoolean("isPercentOutput", isPercentOutput);
+        // SmartDashboard.putBoolean("isPercentOutput", isPercentOutput);
         
         if (distance != 0.0) {
             if (RobotMap.IS_NIGHT) {
@@ -162,6 +168,11 @@ public class Shooter extends SubsystemBase {
         setupVelocityPID();
     }
 
+    public boolean isStalling() {
+        return (flywheelMaster.getStatorCurrent() > CURRENT_DRAW_MIN && flywheelMaster.getSelectedSensorVelocity() < STALL_VELOCITY) || 
+                (flywheelFollower.getStatorCurrent() > CURRENT_DRAW_MIN && flywheelFollower.getSelectedSensorVelocity() < STALL_VELOCITY);
+    }
+
     /**
      * Set up for Velocity PID.
      */
@@ -179,7 +190,7 @@ public class Shooter extends SubsystemBase {
      * at low it switches the position to high.
      */
     public void toggleHoodAngle() {
-        solenoid.set(solenoid.get() == SHOOTER_HIGH_ANGLE ? SHOOTER_LOW_ANGLE : SHOOTER_HIGH_ANGLE);
+        solenoid.set(solenoid.get() == HIGH_ANGLE ? LOW_ANGLE : HIGH_ANGLE);
     }
     
     /**

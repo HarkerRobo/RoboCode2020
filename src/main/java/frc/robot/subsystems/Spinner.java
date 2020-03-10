@@ -27,18 +27,17 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 public class Spinner extends SubsystemBase {
     private static Spinner instance;
 
-    private VictorSPX spinnerMotor;
+    // private VictorSPX spinnerMotor;
     private DoubleSolenoid solenoid;
-    // private CANCoder cancoder; 
 
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 colorSensor;
     private final ColorMatch colorMatcher = new ColorMatch();
 
     public static final int SPINNER_POSITION_SLOT = 0;
-    private static final double SPINNER_POSITION_KP = 0.7; 
-    private static final double SPINNER_POSITION_KI = 0;
-    private static final double SPINNER_POSITION_KD = 0;
+    // private static final double SPINNER_POSITION_KP = 0.7; 
+    // private static final double SPINNER_POSITION_KI = 0;
+    // private static final double SPINNER_POSITION_KD = 0;
    
     /**
      * Distance (in encoder ticks) the motor needs to turn to rotate the wheel by one wedge
@@ -50,8 +49,8 @@ public class Spinner extends SubsystemBase {
     private final Color redTarget = ColorMatch.makeColor(0.480, 0.350, 0.114);
     private final Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
-    private static final boolean SPINNER_INVERT = false; 
-    private static final boolean SPINNER_SENSOR_PHASE = false;
+    // private static final boolean SPINNER_INVERT = false; 
+    // private static final boolean SPINNER_SENSOR_PHASE = false;
 
     public static final int ALLOWABLE_ERROR = 100;
 
@@ -79,100 +78,88 @@ public class Spinner extends SubsystemBase {
 
     public Spinner() {
         //Same motor controller being used for spinner and indexer
-        spinnerMotor = new VictorSPX(RobotMap.CAN_IDS.SPINNER_ID);
+        // spinnerMotor = new VictorSPX(RobotMap.CAN_IDS.SPINNER_ID);
         colorSensor = new ColorSensorV3(i2cPort);
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.SPINNER_SOLENOID_FORWARD, RobotMap.CAN_IDS.SPINNER_SOLENOID_REVERSE);
-        // cancoder = new CANCoder(RobotMap.CAN_IDS.CANCODER_ID);
 
         colorMatcher.addColorMatch(blueTarget);
         colorMatcher.addColorMatch(greenTarget);
         colorMatcher.addColorMatch(redTarget);
         colorMatcher.addColorMatch(yellowTarget);
 
-        spinnerMotor.setInverted(SPINNER_INVERT);
-        spinnerMotor.setSensorPhase(SPINNER_SENSOR_PHASE);   
+        // spinnerMotor.setInverted(SPINNER_INVERT);
+        // spinnerMotor.setSensorPhase(SPINNER_SENSOR_PHASE);   
              
-        setupTalons();
+        // setupTalons();
     }
 
     @Override
     public void periodic() {
-        Color detectedColor = colorSensor.getColor();
+        // Color detectedColor = colorSensor.getColor();
 
-        /**
-         * Run the color match algorithm on our detected color
-         */
-        String colorString;
-        ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
+        // /**
+        //  * Run the color match algorithm on our detected color
+        //  */
+        // String colorString;
+        // ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
-        if (match.color == blueTarget) {
-            colorString = "Blue";
-        } else if (match.color == redTarget) {
-            colorString = "Red";
-        } else if (match.color == greenTarget) {
-            colorString = "Green";
-        } else if (match.color == yellowTarget) {
-            colorString = "Yellow";
-        } else {
-            colorString = "Unknown";
-        }
+        // if (match.color == blueTarget) {
+        //     colorString = "Blue";
+        // } else if (match.color == redTarget) {
+        //     colorString = "Red";
+        // } else if (match.color == greenTarget) {
+        //     colorString = "Green";
+        // } else if (match.color == yellowTarget) {
+        //     colorString = "Yellow";
+        // } else {
+        //     colorString = "Unknown";
+        // }
 
-        /**
-         * Open Smart Dashboard or Shuffleboard to see the color detected by the 
-         * sensor.
-         */
-        SmartDashboard.putNumber("red", detectedColor.red);
-        SmartDashboard.putNumber("green", detectedColor.green);
-        SmartDashboard.putNumber("blue", detectedColor.blue);
-        SmartDashboard.putNumber("Confidence", match.confidence);
-        SmartDashboard.putString("Detected Color", colorString);
-        SmartDashboard.putNumber("Desired red", match.color.red);
-        SmartDashboard.putNumber("Desired blue", match.color.blue);
-        SmartDashboard.putNumber("Desired green", match.color.green);
+        // /**
+        //  * Open Smart Dashboard or Shuffleboard to see the color detected by the 
+        //  * sensor.
+        //  */
+        // SmartDashboard.putNumber("red", detectedColor.red);
+        // SmartDashboard.putNumber("green", detectedColor.green);
+        // SmartDashboard.putNumber("blue", detectedColor.blue);
+        // SmartDashboard.putNumber("Confidence", match.confidence);
+        // SmartDashboard.putString("Detected Color", colorString);
+        // SmartDashboard.putNumber("Desired red", match.color.red);
+        // SmartDashboard.putNumber("Desired blue", match.color.blue);
+        // SmartDashboard.putNumber("Desired green", match.color.green);
     }
 
-    private void setupTalons() {
-        spinnerMotor.configFactoryDefault();
+    // private void setupTalons() {
+    //     spinnerMotor.configFactoryDefault();
                 
-        spinnerMotor.setInverted(SPINNER_INVERT);
+    //     spinnerMotor.setInverted(SPINNER_INVERT);
 
-        spinnerMotor.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
-        spinnerMotor.enableVoltageCompensation(true);
+    //     spinnerMotor.configVoltageCompSaturation(VOLTAGE_COMPENSATION);
+    //     spinnerMotor.enableVoltageCompensation(true);
         
-        spinnerMotor.setNeutralMode(NeutralMode.Coast);
+    //     spinnerMotor.setNeutralMode(NeutralMode.Coast);
       
-        spinnerMotor.setSensorPhase(SPINNER_SENSOR_PHASE);
+    //     spinnerMotor.setSensorPhase(SPINNER_SENSOR_PHASE);
 
-        spinnerMotor.configForwardSoftLimitEnable(false);
-        spinnerMotor.configReverseSoftLimitEnable(false);
-
-        // spinnerMotor.configRemoteFeedbackFilter(RobotMap.CAN_IDS.CANCODER_ID, RemoteSensorSource.CANCoder, RobotMap.SPINNER_REMOTE_ORDINAL);
+    //     spinnerMotor.configForwardSoftLimitEnable(false);
+    //     spinnerMotor.configReverseSoftLimitEnable(false);
         
-        setupPositionPID();
-    } 
+    //     setupPositionPID();
+    // } 
     
-    public void setupPositionPID() {
-        spinnerMotor.config_kP(SPINNER_POSITION_SLOT, SPINNER_POSITION_KP);
-        spinnerMotor.config_kI(SPINNER_POSITION_SLOT, SPINNER_POSITION_KI);
-        spinnerMotor.config_kD(SPINNER_POSITION_SLOT, SPINNER_POSITION_KD);
-    }
+    // public void setupPositionPID() {
+    //     spinnerMotor.config_kP(SPINNER_POSITION_SLOT, SPINNER_POSITION_KP);
+    //     spinnerMotor.config_kI(SPINNER_POSITION_SLOT, SPINNER_POSITION_KI);
+    //     spinnerMotor.config_kD(SPINNER_POSITION_SLOT, SPINNER_POSITION_KD);
+    // }
 
     public VictorSPX getSpinnerMotor() {
-        return spinnerMotor;
+        return Indexer.getInstance().getAgitator();
     }
 
     public DoubleSolenoid getSolenoid() {
         return solenoid;
     }
-
-    // public void spinToColor(ColorValue stationValue, ColorValue actualValue) {
-    //     int error = stationValue.getVal() - actualValue.getVal(); //Number of color wedges away
-    //     int multiplierVal = error < 0 ? 3 : 4; 
-
-    //     int position = multiplierVal * 8 * COLOR_OFFSET + COLOR_OFFSET * (error);
-    //     spinnerMotor.set(ControlMode.Position, position);
-    //     // bagMotor.set(ControlMode.Position, 3 * 8 * COLOR_OFFSET + COLOR_OFFSET * ());
-    // }
 
     public ColorValue getCurrentColor() {
         Color curColor = colorSensor.getColor();
@@ -192,13 +179,13 @@ public class Spinner extends SubsystemBase {
         return curVal; 
     }
 
+    public void toggleSolenoid() {
+        solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
+    }
+
     public static Spinner getInstance() {
         if(instance == null)
             instance = new Spinner();
         return instance;
-    }
-
-    public void toggleSolenoid() {
-        solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
     }
 }

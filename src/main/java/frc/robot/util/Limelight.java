@@ -43,9 +43,7 @@ public class Limelight {
 
     public static final int NO_SNAPSHOT = 0;
     public static final int SNAPSHOT = 1;
-
-    public static double TX_SETPOINT = 0;
-
+    
     private static double[] nullArr;
 
     /**

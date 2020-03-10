@@ -9,7 +9,7 @@ import frc.robot.subsystems.Climber;
 import harkerrobolib.commands.IndefiniteCommand;
 
 /**
- * Sets the climber to a specific position and feedforward.
+ * Moves the climber to one of its two soft limits
  * 
  * @author Shahzeb Lakhani
  * @author Jatin Kohli
@@ -17,40 +17,44 @@ import harkerrobolib.commands.IndefiniteCommand;
  * @author Chirag Kaushik
  * @since February 6, 2020
  */
-public class MoveClimberManual extends IndefiniteCommand {
+public class MoveClimbers extends IndefiniteCommand {
     private static final double OUTPUT_MULTIPLIER = 1;
+    public static final double FEED_FORWARD = 0;
 
-    private boolean inputFlag;
+    private static final int EPSILON = 10;
 
-    public MoveClimberManual() {
+    private boolean down;
+
+    public MoveClimbers(boolean down) {
         addRequirements(Climber.getInstance());
+
+        this.down = down;
     }
 
     @Override
     public void initialize() {
-        inputFlag = false;
-
         Climber.getInstance().getMaster().configForwardSoftLimitEnable(true);
         Climber.getInstance().getMaster().configReverseSoftLimitEnable(true);
     }
 
     @Override
     public void execute() {
-        boolean upDpad = OI.getInstance().getDriverGamepad().getUpDPadButton().get();
-        boolean downDpad = OI.getInstance().getDriverGamepad().getDownDPadButton().get();
-        double output = OUTPUT_MULTIPLIER * ((upDpad ? 1 : 0) - (downDpad ? 1 : 0));
-
+        double output = OUTPUT_MULTIPLIER * (down ? -1 : 1);
         SmartDashboard.putNumber("climber manual output", output);
 
-        if (upDpad || downDpad)
-            inputFlag = true;
+        Climber.getInstance().getMaster().set(ControlMode.PercentOutput, output);
+    }
 
-        if (inputFlag)
-            Climber.getInstance().getMaster().set(ControlMode.PercentOutput, output);
+    @Override
+    public boolean isFinished() {
+        return Math.abs(Climber.getInstance().getMaster().getSelectedSensorVelocity()) < EPSILON;
     }
 
     @Override
     public void end(boolean interrupted) {
-        Climber.getInstance().getMaster().set(ControlMode.Disabled, 0, DemandType.ArbitraryFeedForward, MoveClimbers.FEED_FORWARD);
+        Climber.getInstance().getMaster().set(ControlMode.Disabled, 0, DemandType.ArbitraryFeedForward, FEED_FORWARD);
+
+        Climber.getInstance().getMaster().configForwardSoftLimitEnable(true);
+        Climber.getInstance().getMaster().configReverseSoftLimitEnable(true);
     }
 }

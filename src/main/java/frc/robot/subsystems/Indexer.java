@@ -6,9 +6,8 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import harkerrobolib.wrappers.HSTalon;
@@ -27,7 +26,7 @@ import harkerrobolib.wrappers.HSTalon;
  */
 public class Indexer extends SubsystemBase {
     static {
-        if(RobotMap.IS_PRACTICE) {
+        if(RobotMap.IS_COMP) {
             SPINE_INVERT = false; //Change accordingly
             AGITATOR_INVERT = false;
         } else {
@@ -45,7 +44,7 @@ public class Indexer extends SubsystemBase {
     private VictorSPX agitator;
     
     public static final double SPINE_OUTPUT_MULTIPLIER = 1;
-    public static final double AGITATOR_OUTPUT_MULTIPLIER = 1;
+    public static final double AGITATOR_OUTPUT_MULTIPLIER = 0.95;
 
     public static final int VOLTAGE_COMPENSATION = 10;
     public static final double RAMP_RATE = 0.04;
@@ -54,11 +53,9 @@ public class Indexer extends SubsystemBase {
     private static final int INDEXER_CURRENT_CONTINUOUS = 30;
     private static final int INDEXER_CURRENT_PEAK = 40;
 
-    //private DigitalInput intakeSensor;  // The first sensor when a ball is intaked
     private DigitalInput indexerSensor;  // The second sensor in the indexer
     private DigitalInput shooterSensor; // Determines if the indexer is full
-    
-    // private static final int INTAKE_SENSOR_ID = 0;
+
     private static final int INDEXER_SENSOR_ID = 6;
     private static final int SHOOTER_SENSOR_ID = 7;
 
@@ -73,17 +70,18 @@ public class Indexer extends SubsystemBase {
 
     private DoubleSolenoid solenoid;
 
+    private static final int CURRENT_DRAW_MIN = 10;
+    private static final int STALL_VELOCITY = 100;
+
     private Indexer() {
         spine = new HSTalon(RobotMap.CAN_IDS.SPINE_TALON_ID);
         agitator = new VictorSPX(RobotMap.CAN_IDS.AGITATOR_TALON_ID);
         initializeSensors();
         setupTalons();
-        // numPowerCells = 0;
         solenoid = new DoubleSolenoid(RobotMap.CAN_IDS.INDEXER_SOLENOID_FORWARD, RobotMap.CAN_IDS.INDEXER_SOLENOID_REVERSE);
     }
 
     public void initializeSensors() {
-        //intakeSensor = new DigitalInput(INTAKE_SENSOR_ID);
         indexerSensor = new DigitalInput(INDEXER_SENSOR_ID);
         shooterSensor = new DigitalInput(SHOOTER_SENSOR_ID);
     }
@@ -120,25 +118,6 @@ public class Indexer extends SubsystemBase {
         spine.enableCurrentLimit(true);
     }
 
-    @Override
-    public void periodic() {
-        long currentTime = System.currentTimeMillis();
-        // boolean indexerDetected = !Indexer.getInstance().getIndexerSensor().get();
-        // boolean shooterDetected = !Indexer.getInstance().getShooterSensor().get();
-
-        // if(BottomIntake.getInstance().getTalon().getMotorOutputPercent() > 0) {
-        //     if (currentTime % AGITATOR_CYCLE_DUR < AGITATOR_ON_DURATION) {
-        //         spinAgitator(AGITATOR_DEFAULT_OUTPUT);
-        //     }
-        //     spinAgitator(0);
-        // }
-
-        // if(!indexerDetected && !shooterDetected) {
-        //     spinSpine(SPINE_DEFAULT_OUTPUT);
-        //     spinAgitator(AGITATOR_DEFAULT_OUTPUT);
-        // }
-    }
-
     public void spinSpine(double percentOutput) {
         if(percentOutput == 0)
             spine.set(ControlMode.Disabled, 0);
@@ -153,6 +132,10 @@ public class Indexer extends SubsystemBase {
             agitator.set(ControlMode.PercentOutput, percentOutput * AGITATOR_OUTPUT_MULTIPLIER);
     }
 
+    public void toggleSolenoid() {
+        solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
+    }
+
     public DoubleSolenoid getSolenoid() {
         return solenoid;
     }
@@ -160,10 +143,6 @@ public class Indexer extends SubsystemBase {
     public DigitalInput getShooterSensor() {
         return shooterSensor;
     }
-
-    // public DigitalInput getIntakeSensor() {
-    //     return intakeSensor;
-    // }
 
     public DigitalInput getIndexerSensor() {
         return indexerSensor;
@@ -181,9 +160,5 @@ public class Indexer extends SubsystemBase {
         if(instance == null)
             instance = new Indexer();
         return instance;
-    }
-
-    public void toggleSolenoid() {
-        solenoid.set(solenoid.get() == Value.kReverse ? Value.kForward : Value.kReverse);
     }
 }
