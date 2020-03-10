@@ -26,7 +26,7 @@ public class SwerveDriveWithOdometryProfiling extends HSSwerveDriveOdometry {
     private Trajectory trajectory;
 
     private final int ALLOWABLE_ERROR = 5;
-    private final int TIMEOUT = 800;
+    private final int TIMEOUT = 400;
         
     public SwerveDriveWithOdometryProfiling(Trajectory trajectory, Rotation2d heading) {
         super(trajectory,

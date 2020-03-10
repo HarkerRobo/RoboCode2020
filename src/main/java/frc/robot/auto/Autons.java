@@ -36,7 +36,7 @@ public class Autons {
     }
     
     //Change this before the match.
-    public static StartingPosition startingPosition = StartingPosition.MIDDLE;
+    public static StartingPosition startingPosition = StartingPosition.RIGHT;
     // public static AutonCommands curAuton = AutonCommands.EIGHT_TRENCH; 
 
     //Brings the intake out, required at the start of every autonomous configuration
@@ -127,7 +127,7 @@ public class Autons {
         new SpinShooterLimelight().raceWith(new WaitCommand(1.5), new SwerveAlignWithLimelight(), new MoveBallsToShooter(false)),
         new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.pickUpTrenchBalls, OI.forwardHeading) // pick up trench balls
             .raceWith(new SpinIntakeVelocity(0.6), new SpinIndexer(0.6, false)),
-        new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.alignFromTrench, OI.forwardHeading) // move to viable space and align with target from trench
+        new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.alignFromTrenchNew, OI.forwardHeading) // move to viable space and align with target from trench
             .raceWith(new SpinShooterVelocity(REV_SPEED), new StartEndCommand(() -> Indexer.getInstance().spinSpine(0.35), () -> Indexer.getInstance().spinSpine(0), Indexer.getInstance())),
         new SpinShooterLimelight().raceWith(new SwerveAlignWithLimelight(), new MoveBallsToShooter(false), new WaitCommand(5))
     );
@@ -202,7 +202,7 @@ public class Autons {
     );
 
     public static CommandBase getAutonCommand() {
-        return trenchEightAutonFast;/*curAuton.value*/
+        return trenchEightAuton;/*curAuton.value*/
     }
 
     public static enum AutonCommands {
