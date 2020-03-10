@@ -103,7 +103,7 @@ public class Shooter extends SubsystemBase {
     private static final int CURRENT_DRAW_MIN = 10;
     private static final int STALL_VELOCITY = 100;
 
-    public static boolean isPercentOutput = false;
+    public static boolean isPercentOutput = true;
     
     /**
      * Constructs a Shooter.

@@ -106,11 +106,14 @@ public class OI {
         driverGamepad.getButtonStart().whenPressed(new InstantCommand(() -> SwerveManualHeadingControl.isNotOptimized = !SwerveManualHeadingControl.isNotOptimized));
         driverGamepad.getButtonB().whilePressed(new StartEndCommand(() -> Shooter.getInstance().spinShooterPercentOutput(0.15), () -> Shooter.getInstance().getMaster().set(ControlMode.Disabled, 0), Shooter.getInstance()));
         // driverGamepad.getButtonY().whenPressed(new SwerveDriveWithOdometryProfiling(Trajectories.Test.circle, Rotation2d.fromDegrees(0)));
-
+        driverGamepad.getRightDPadButton().whenPressed(command)
+        driverGamepad.getButtonSelect().whenPressed(new InstantCommand(() -> {Drivetrain.getInstance().getPigeon().addFusedHeading(-63.9886 * Drivetrain.getInstance().getPigeon().getFusedHeading()); 
+            SwerveManualHeadingControl.headingFlag = false;
+            SwerveManualHeadingControl.flag = false;}));
         // driverGamepad.getButtonX().whilePressed(new SpinIndexer(0.7, true));
 
         //Shoot from Target Zone Command
-        driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(65), new MoveBallsToShooter(false)));
+        // driverGamepad.getButtonY().whilePressed(new ParallelCommandGroup(new SpinShooterVelocity(65), new MoveBallsToShooter(false)));
         // driverGamepad.getButtonY().whenPressed(new SwerveRotateToHeading(180));
         driverGamepad.getButtonBumperRight().whilePressed(new SwerveAlignWithLimelight());
         // driverGamepad.getButtonX().whilePressed(new SpinShooterVelocity(90));

@@ -40,7 +40,10 @@ public class SwerveAlignWithLimelight extends CommandBase {
     private double prevTime;
     private boolean bPressed;
     private boolean bFlag;
+    
+    private static final long spinTime = 100;
 
+    private long time;
     public SwerveAlignWithLimelight() {
         addRequirements(Drivetrain.getInstance());
 
@@ -63,6 +66,8 @@ public class SwerveAlignWithLimelight extends CommandBase {
         prevXPos = Drivetrain.getInstance().getOdometry().getPoseMeters().getTranslation().getX();
         prevTime = System.currentTimeMillis();
         bPressed = false;
+        Drivetrain.TX_SETPOINT = 0;
+        time = 0;
     }
     
     @Override
@@ -79,13 +84,27 @@ public class SwerveAlignWithLimelight extends CommandBase {
 
         double translateX = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftX(), OI.XBOX_JOYSTICK_DEADBAND);
         double translateY = MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getLeftY(), OI.XBOX_JOYSTICK_DEADBAND);
-        double pigeonHeading = (Drivetrain.getInstance().getPigeon().getFusedHeading() +180) % 360;//have to have pigeon heading to have shooter forward as 0
+        double pigeonHeading = (Drivetrain.getInstance().getPigeon().getFusedHeading() +180);//have to have pigeon heading to have shooter forward as 0
+        while (pigeonHeading < -180) {
+            pigeonHeading += 360;
+        }
+        while (pigeonHeading > 180) {
+            pigeonHeading -= 360;
+        }
         if (bFlag) {
             Drivetrain.TX_SETPOINT = 
                 SCALE_A * Math.pow(pigeonHeading, 3) +
                 SCALE_B * Math.pow(pigeonHeading, 2) +
-                SCALE_C * Math.pow(pigeonHeading, 1) + SCALE_D
-            ;
+                SCALE_C * Math.pow(pigeonHeading, 1) + SCALE_D;
+            long time = System.currentTimeMillis();
+            ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                0, 0, 3.5, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
+            );
+    
+            SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
+    
+            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], false, false);
+
         }
         double turnManual = -3 * MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
         
@@ -118,8 +137,8 @@ public class SwerveAlignWithLimelight extends CommandBase {
         );
 
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
-
-        Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], false, false);
+        if (System.currentTimeMillis() - time > spinTime)
+            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], false, false);
     }
 
     @Override

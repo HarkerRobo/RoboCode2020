@@ -189,7 +189,7 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
         // }
         
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateX, translateY, headingFlag || flag ? turnMagnitude : 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
+            translateX * (OI.getInstance().getDriverGamepad().getButtonY().get() ? -1 : 1), translateY * (OI.getInstance().getDriverGamepad().getButtonY().get() ? -1 : 1), headingFlag || flag ? turnMagnitude : 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
         );
 
         // Now use this in our kinematics
