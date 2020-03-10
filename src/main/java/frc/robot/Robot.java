@@ -102,11 +102,11 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManualHeadingControl());
 
-        Spinner.getInstance();
-        BottomIntake.getInstance().setDefaultCommand(new IntakeDefault());
-        Indexer.getInstance().setDefaultCommand(new IndexerDefault());
-        Shooter.getInstance();
-        Climber.getInstance().setDefaultCommand(new MoveClimberManual());
+        // Spinner.getInstance();
+        // BottomIntake.getInstance().setDefaultCommand(new IntakeDefault());
+        // Indexer.getInstance().setDefaultCommand(new IndexerDefault());
+        // Shooter.getInstance();
+        // Climber.getInstance().setDefaultCommand(new MoveClimberManual());
 
         OI.getInstance();
         // compressor = new Compressor();  
