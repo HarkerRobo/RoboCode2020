@@ -205,6 +205,12 @@ public class Trajectories {
             List.of(new Pose2d(25.40 * 0.3048, 42.00 * 0.3048, Rotation2d.fromDegrees(180)),
                     new Pose2d(19.00 * 0.3048, 39.00 * 0.3048, Rotation2d.fromDegrees(180))),
             config);
+
+        // public static Trajectory pickUpTrenchBallsRight = TrajectoryGenerator.generateTrajectory(
+        //     List.of(new Pose2d(25.40 * 0.3048, 39.00 * 0.3048, Rotation2d.fromDegrees(0)),
+        //             new Pose2d(23.5 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(270)),
+        //             new Pose2d(23.6 * 0.3048, 20 * 0.3048, Rotation2d.fromDegrees(270))),
+        //     mediumConfig);
         
         public static Trajectory pickUpTrenchBalls = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(19.00 * 0.3048, 39.00 * 0.3048, Rotation2d.fromDegrees(0)),
@@ -219,12 +225,13 @@ public class Trajectories {
             mediumConfig);
         
         public static Trajectory alignFromTrench = TrajectoryGenerator.generateTrajectory(
-            List.of(
+            List.of(new Pose2d(23.7 * 0.3048, 20 * 0.3048, Rotation2d.fromDegrees(90)),
+                    new Pose2d(23.7 * 0.3048, 25.00 * 0.3048, Rotation2d.fromDegrees(90)),
+                    new Pose2d(19.00 * 0.3048, 39.00 * 0.3048, Rotation2d.fromDegrees(90))), 
+            config);
 
-                    // new Pose2d(24.75 * 0.3048, 21.50 * 0.3048, Rotation2d.fromDegrees(90)),
-                    // new Pose2d(24.75 * 0.3048, 32.00 * 0.3048, Rotation2d.fromDegrees(90)),
-                    new Pose2d(23.7 * 0.3048, 20 * 0.3048, Rotation2d.fromDegrees(90)),
-                    new Pose2d(23.7 * 0.3048, 34.00 * 0.3048, Rotation2d.fromDegrees(90)),
+        public static Trajectory alignFromTrenchNew = TrajectoryGenerator.generateTrajectory(
+            List.of(new Pose2d(23.7 * 0.3048, 20 * 0.3048, Rotation2d.fromDegrees(90)),
                     new Pose2d(19.00 * 0.3048, 39.00 * 0.3048, Rotation2d.fromDegrees(90))), 
             config);
 

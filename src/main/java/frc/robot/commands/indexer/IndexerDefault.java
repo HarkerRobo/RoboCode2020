@@ -41,7 +41,8 @@ public class IndexerDefault extends IndefiniteCommand {
 
         double output = MathUtil.mapJoystickOutput(OI.getInstance().getOperatorGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);
         
-        // Spinner.getInstance().getSpinnerMotor().set(ControlMode.PercentOutput, OUTPUT_MULTIPLIER * output);
+        if (output != 0)
+            Spinner.getInstance().getSpinnerMotor().set(ControlMode.PercentOutput, OUTPUT_MULTIPLIER * output);
     }
     
     @Override
