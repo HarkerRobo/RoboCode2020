@@ -75,7 +75,6 @@ import frc.robot.auto.Trajectories;
  * @since 01/06/20
  */
 public class Robot extends TimedRobot {
-    private Compressor compressor;
     private boolean wasTeleop;
 
     @Override
@@ -102,23 +101,20 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         Drivetrain.getInstance().setDefaultCommand(new SwerveManualHeadingControl());
 
-        // Spinner.getInstance();
-        // BottomIntake.getInstance().setDefaultCommand(new IntakeDefault());
-        // Indexer.getInstance().setDefaultCommand(new IndexerDefault());
-        // Shooter.getInstance();
-        // Climber.getInstance().setDefaultCommand(new MoveClimberManual());
+        Spinner.getInstance();
+        BottomIntake.getInstance().setDefaultCommand(new IntakeDefault());
+        Indexer.getInstance().setDefaultCommand(new IndexerDefault());
+        Shooter.getInstance();
+        Climber.getInstance().setDefaultCommand(new MoveClimberManual());
 
         OI.getInstance();
-        // compressor = new Compressor();  
 
         Limelight.setLEDS(true);
         Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);
-        // Spinner.getInstance().getSolenoid().set(Spinner.DOWN);
+        Spinner.getInstance().getSolenoid().set(Spinner.DOWN);
 
         Autons.AutonCommands.BASELINE.toString();
-        // System.out.println(Autons.getAutonCommand());
         Autons.AutonCommands.BASELINE.toString();
-        // Drivetrain.getInstance().getPigeon().setFusedHeading(0);
 
         wasTeleop = true;
     }
