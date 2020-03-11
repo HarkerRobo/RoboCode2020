@@ -52,8 +52,8 @@ public class Climber extends SubsystemBase {
             MASTER_SENSOR_PHASE = true;
             FOLLOWER_SENSOR_PHASE = false;
 
-            MASTER_INVERTED = TalonFXInvertType.CounterClockwise;
-            FOLLOWER_INVERTED = TalonFXInvertType.Clockwise;
+            MASTER_INVERTED = TalonFXInvertType.Clockwise;
+            FOLLOWER_INVERTED = TalonFXInvertType.CounterClockwise;
 
             CLIMBER_POSITION_KP = 0.0; // tune
             CLIMBER_POSITION_KI = 0.0; // tune
