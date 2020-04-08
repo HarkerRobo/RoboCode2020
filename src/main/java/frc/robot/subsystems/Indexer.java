@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -29,9 +31,11 @@ public class Indexer extends SubsystemBase {
         if(RobotMap.IS_COMP) {
             SPINE_INVERT = false; //Change accordingly
             AGITATOR_INVERT = false;
+            SPINE_SENSOR_PHASE = false;//check
         } else {
             SPINE_INVERT = false; //Change accordingly
             AGITATOR_INVERT = false;
+            SPINE_SENSOR_PHASE = false;//check
         }
     } 
     
@@ -39,6 +43,8 @@ public class Indexer extends SubsystemBase {
     
     private static boolean SPINE_INVERT;
     private static boolean AGITATOR_INVERT;
+
+    private static boolean SPINE_SENSOR_PHASE;
     
     private HSTalon spine;
     private VictorSPX agitator;
@@ -52,6 +58,9 @@ public class Indexer extends SubsystemBase {
     private static final int INDEXER_CURRENT_PEAK_DUR = 50;
     private static final int INDEXER_CURRENT_CONTINUOUS = 30;
     private static final int INDEXER_CURRENT_PEAK = 40;
+
+    private static final int FORWARD_SOFT_LIMIT = 0; //find
+    private static final int REVERSE_SOFT_LIMIT = 0;
 
     private DigitalInput indexerSensor;  // The second sensor in the indexer
     private DigitalInput shooterSensor; // Determines if the indexer is full
@@ -89,6 +98,18 @@ public class Indexer extends SubsystemBase {
     public void setupTalons() {
         spine.configFactoryDefault();
         agitator.configFactoryDefault();
+
+        spine.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_INDEX, 
+                                            RobotMap.DEFAULT_TIMEOUT);
+
+        spine.configForwardSoftLimitThreshold(FORWARD_SOFT_LIMIT);
+        spine.configReverseSoftLimitThreshold(REVERSE_SOFT_LIMIT);
+
+        spine.configForwardSoftLimitEnable(false);//change after checking values
+        spine.configReverseSoftLimitEnable(false);//change after checking values
+
+        spine.setSelectedSensorPosition(0);
+        spine.setSensorPhase(SPINE_SENSOR_PHASE);
         
         agitator.setInverted(AGITATOR_INVERT);
         spine.setInverted(SPINE_INVERT);
@@ -103,10 +124,6 @@ public class Indexer extends SubsystemBase {
         
         spine.setNeutralMode(NeutralMode.Brake);
         agitator.setNeutralMode(NeutralMode.Brake);
-
-        spine.configForwardSoftLimitEnable(false);
-        spine.configReverseSoftLimitEnable(false);
-        spine.overrideLimitSwitchesEnable(false);
         
         agitator.configForwardSoftLimitEnable(false);
         agitator.configReverseSoftLimitEnable(false);
