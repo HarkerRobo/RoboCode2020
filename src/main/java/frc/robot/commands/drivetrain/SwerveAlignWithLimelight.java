@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import harkerrobolib.util.MathUtil;
 
 /**
@@ -41,7 +42,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
     private boolean bPressed;
     private boolean bFlag;
     
-    private static final long spinTime = 100;
+    private static final long spinTime = 500;
 
     private long time;
     public SwerveAlignWithLimelight() {
@@ -74,7 +75,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
     public void execute() {
         Limelight.setLEDS(true);
         //double speed = -thorController.calculate(Limelight.getTx(), Drivetrain.TX_SETPOINT) * Drivetrain.MAX_DRIVE_VELOCITY;
-        txController.setSetpoint(SmartDashboard.getNumber("TX", Drivetrain.TX_SETPOINT));
+        // txController.setSetpoint(SmartDashboard.getNumber("TX", Drivetrain.TX_SETPOINT));
         SmartDashboard.putNumber("TX setpoint", txController.getSetpoint());
         bFlag = OI.getInstance().getDriverGamepad().getButtonB().get() == true && bPressed == false;
 
@@ -97,13 +98,7 @@ public class SwerveAlignWithLimelight extends CommandBase {
                 SCALE_B * Math.pow(pigeonHeading, 2) +
                 SCALE_C * Math.pow(pigeonHeading, 1) + SCALE_D;
             long time = System.currentTimeMillis();
-            ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                0, 0, 3.5, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
-            );
-    
-            SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
-    
-            Drivetrain.getInstance().setDrivetrainVelocity(moduleStates[0], moduleStates[1], moduleStates[2], moduleStates[3], false, false);
+            CommandScheduler.getInstance().schedule(new SwerveRotateToHeading(Drivetrain.getInstance().getPigeon().getFusedHeading() -2));
 
         }
         double turnManual = -3 * MathUtil.mapJoystickOutput(OI.getInstance().getDriverGamepad().getRightX(), OI.XBOX_JOYSTICK_DEADBAND);

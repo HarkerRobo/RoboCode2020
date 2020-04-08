@@ -73,6 +73,10 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
     private static boolean aFlag;
     
     public static boolean isNotOptimized;
+    private static boolean prevY;
+    private static boolean yFlag;
+    private static ChassisSpeeds speeds;
+
 
     public SwerveManualHeadingControl() {
         addRequirements(Drivetrain.getInstance());
@@ -89,6 +93,7 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
         xFlag = false;
         aPressed = false;
         aFlag = false;
+        
     }
 
     @Override
@@ -109,6 +114,8 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
         isNotOptimized = false;
         flag = false;
         prevHeadingFlag = false;
+        prevY = false;
+        yFlag = false;
     }
 
     @Override
@@ -187,10 +194,22 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
         //     // turnMagnitude = !RobotMap.IS_PRACTICE ? Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading) : turnMagnitude;
         //     turnMagnitude = Drivetrain.PIGEON_kP * (pigeonAngle - currentPigeonHeading);
         // }
+        if (OI.getInstance().getDriverGamepad().getButtonY().get() && !prevY) {
+            yFlag = !yFlag;
+            flag = false;
+            headingFlag = false;
+        }
         
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateX * (OI.getInstance().getDriverGamepad().getButtonY().get() ? -1 : 1), translateY * (OI.getInstance().getDriverGamepad().getButtonY().get() ? -1 : 1), headingFlag || flag ? turnMagnitude : 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
-        );
+        if (!yFlag)
+        {
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                translateX, translateY, headingFlag || flag ? turnMagnitude : 0, Rotation2d.fromDegrees(Drivetrain.getInstance().getPigeon().getFusedHeading())
+            );
+        }
+        else {
+            speeds = new ChassisSpeeds(translateX, translateY, -1 * headingX * Drivetrain.MAX_ROTATION_VELOCITY * OUTPUT_MULTIPLIER);
+        }
+
 
         // Now use this in our kinematics
         SwerveModuleState[] moduleStates = Drivetrain.getInstance().getKinematics().toSwerveModuleStates(speeds);
@@ -212,6 +231,7 @@ public class SwerveManualHeadingControl extends IndefiniteCommand {
         //     lastPigeonUpdateTime = Timer.getFPGATimestamp();
         // }
         prevHeadingFlag = headingFlag;
+        prevY = OI.getInstance().getDriverGamepad().getButtonY().get();
     }
 
     @Override
