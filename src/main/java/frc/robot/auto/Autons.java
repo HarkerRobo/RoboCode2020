@@ -128,7 +128,7 @@ public class Autons {
         new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.pickUpTrenchBalls, OI.forwardHeading) // pick up trench balls
             .raceWith(new SpinIntakeVelocity(0.6), new SpinIndexer(0.6, false)),
         new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.alignFromTrenchNew, OI.forwardHeading) // move to viable space and align with target from trench
-            .raceWith(new SpinShooterVelocity(REV_SPEED), new StartEndCommand(() -> Indexer.getInstance().spinSpine(0.35), () -> Indexer.getInstance().spinSpine(0), Indexer.getInstance())),
+            .raceWith(new SpinShooterVelocity(REV_SPEED), new StartEndCommand(() -> Indexer.getInstance().spinSpinePercentOutput(0.35), () -> Indexer.getInstance().spinSpinePercentOutput(0), Indexer.getInstance())),
         new SpinShooterLimelight().raceWith(new SwerveAlignWithLimelight(), new MoveBallsToShooter(false), new WaitCommand(5))
     );
 
@@ -140,7 +140,7 @@ public class Autons {
         new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.pickUpTrenchBallsFastMiddle, OI.forwardHeading) // pick up trench balls
             .raceWith(new SpinIntakeVelocity(0.6), new SpinIndexer(0.6, false)),
         new SwerveDriveWithOdometryProfiling(Trajectories.EightTrench.alignFromTrench, OI.forwardHeading) // move to viable space and align with target from trench
-            .raceWith(new SpinShooterVelocity(REV_SPEED), new StartEndCommand(() -> Indexer.getInstance().spinSpine(0.35), () -> Indexer.getInstance().spinSpine(0), Indexer.getInstance())),
+            .raceWith(new SpinShooterVelocity(REV_SPEED), new StartEndCommand(() -> Indexer.getInstance().spinSpinePercentOutput(0.35), () -> Indexer.getInstance().spinSpinePercentOutput(0), Indexer.getInstance())),
         new SpinShooterLimelight().raceWith(new SwerveAlignWithLimelight(), new MoveBallsToShooter(false), new WaitCommand(5))
     );
 

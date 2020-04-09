@@ -47,7 +47,7 @@ public class IndexerDefault extends IndefiniteCommand {
     
     @Override
     public void end(boolean interrupted) {
-        Indexer.getInstance().spinSpine(0);
+        Indexer.getInstance().spinSpinePercentOutput(0);
         Indexer.getInstance().spinAgitator(0);
     }
 }

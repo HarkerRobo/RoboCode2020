@@ -32,10 +32,18 @@ public class Indexer extends SubsystemBase {
             SPINE_INVERT = false; //Change accordingly
             AGITATOR_INVERT = false;
             SPINE_SENSOR_PHASE = false;//check
+            SPINE_KF = 0;
+            SPINE_VELOCITY_KP = 0; 
+            SPINE_VELOCITY_KI = 0;
+            SPINE_VELOCITY_KD = 0;
         } else {
             SPINE_INVERT = false; //Change accordingly
             AGITATOR_INVERT = false;
             SPINE_SENSOR_PHASE = false;//check
+            SPINE_KF = 0;
+            SPINE_VELOCITY_KP = 0; 
+            SPINE_VELOCITY_KI = 0;
+            SPINE_VELOCITY_KD = 0;
         }
     } 
     
@@ -76,6 +84,14 @@ public class Indexer extends SubsystemBase {
 
     public static final DoubleSolenoid.Value CLOSED = Value.kForward;
     public static final DoubleSolenoid.Value OPEN = Value.kReverse;
+
+    public static final int SPINE_VELOCITY_SLOT = 0;
+    
+    public static double SPINE_KF;
+    public static double SPINE_VELOCITY_KP;
+    public static double SPINE_VELOCITY_KI;
+    public static double SPINE_VELOCITY_KD;
+
 
     private DoubleSolenoid solenoid;
 
@@ -133,13 +149,32 @@ public class Indexer extends SubsystemBase {
         spine.configPeakCurrentLimit(INDEXER_CURRENT_PEAK);
         spine.configPeakCurrentDuration(INDEXER_CURRENT_PEAK_DUR);
         spine.enableCurrentLimit(true);
+
+        setupVelocityPID();
     }
 
-    public void spinSpine(double percentOutput) {
+    /**
+     * Set up for Velocity PID.
+     */
+    public void setupVelocityPID() {
+        spine.config_kF(SPINE_VELOCITY_SLOT, SPINE_KF);
+        spine.config_kP(SPINE_VELOCITY_SLOT, SPINE_VELOCITY_KP);
+        spine.config_kI(SPINE_VELOCITY_SLOT, SPINE_VELOCITY_KI);
+        spine.config_kD(SPINE_VELOCITY_SLOT, SPINE_VELOCITY_KD);
+    }
+
+    public void spinSpinePercentOutput(double percentOutput) {
         if(percentOutput == 0)
             spine.set(ControlMode.Disabled, 0);
         else
             spine.set(ControlMode.PercentOutput, percentOutput * SPINE_OUTPUT_MULTIPLIER);
+    }
+
+    public void spinSpineEncoder(double velocity) {
+        if(velocity == 0)
+            spine.set(ControlMode.Disabled, 0);
+        else
+            spine.set(ControlMode.Velocity, velocity);
     }
 
     public void spinAgitator(double percentOutput) {

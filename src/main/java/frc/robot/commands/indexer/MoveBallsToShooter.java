@@ -56,13 +56,13 @@ public class MoveBallsToShooter extends IndefiniteCommand {
             else
                 Indexer.getInstance().spinAgitator(backwards ? -Indexer.AGITATOR_DEFAULT_OUTPUT : 0);
 
-            Indexer.getInstance().spinSpine(INDEX_PERCENT_OUTPUT);
+            Indexer.getInstance().spinSpinePercentOutput(INDEX_PERCENT_OUTPUT);
         }
     }
     
     @Override
     public void end(boolean interrupted) {
-        Indexer.getInstance().spinSpine(0);
+        Indexer.getInstance().spinSpinePercentOutput(0);
         Indexer.getInstance().spinAgitator(0);
 
         Indexer.getInstance().getSolenoid().set(Indexer.CLOSED);

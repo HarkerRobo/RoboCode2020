@@ -48,9 +48,9 @@ public class SpinIndexer extends IndefiniteCommand {
         // }
 
         if(!(hopperDetected && indexerDetected) || backwards)
-            Indexer.getInstance().spinSpine(output * (backwards ? -INDEX_SPEED : INDEX_SPEED));
+            Indexer.getInstance().spinSpinePercentOutput(output * (backwards ? -INDEX_SPEED : INDEX_SPEED));
         else
-            Indexer.getInstance().spinSpine(0);
+            Indexer.getInstance().spinSpinePercentOutput(0);
 
         if (currentTime % Indexer.AGITATOR_CYCLE_DUR < Indexer.AGITATOR_ON_DURATION)
             Indexer.getInstance().spinAgitator(output * Indexer.AGITATOR_DEFAULT_OUTPUT);
@@ -60,7 +60,7 @@ public class SpinIndexer extends IndefiniteCommand {
 
     @Override
     public void end(boolean interrupted) {
-        Indexer.getInstance().spinSpine(0);
+        Indexer.getInstance().spinSpinePercentOutput(0);
         Indexer.getInstance().spinAgitator(0);
     }
 }
