@@ -170,7 +170,7 @@ public class Indexer extends SubsystemBase {
             spine.set(ControlMode.PercentOutput, percentOutput * SPINE_OUTPUT_MULTIPLIER);
     }
 
-    public void spinSpineEncoder(double velocity) {
+    public void spinSpineVelocity(double velocity) {
         if(velocity == 0)
             spine.set(ControlMode.Disabled, 0);
         else
